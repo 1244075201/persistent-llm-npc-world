@@ -1,0 +1,247 @@
+{
+  "node_1": {
+    "node_count": 1,
+    "type_count": 1,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 07:00:00",
+    "expiration": null,
+    "subject": "Lysa Vale",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 07:00, Lysa Vale was at Market and did: Morning: Visit market stalls to negotiate prices and ask about safe trade routes.",
+    "embedding_key": "At 07:00, Lysa Vale was at Market and did: Morning: Visit market stalls to negotiate prices and ask about safe trade routes.",
+    "poignancy": 1,
+    "keywords": [
+      "Lysa Vale",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_2": {
+    "node_count": 2,
+    "type_count": 2,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 07:00:00",
+    "expiration": null,
+    "subject": "Lysa Vale",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 07:00, Tovan Reed talked with Lysa Vale at Market: Tovan Reed: Morning, Lysa. Vendors seem jittery today \u2014 three stalls didn't open. / Lysa Vale: I noticed. Heard the eastern road's gone quiet; traders are skipping it. / Tovan Reed: That's the second route in a week. What are you hearing from the others? / Lysa Vale: Western pass is still safe, but prices are climbing fast. People are nervous.",
+    "embedding_key": "At 07:00, Tovan Reed talked with Lysa Vale at Market: Tovan Reed: Morning, Lysa. Vendors seem jittery today \u2014 three stalls didn't open. / Lysa Vale: I noticed. Heard the eastern road's gone quiet; traders are skipping it. / Tovan Reed: That's the second route in a week. What are you hearing from the others? / Lysa Vale: Western pass is still safe, but prices are climbing fast. People are nervous.",
+    "poignancy": 1,
+    "keywords": [
+      "Lysa Vale",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_3": {
+    "node_count": 3,
+    "type_count": 3,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 09:00:00",
+    "expiration": null,
+    "subject": "Lysa Vale",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 09:00, Lysa Vale was at Market and did: Morning: Visit market stalls to negotiate prices and ask about safe trade routes.",
+    "embedding_key": "At 09:00, Lysa Vale was at Market and did: Morning: Visit market stalls to negotiate prices and ask about safe trade routes.",
+    "poignancy": 1,
+    "keywords": [
+      "Lysa Vale",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_4": {
+    "node_count": 4,
+    "type_count": 4,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 11:00:00",
+    "expiration": null,
+    "subject": "Lysa Vale",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 11:00, Lysa Vale was at Market and did: Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability.",
+    "embedding_key": "At 11:00, Lysa Vale was at Market and did: Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability.",
+    "poignancy": 1,
+    "keywords": [
+      "Lysa Vale",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_5": {
+    "node_count": 5,
+    "type_count": 5,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 13:00:00",
+    "expiration": null,
+    "subject": "Lysa Vale",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 13:00, Lysa Vale was at Market and did: Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability.",
+    "embedding_key": "At 13:00, Lysa Vale was at Market and did: Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability.",
+    "poignancy": 1,
+    "keywords": [
+      "Lysa Vale",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_6": {
+    "node_count": 6,
+    "type_count": 6,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 15:00:00",
+    "expiration": null,
+    "subject": "Lysa Vale",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 15:00, Lysa Vale was at Market and did: Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability.",
+    "embedding_key": "At 15:00, Lysa Vale was at Market and did: Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability.",
+    "poignancy": 1,
+    "keywords": [
+      "Lysa Vale",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_7": {
+    "node_count": 7,
+    "type_count": 7,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 17:00:00",
+    "expiration": null,
+    "subject": "Lysa Vale",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 17:00, Lysa Vale was at Market and did: Evening: Record promising trade leads and update travel notes.",
+    "embedding_key": "At 17:00, Lysa Vale was at Market and did: Evening: Record promising trade leads and update travel notes.",
+    "poignancy": 1,
+    "keywords": [
+      "Lysa Vale",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_8": {
+    "node_count": 8,
+    "type_count": 8,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 19:00:00",
+    "expiration": null,
+    "subject": "Lysa Vale",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 19:00, Lysa Vale was at Market and did: Evening: Record promising trade leads and update travel notes.",
+    "embedding_key": "At 19:00, Lysa Vale was at Market and did: Evening: Record promising trade leads and update travel notes.",
+    "poignancy": 1,
+    "keywords": [
+      "Lysa Vale",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_9": {
+    "node_count": 9,
+    "type_count": 1,
+    "type": "chat",
+    "depth": 0,
+    "created": "2026-06-27 07:00:00",
+    "expiration": null,
+    "subject": "Lysa Vale",
+    "predicate": "talked with",
+    "object": "Tovan Reed",
+    "description": "Lysa Vale talked with Tovan Reed at Market.",
+    "embedding_key": "Lysa Vale talked with Tovan Reed at Market.",
+    "poignancy": 3,
+    "keywords": [
+      "Lysa Vale",
+      "Tovan Reed"
+    ],
+    "filling": [
+      [
+        "Tovan Reed",
+        "Morning, Lysa. Vendors seem jittery today \u2014 three stalls didn't open."
+      ],
+      [
+        "Lysa Vale",
+        "I noticed. Heard the eastern road's gone quiet; traders are skipping it."
+      ],
+      [
+        "Tovan Reed",
+        "That's the second route in a week. What are you hearing from the others?"
+      ],
+      [
+        "Lysa Vale",
+        "Western pass is still safe, but prices are climbing fast. People are nervous."
+      ]
+    ]
+  },
+  "node_10": {
+    "node_count": 10,
+    "type_count": 1,
+    "type": "thought",
+    "depth": 1,
+    "created": "2026-06-27 19:00:00",
+    "expiration": null,
+    "subject": "Lysa Vale",
+    "predicate": "reflects on",
+    "object": "recent events",
+    "description": "Which trade routes are becoming unreliable, and what patterns are emerging from the rumors I gathered today?",
+    "embedding_key": "Which trade routes are becoming unreliable, and what patterns are emerging from the rumors I gathered today?",
+    "poignancy": 4,
+    "keywords": [
+      "Lysa Vale",
+      "recent events"
+    ],
+    "filling": []
+  },
+  "node_11": {
+    "node_count": 11,
+    "type_count": 2,
+    "type": "thought",
+    "depth": 1,
+    "created": "2026-06-27 19:00:00",
+    "expiration": null,
+    "subject": "Lysa Vale",
+    "predicate": "reflects on",
+    "object": "recent events",
+    "description": "How can I strengthen my relationships with jittery vendors and fellow merchants to secure better prices and inside information?",
+    "embedding_key": "How can I strengthen my relationships with jittery vendors and fellow merchants to secure better prices and inside information?",
+    "poignancy": 4,
+    "keywords": [
+      "Lysa Vale",
+      "recent events"
+    ],
+    "filling": []
+  },
+  "node_12": {
+    "node_count": 12,
+    "type_count": 3,
+    "type": "thought",
+    "depth": 1,
+    "created": "2026-06-27 19:00:00",
+    "expiration": null,
+    "subject": "Lysa Vale",
+    "predicate": "reflects on",
+    "object": "recent events",
+    "description": "What risks am I overlooking by relying on the western pass as it becomes more expensive and crowded?",
+    "embedding_key": "What risks am I overlooking by relying on the western pass as it becomes more expensive and crowded?",
+    "poignancy": 4,
+    "keywords": [
+      "Lysa Vale",
+      "recent events"
+    ],
+    "filling": []
+  }
+}

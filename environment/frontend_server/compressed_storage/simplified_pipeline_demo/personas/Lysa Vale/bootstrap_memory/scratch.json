@@ -1,0 +1,79 @@
+{
+  "vision_r": 8,
+  "att_bandwidth": 8,
+  "retention": 8,
+  "curr_time": "June 27, 2026, 19:00:00",
+  "curr_tile": [
+    84,
+    47
+  ],
+  "curr_arena": "store",
+  "curr_sector": "The Willows Market and Pharmacy",
+  "curr_address": "the Ville:The Willows Market and Pharmacy:store",
+  "daily_plan_req": "Morning: Visit market stalls to negotiate prices and ask about safe trade routes; Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability; Evening: Record promising trade leads and update travel notes",
+  "name": "Lysa Vale",
+  "first_name": "Lysa",
+  "last_name": "Vale",
+  "age": 30,
+  "innate": "sociable, ambitious, resourceful",
+  "learned": "Lysa Vale is a traveling merchant. Goal: protect her trade opportunities and learn which routes people still trust",
+  "currently": "Lysa Vale is currently evening: record promising trade leads and update travel notes.",
+  "lifestyle": "Lysa Vale follows a morning, afternoon, and evening routine.",
+  "living_area": "the Ville:The Willows Market and Pharmacy:store",
+  "daily_req": [
+    "Morning: Visit market stalls to negotiate prices and ask about safe trade routes",
+    "Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability",
+    "Evening: Record promising trade leads and update travel notes"
+  ],
+  "f_daily_schedule": [
+    [
+      "Morning: Visit market stalls to negotiate prices and ask about safe trade routes",
+      240
+    ],
+    [
+      "Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability",
+      240
+    ],
+    [
+      "Evening: Record promising trade leads and update travel notes",
+      240
+    ]
+  ],
+  "f_daily_schedule_hourly_org": [
+    [
+      "Morning: Visit market stalls to negotiate prices and ask about safe trade routes",
+      240
+    ],
+    [
+      "Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability",
+      240
+    ],
+    [
+      "Evening: Record promising trade leads and update travel notes",
+      240
+    ]
+  ],
+  "act_address": "the Ville:The Willows Market and Pharmacy:store",
+  "act_start_time": "June 27, 2026, 19:00:00",
+  "act_duration": 120,
+  "act_description": "Evening: Record promising trade leads and update travel notes",
+  "act_pronunciatio": "\ud83e\uddf3",
+  "act_event": [
+    "Lysa Vale",
+    "is",
+    "Evening: Record promising trade leads and update travel notes"
+  ],
+  "act_obj_description": null,
+  "act_obj_pronunciatio": null,
+  "act_obj_event": [
+    null,
+    null,
+    null
+  ],
+  "chatting_with": null,
+  "chat": null,
+  "chatting_with_buffer": {},
+  "chatting_end_time": null,
+  "act_path_set": true,
+  "planned_path": []
+}

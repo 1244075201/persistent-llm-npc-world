@@ -1,0 +1,946 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<style>
+	.scratch_table {
+		font-size: 1.3em;
+	}
+</style>
+
+
+<h3 style="width:80%; margin:0 auto; margin-top:5em; padding:1em; padding-left:3.5em; padding-right:2em; border-radius:10px; padding-top:3em"><a href="{{request.META.HTTP_REFERER}}">< Return to simulation</a></h3>
+
+
+<div class="media" style="width:80%; margin:0 auto; margin-top:2em; background-color:#EEEEEE; padding:1em; padding-left:3.5em; padding-right:2em; border-radius:10px; padding-top:3em">
+  <div class="media-left media">
+    <a href="#">
+    	{% with 'assets/characters/profile/'|add:persona_name_underscore|add:'.png' as image_static %}
+      <img class="media-object" src="{% static image_static %}" style="width:5em">
+      {% endwith %}
+    </a>
+  </div>
+  <div class="media-body" style='padding-left:3em; padding-top:0.5em; padding-bottom:1em'>
+  	<div class="row">
+    	<h1 class="col-md-8" style="margin-bottom:0.8em; font-size:2em; ">
+    		{{persona_name}}
+    	</h1>
+    </div>
+    <div style="">
+
+		  <h3 style="font-size:1.65em"><strong>Basic information</strong></h3>
+		  <table class="scratch_table" style="width:100%">
+			  <tr>
+			    <td style="width:20%; font-weight:800">First name</td>
+			    <td>{{scratch.first_name}}</td>
+			  </tr>
+			  <tr>
+			    <td style="font-weight:800">Last name</td>
+			    <td>{{scratch.last_name}}</td>
+			  </tr>
+			  <tr>
+			    <td style="font-weight:800">Age</td>
+			    <td>{{scratch.age}}</td>
+			  </tr>
+			  <tr>
+			    <td style="font-weight:800">Current time</td>
+			    <td>
+			      {{ authoritative_world_time.display }}
+			      <details>
+			        <summary>Debug / legacy persona scratch time</summary>
+			        {{ scratch.curr_time }}
+			      </details>
+			    </td>
+			  </tr>
+			  <tr>
+			    <td style="font-weight:800">Current tile</td>
+			    <td>{{scratch.curr_tile}}</td>
+			  </tr>
+			</table>
+			<br>
+
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>Unified World Time</strong></h3>
+			<div class="" style="width:100%">
+			  <p>
+			    Authoritative World Time: {{ authoritative_world_time.display }}<br>
+			    Source of truth: world_state.current_day / world_state.current_time
+			  </p>
+			  {% if time_consistency_warnings %}
+			    <p>
+			      Time consistency warnings:<br>
+			      {% for warning in time_consistency_warnings %}
+			      - {{ warning }}<br>
+			      {% endfor %}
+			    </p>
+			  {% else %}
+			    <p><em>No time consistency warnings for displayed persistent records.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>Agent Configuration</strong></h3>
+			<div class="" style="width:100%">
+			  <p>
+			    Experiment: {{ agent_config.name|default:"full_agent" }}<br>
+			    Memory Context: {% if agent_config.use_memory %}ON{% else %}OFF{% endif %}<br>
+			    Knowledge Context: {% if agent_config.use_knowledge %}ON{% else %}OFF{% endif %}<br>
+			    Relationship Context: {% if agent_config.use_relationship %}ON{% else %}OFF{% endif %}<br>
+			    World Grounding: {% if agent_config.use_world_grounding %}ON{% else %}OFF{% endif %}<br>
+			    Belief Context: {% if agent_config.use_belief %}ON{% else %}OFF{% endif %}
+			  </p>
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>Settings</strong></h3>
+		  <table class="scratch_table" style="width:100%">
+			  <tr>
+			    <td style="width:20%; font-weight:800">Vision Radius</td>
+			    <td>{{scratch.vision_r}}</td>
+			  </tr>
+			  <tr>
+			    <td style="font-weight:800">Attention Bandwidth</td>
+			    <td>{{scratch.att_bandwidth}}</td>
+			  </tr>
+			  <tr>
+			    <td style="font-weight:800">Retention</td>
+			    <td>{{scratch.retention}}</td>
+			  </tr>
+			</table>
+			<br>
+
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>Personality and Lifestyle</strong></h3>
+			<table class="scratch_table" style="width:100%">
+			  <tr>
+			    <td style="font-weight:800">Innate tendency</td>
+			    <td>{{scratch.innate}}</td>
+			  </tr>
+			  <tr>
+			    <td style="font-weight:800">Learned tendency</td>
+			    <td>{{scratch.learned}}</td>
+			  </tr>
+			  <tr>
+			    <td style="font-weight:800">Currently</td>
+			    <td>{{scratch.currently}}</td>
+			  </tr>
+			  <tr>
+			    <td style="font-weight:800">Lifestyle</td>
+			    <td>{{scratch.lifestyle}}</td>
+			  </tr>
+			</table>
+			<br>
+
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em; "><strong>Current Action State</strong></h3>
+			<table class="scratch_table" style="width:100%">
+			  <tr>
+			    <td style="width:20%; font-weight:800">World Time Reference</td>
+			    <td>{{ authoritative_world_time.display }}</td>
+			  </tr>
+			  <tr>
+			    <td style="width:20%; font-weight:800">Daily Requirement</td>
+			    <td>
+			    	<ol>
+			    	{% for i in scratch.daily_req %}
+			    	  <li>{{ i }}</li>
+			    	{% endfor %}
+			    	</ol>
+			    </td>
+			  </tr>
+			  <tr>
+			    <td style="font-weight:800">Daily Schedule</td>
+			    <td>
+			    	<ol>
+			    	{% for i in scratch.f_daily_schedule %}
+			    	  <li>{{ i }}</li>
+			    	{% endfor %}
+			    	</ol>
+			    </td>
+			  </tr>
+			  <tr>
+			    <td style="font-weight:800">Action Address</td>
+			    <td>{{scratch.act_address}}</td>
+			  </tr>
+			  <tr>
+			    <td style="font-weight:800">Action Start Time</td>
+			    <td>
+			      {{ authoritative_world_time.display }}
+			      <details>
+			        <summary>Debug / legacy action start time</summary>
+			        {{ scratch.act_start_time }}
+			      </details>
+			    </td>
+			  </tr>
+			  <tr>
+			    <td style="font-weight:800">Action Duration</td>
+			    <td>{{scratch.act_duration}}</td>
+			  </tr>
+			  <tr>
+			    <td style="font-weight:800">Action Description</td>
+			    <td>{{scratch.act_description}}</td>
+			  </tr>
+			  <tr>
+			    <td style="font-weight:800">Action Pronunciatio</td>
+			    <td>{{scratch.act_pronunciatio}}</td>
+			  </tr>
+			</table>
+			<br>
+
+
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>Live Memories</strong></h3>
+			<div class="" style="width:100%">
+			  <p><strong>Authoritative World Time:</strong> {{ authoritative_world_time.display }}</p>
+			  {% if live_memories %}
+			    {% for memory in live_memories %}
+			      <p>
+			      	<strong>{{ memory.content }}</strong><br>
+			      	Source: {{ memory.source }}<br>
+			      	{% if memory.world_time %}
+			      	Entry World Time: Day {{ memory.world_day }} {{ memory.world_time }}<br>
+			      	{% else %}
+			      	World Time: <em>Not recorded for legacy memory</em><br>
+			      	{% endif %}
+			      	{% if memory.legacy_replay_time %}
+			      	<details>
+			      	  <summary>Debug / legacy replay time</summary>
+			      	  {{ memory.legacy_replay_time }}
+			      	</details>
+			      	{% endif %}
+			      	Type: {{ memory.relationship_event|default:memory.type }}<br>
+			      	Importance: {{ memory.importance_label|default:"Medium" }} ({{ memory.importance_score|default:"0.5" }})
+			      </p>
+			    {% endfor %}
+			  {% else %}
+			    <p><em>No live dialogue memories have been saved for this NPC.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>NPC Knowledge</strong></h3>
+			<div class="" style="width:100%">
+			  <p><strong>Authoritative World Time:</strong> {{ authoritative_world_time.display }}</p>
+			  {% if npc_knowledge %}
+			    {% for knowledge in npc_knowledge %}
+			      <div style="margin-bottom:1em;">
+			      	<strong>Knowledge: {{ knowledge.related_goal|default:"Task result" }}</strong><br>
+			      	Source: {{ knowledge.source }}<br>
+			      	Source type: {{ knowledge.source_type|default:"legacy/unknown" }}<br>
+			      	{% if knowledge.confidence %}
+			      	Confidence: {{ knowledge.confidence }}<br>
+			      	{% endif %}
+			      	Location: {{ knowledge.location|default:"Unknown" }}<br>
+			      	{% if knowledge.time %}
+			      	Entry World Time: {{ knowledge.time }}<br>
+			      	{% endif %}
+			      	{% if knowledge.knowledge_id %}
+			      	Knowledge ID: {{ knowledge.knowledge_id }}<br>
+			      	{% endif %}
+			      	{% if knowledge.source_memory_id %}
+			      	Source memory ID: {{ knowledge.source_memory_id }}<br>
+			      	{% endif %}
+			      	Findings:<br>
+			      	{% for finding in knowledge.findings %}
+			      	- {{ finding }}<br>
+			      	{% endfor %}
+			      	{% if knowledge.interpretation %}
+			      	<details style="margin-top:0.35em;">
+			      	  <summary>Knowledge Interpretation</summary>
+			      	  Summary: {{ knowledge.interpretation.summary|default:"Insufficient evidence." }}<br>
+			      	  Implications:<br>
+			      	  {% for implication in knowledge.interpretation.implications %}
+			      	  - {{ implication }}<br>
+			      	  {% empty %}
+			      	  <em>No implications recorded.</em><br>
+			      	  {% endfor %}
+			      	  Confidence: {{ knowledge.interpretation.confidence|default:"low" }}<br>
+			      	  {% if knowledge.interpretation.llm_failed %}
+			      	  LLM fallback: {{ knowledge.interpretation.error|default:"Unknown error" }}<br>
+			      	  {% endif %}
+			      	</details>
+			      	{% endif %}
+			      	{% if knowledge.evidence %}
+			      	<details style="margin-top:0.35em;">
+			      	  <summary>Knowledge Evidence</summary>
+			      	  Related Goal: {{ knowledge.related_goal|default:"Task result" }}<br>
+			      	  {% for evidence_item in knowledge.evidence %}
+			      	    {% if evidence_item.type == "action" %}
+			      	    Completed Action: {{ evidence_item.content }}{% if evidence_item.time %} ({{ evidence_item.time }}){% endif %}{% if evidence_item.location %} @ {{ evidence_item.location }}{% endif %}<br>
+			      	    {% endif %}
+			      	  {% endfor %}
+			      	  Observation Evidence:<br>
+			      	  {% for evidence_item in knowledge.evidence %}
+			      	    {% if evidence_item.type == "observation" %}
+			      	    - {{ evidence_item.content }}{% if evidence_item.time %} ({{ evidence_item.time }}){% endif %}{% if evidence_item.location %} @ {{ evidence_item.location }}{% endif %}<br>
+			      	    {% endif %}
+			      	  {% endfor %}
+			      	  Conversation Evidence:<br>
+			      	  {% for evidence_item in knowledge.evidence %}
+			      	    {% if evidence_item.type == "conversation" %}
+			      	    - {% if evidence_item.source_npc %}{{ evidence_item.source_npc }}: {% endif %}{{ evidence_item.content }}{% if evidence_item.time %} ({{ evidence_item.time }}){% endif %}<br>
+			      	    {% endif %}
+			      	  {% endfor %}
+			      	  Reflection Evidence:<br>
+			      	  {% for evidence_item in knowledge.evidence %}
+			      	    {% if evidence_item.type == "reflection" %}
+			      	    - {{ evidence_item.content }}{% if evidence_item.time %} ({{ evidence_item.time }}){% endif %}<br>
+			      	    {% endif %}
+			      	  {% endfor %}
+			      	</details>
+			      	{% endif %}
+			      	Importance: {{ knowledge.importance }}
+			      </div>
+			    {% endfor %}
+			  {% else %}
+			    <p><em>No structured NPC knowledge has been accumulated from completed tasks.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>NPC Belief Context</strong></h3>
+			<div class="" style="width:100%">
+			  <p><strong>Authoritative World Time:</strong> {{ authoritative_world_time.display }}</p>
+			  <p>
+			    Known facts:<br>
+			    {% if npc_belief.known_facts %}
+			      {% for fact in npc_belief.known_facts %}
+			      - {{ fact.content }}<br>
+			        Source: {{ fact.source|default:"unknown" }} |
+			        Source type: {{ fact.source_type|default:"unknown" }} |
+			        Confidence: {{ fact.confidence|default:"medium" }}<br>
+			      {% endfor %}
+			    {% else %}
+			      <em>No explicit NPC belief facts are stored for this NPC.</em><br>
+			    {% endif %}
+			  </p>
+			  <details>
+			    <summary>Debug / unknown world truth</summary>
+			    {% if unknown_world_facts %}
+			      {% for fact in unknown_world_facts %}
+			      - {{ fact.fact_id }}: {{ fact.truth }}<br>
+			      {% endfor %}
+			    {% else %}
+			      <em>No hidden or unknown canon facts listed for this NPC.</em><br>
+			    {% endif %}
+			  </details>
+			  {% if world_state.last_dialogue_world_grounding_context.target_npc == persona_name %}
+			    <p>
+			      Target: {{ world_state.last_dialogue_world_grounding_context.target_npc }}<br>
+			      Location: {{ world_state.last_dialogue_world_grounding_context.location|default:"Unknown" }}<br>
+			      Player message: {{ world_state.last_dialogue_world_grounding_context.player_message|default:"N/A" }}<br>
+			      Relevant NPC Beliefs: {{ world_state.last_dialogue_world_grounding_context.belief_count|default:"0" }}<br>
+			      {% if world_state.last_dialogue_world_grounding_context.beliefs_used %}
+			        {% for belief in world_state.last_dialogue_world_grounding_context.beliefs_used %}
+			        - {{ belief }}<br>
+			        {% endfor %}
+			      {% else %}
+			        <em>No NPC beliefs were injected for the last dialogue.</em><br>
+			      {% endif %}
+			      {% if world_state.last_dialogue_world_grounding_context.belief_ids %}
+			      Belief IDs: {{ world_state.last_dialogue_world_grounding_context.belief_ids }}<br>
+			      {% endif %}
+			      {% if world_state.last_dialogue_world_grounding_context.retrieval_error %}
+			      Retrieval warning: {{ world_state.last_dialogue_world_grounding_context.retrieval_error }}<br>
+			      {% endif %}
+			    </p>
+			    {% if world_state.last_dialogue_world_grounding_context.grounding_check %}
+			    <p>
+			      Grounded: {{ world_state.last_dialogue_world_grounding_context.grounding_check.grounded }}<br>
+			      Grounding Warnings:<br>
+			      {% if world_state.last_dialogue_world_grounding_context.grounding_check.warnings %}
+			        {% for warning in world_state.last_dialogue_world_grounding_context.grounding_check.warnings %}
+			        - {{ warning }}<br>
+			        {% endfor %}
+			      {% else %}
+			        <em>No grounding warnings recorded.</em><br>
+			      {% endif %}
+			    </p>
+			    {% endif %}
+			  {% else %}
+			    <p><em>No dialogue NPC belief context has been recorded for this NPC yet.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>Dialogue Knowledge Context</strong></h3>
+			<div class="" style="width:100%">
+			  <p><strong>Authoritative World Time:</strong> {{ authoritative_world_time.display }}</p>
+			  {% if world_state.last_dialogue_knowledge_context.target_npc == persona_name %}
+			    <p>
+			      <strong>Last dialogue knowledge used:</strong><br>
+			      Target: {{ world_state.last_dialogue_knowledge_context.target_npc }}<br>
+			      Location: {{ world_state.last_dialogue_knowledge_context.location|default:"Unknown" }}<br>
+			      Player message: {{ world_state.last_dialogue_knowledge_context.player_message|default:"N/A" }}<br>
+			      Knowledge count: {{ world_state.last_dialogue_knowledge_context.knowledge_count|default:"0" }}<br>
+			      {% if world_state.last_dialogue_knowledge_context.knowledge_used %}
+			        {% for summary in world_state.last_dialogue_knowledge_context.knowledge_used %}
+			        - {{ summary }}<br>
+			        {% endfor %}
+			      {% else %}
+			        <em>No relevant NPC knowledge was used for the last dialogue.</em><br>
+			      {% endif %}
+			      {% if world_state.last_dialogue_knowledge_context.knowledge_ids %}
+			      Knowledge IDs:<br>
+			        {% for knowledge_id in world_state.last_dialogue_knowledge_context.knowledge_ids %}
+			        - {{ knowledge_id }}<br>
+			        {% endfor %}
+			      {% endif %}
+			      {% if world_state.last_dialogue_knowledge_context.retrieval_error %}
+			      Retrieval warning: {{ world_state.last_dialogue_knowledge_context.retrieval_error }}<br>
+			      {% endif %}
+			    </p>
+			  {% else %}
+			    <p><em>No dialogue knowledge context has been recorded for this NPC yet.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>Dialogue Relationship Context</strong></h3>
+			<div class="" style="width:100%">
+			  <p><strong>Authoritative World Time:</strong> {{ authoritative_world_time.display }}</p>
+			  {% if world_state.last_dialogue_relationship_context.target_npc == persona_name %}
+			    <p>
+			      Last relationship state used: {{ world_state.last_dialogue_relationship_context.relationship_state|default:"neutral" }}<br>
+			      Player message: {{ world_state.last_dialogue_relationship_context.player_message|default:"N/A" }}<br>
+			      Relationship memories used:<br>
+			      {% if world_state.last_dialogue_relationship_context.relationship_memories_used %}
+			        {% for memory in world_state.last_dialogue_relationship_context.relationship_memories_used %}
+			        - {{ memory }}<br>
+			        {% endfor %}
+			      {% else %}
+			        <em>No relationship memories were used for the last dialogue.</em><br>
+			      {% endif %}
+			      {% if world_state.last_dialogue_relationship_context.relationship_memory_ids %}
+			      Relationship memory IDs:<br>
+			        {% for memory_id in world_state.last_dialogue_relationship_context.relationship_memory_ids %}
+			        - {{ memory_id }}<br>
+			        {% endfor %}
+			      {% endif %}
+			      {% if world_state.last_dialogue_relationship_context.recent_relationship_reasoning %}
+			      Recent relationship reasoning used:<br>
+			      Signal: {{ world_state.last_dialogue_relationship_context.recent_relationship_reasoning.relationship_signal|default:"neutral" }}<br>
+			      Change: {{ world_state.last_dialogue_relationship_context.recent_relationship_reasoning.relationship_change|default:"none" }}<br>
+			      Strength: {{ world_state.last_dialogue_relationship_context.recent_relationship_reasoning.impact_strength|default:"small" }}<br>
+			      Confidence: {{ world_state.last_dialogue_relationship_context.recent_relationship_reasoning.confidence|default:"N/A" }}<br>
+			      Reason: {{ world_state.last_dialogue_relationship_context.recent_relationship_reasoning.reason|default:"N/A" }}<br>
+			      {% endif %}
+			    </p>
+			  {% else %}
+			    <p><em>No dialogue relationship context has been recorded for this NPC yet.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>NPC Reflections</strong></h3>
+			<div class="" style="width:100%">
+			  <p><strong>Authoritative World Time:</strong> {{ authoritative_world_time.display }}</p>
+			  {% if live_reflections %}
+			    {% for reflection in live_reflections %}
+			      <p>
+			      	<strong>{{ reflection.reflection }}</strong><br>
+			      	Source memory: {{ reflection.source_memory }}<br>
+			      	{% if reflection.world_time %}
+			      	Entry World Time: Day {{ reflection.world_day }} {{ reflection.world_time }}<br>
+			      	{% else %}
+			      	World Time: <em>Not recorded for legacy reflection</em><br>
+			      	{% endif %}
+			      	{% if reflection.legacy_replay_time %}
+			      	<details>
+			      	  <summary>Debug / legacy replay time</summary>
+			      	  {{ reflection.legacy_replay_time }}
+			      	</details>
+			      	{% endif %}
+			      	Importance: {{ reflection.importance }}
+			      </p>
+			    {% endfor %}
+			  {% else %}
+			    <p><em>No live dialogue reflections have been saved for this NPC.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>NPC Spatial State</strong></h3>
+			<div class="" style="width:100%">
+			  <p><strong>Authoritative World Time:</strong> {{ authoritative_world_time.display }}</p>
+			  {% if npc_spatial_state %}
+			    <p>
+			      <strong>{{ persona_name }}</strong><br>
+			      Current location: {{ npc_spatial_state.current_location|default:"Unknown" }}<br>
+			      Current tile: {{ npc_spatial_state.current_tile|default:"Unknown" }}<br>
+			      From location: {{ npc_spatial_state.from_location|default:"None" }}<br>
+			      Target location: {{ npc_spatial_state.target_location|default:"None" }}<br>
+			      Target tile: {{ npc_spatial_state.target_tile|default:"None" }}<br>
+			      Current action: {{ npc_spatial_state.current_action|default:"None" }}<br>
+			      Status: {{ npc_spatial_state.movement_status|default:"idle" }}<br>
+			      Progress: {{ npc_spatial_state.route_progress|default:"0" }}%<br>
+			      Movement start: {{ npc_spatial_state.movement_start_time|default:"None" }}<br>
+			      Estimated arrival: {{ npc_spatial_state.estimated_arrival_time|default:"None" }}<br>
+			      State Updated World Time: Day {{ npc_spatial_state.world_day }} {{ npc_spatial_state.world_time }}
+			    </p>
+			  {% else %}
+			    <p><em>No persistent spatial state has been initialized for this NPC.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>NPC Schedules</strong></h3>
+			<div class="" style="width:100%">
+			  {% if npc_schedules %}
+			    {% for schedule in npc_schedules %}
+			      <p>
+			      	<strong>{{ schedule.time }}</strong>: {{ schedule.action }}<br>
+			      	Location: {{ schedule.location|default:"Unknown" }}
+			      </p>
+			    {% endfor %}
+			  {% else %}
+			    <p><em>No persistent schedule has been bootstrapped for this NPC.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>NPC Goals</strong></h3>
+			<h4><strong>Current Goal Status</strong></h4>
+			<div class="" style="width:100%">
+			  <p><strong>Authoritative World Time:</strong> {{ authoritative_world_time.display }}</p>
+			  {% if npc_goals %}
+			    {% for goal in npc_goals %}
+			      <p>
+			      	<strong>{{ goal.goal }}</strong><br>
+			      	Source: {{ goal.source }}<br>
+			      	Reason: {{ goal.reason }}<br>
+			      	Target: {{ goal.target_location|default:goal.location }}<br>
+			      	Deadline: {{ goal.deadline }}<br>
+			      	Priority: {{ goal.priority }}<br>
+			      	Status: {{ goal.status }}<br>
+			      	{% if goal.completed_world_time %}
+			      	Completed: Day {{ goal.completed_world_day }} {{ goal.completed_world_time }}<br>
+			      	{% elif goal.completed_time %}
+			      	Completed: {{ goal.completed_time }}<br>
+			      	{% endif %}
+			      	Actions: {{ goal.actions }}<br>
+			      	{% if goal.source_memory_id %}
+			      	Source memory ID: {{ goal.source_memory_id }}<br>
+			      	{% endif %}
+			      </p>
+			    {% endfor %}
+			  {% else %}
+			    <p><em>No player-derived NPC goals have been extracted for this NPC.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>Player Relationship</strong></h3>
+			<div class="" style="width:100%">
+			    <p><strong>Authoritative World Time:</strong> {{ authoritative_world_time.display }}</p>
+			    {% if player_relationship %}
+			      <p>
+			        Relationship state: {{ player_relationship.relationship_state|default:"neutral" }}<br>
+			        Relationship score: {{ player_relationship.relationship_score|default:"0.0" }}<br>
+			        {% if player_relationship.last_relationship_update %}
+			        Recent Relationship Update:<br>
+			        Type: {{ player_relationship.last_relationship_update.relationship_event|default:player_relationship.last_relationship_update.event_type }}<br>
+			        Reason: {{ player_relationship.last_relationship_update.reason|default:"N/A" }}<br>
+			        Event: {{ player_relationship.last_relationship_update.event }}{% if player_relationship.last_relationship_update.time %} ({{ player_relationship.last_relationship_update.time }}){% endif %}<br>
+			        Impact: {{ player_relationship.last_relationship_update.impact|default:"N/A" }}<br>
+			        {% else %}
+			        Recent Relationship Update: none<br>
+			        {% endif %}
+			        {% if player_relationship.last_relationship_reasoning %}
+			        Recent Relationship Reasoning:<br>
+			        Signal: {{ player_relationship.last_relationship_reasoning.relationship_signal|default:"neutral" }}<br>
+			        Change: {{ player_relationship.last_relationship_reasoning.relationship_change|default:"none" }}<br>
+			        Strength: {{ player_relationship.last_relationship_reasoning.impact_strength|default:"small" }}<br>
+			        Confidence: {{ player_relationship.last_relationship_reasoning.confidence|default:"N/A" }}<br>
+			        Reason: {{ player_relationship.last_relationship_reasoning.reason|default:"N/A" }}<br>
+			        Backend: {{ player_relationship.last_relationship_reasoning.backend|default:"N/A" }}{% if player_relationship.last_relationship_reasoning.model %} / {{ player_relationship.last_relationship_reasoning.model }}{% endif %}<br>
+			        {% endif %}
+			        Relationship Event History:<br>
+			        {% if player_relationship.relationship_events %}
+			          {% for event in player_relationship.relationship_events reversed %}
+			          - {{ event.timestamp|default:"N/A" }}<br>
+			            Type: {{ event.event_type|default:"N/A" }}<br>
+			            Signal: {{ event.signal|default:"N/A" }} / Strength: {{ event.strength|default:"N/A" }}<br>
+			            Reason: {{ event.reason|default:"N/A" }}<br>
+			            Impact: {{ event.impact|default:"0.0" }}<br>
+			          {% endfor %}
+			        {% else %}
+			          <em>No typed relationship events recorded.</em><br>
+			        {% endif %}
+			        Positive memories:<br>
+			        {% if player_relationship.positive_memories %}
+			          {% for memory in player_relationship.positive_memories reversed %}
+			          - {% if memory.relationship_event %}[{{ memory.relationship_event }}] {% elif memory.event_type %}[{{ memory.event_type }}] {% endif %}{{ memory.event }}{% if memory.time %} ({{ memory.time }}){% endif %}{% if memory.impact %} impact={{ memory.impact }}{% endif %}{% if memory.confidence %} confidence={{ memory.confidence }}{% endif %}<br>
+			          {% endfor %}
+			        {% else %}
+			          <em>No positive relationship memories recorded.</em><br>
+			        {% endif %}
+			        Negative memories:<br>
+			        {% if player_relationship.negative_memories %}
+			          {% for memory in player_relationship.negative_memories reversed %}
+			          - {% if memory.relationship_event %}[{{ memory.relationship_event }}] {% elif memory.event_type %}[{{ memory.event_type }}] {% endif %}{{ memory.event }}{% if memory.time %} ({{ memory.time }}){% endif %}{% if memory.impact %} impact={{ memory.impact }}{% endif %}{% if memory.confidence %} confidence={{ memory.confidence }}{% endif %}<br>
+			          {% endfor %}
+			        {% else %}
+			          <em>No negative relationship memories recorded.</em><br>
+			        {% endif %}
+			      </p>
+			    {% else %}
+			      <p>
+			        Relationship state: neutral<br>
+			        Recent Relationship Update: none<br>
+			        Positive memories:<br>
+			        <em>No positive relationship memories recorded.</em><br>
+			        Negative memories:<br>
+			        <em>No negative relationship memories recorded.</em><br>
+			        <em>No player relationship memory has been recorded for this NPC.</em>
+			      </p>
+			    {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>Generated Daily Plan</strong></h3>
+			<div class="" style="width:100%">
+			  <p><strong>Authoritative World Time:</strong> {{ authoritative_world_time.display }}</p>
+			  {% if npc_daily_plan.schedule %}
+			    <p>
+			      <strong>Daily Plan Source:</strong> {{ npc_daily_plan.planner|default:"deterministic" }}<br>
+			      <strong>Day:</strong> {{ npc_daily_plan.day }}<br>
+			      <strong>Generated at:</strong> {{ npc_daily_plan.generated_at|default:"N/A" }}<br>
+			      {% if npc_daily_plan.planner_error %}
+			        <strong>Planner fallback/error:</strong> {{ npc_daily_plan.planner_error }}<br>
+			      {% endif %}
+			      {% if npc_daily_plan.planner_metadata %}
+			        <strong>Planner metadata:</strong><br>
+			        Planner Attempt: {{ npc_daily_plan.planner_metadata.planner_attempt|default:"False" }}<br>
+			        Requested planner: {{ npc_daily_plan.planner_metadata.requested_planner|default:"N/A" }}<br>
+			        Model: {{ npc_daily_plan.planner_metadata.model|default:"N/A" }}<br>
+			        Max tokens: {{ npc_daily_plan.planner_metadata.max_tokens|default:"N/A" }}<br>
+			        Finish reason: {{ npc_daily_plan.planner_metadata.finish_reason|default:"N/A" }}<br>
+			        Prompt chars: {{ npc_daily_plan.planner_metadata.prompt_chars|default:"N/A" }}<br>
+			        Raw Response Length:
+			        {% if npc_daily_plan.planner_metadata.raw_response_length %}
+			          {{ npc_daily_plan.planner_metadata.raw_response_length }}
+			        {% elif npc_daily_plan.planner_metadata.raw_reply_chars %}
+			          {{ npc_daily_plan.planner_metadata.raw_reply_chars }}
+			        {% else %}
+			          N/A
+			        {% endif %}<br>
+			        Parsed Successfully: {{ npc_daily_plan.planner_metadata.parsed_successfully|default:"False" }}<br>
+			        Fallback Reason: {{ npc_daily_plan.planner_metadata.fallback_reason|default:"N/A" }}<br>
+			        Debug log: {{ npc_daily_plan.planner_metadata.debug_log_path|default:"N/A" }}<br>
+			        {% if npc_daily_plan.planner_metadata.validation_warnings %}
+			          Validation warnings: {{ npc_daily_plan.planner_metadata.validation_warnings }}<br>
+			        {% endif %}
+			      {% endif %}
+			      {% for item in npc_daily_plan.schedule %}
+			        - {{ item.time }} {{ item.action }} @ {{ item.location }}
+			        {% if item.from_location or item.to_location %}
+			          [{{ item.from_location|default:item.location }} -> {{ item.to_location|default:item.location }}]
+			        {% endif %}
+			        {% if item.duration %}({{ item.duration }}m){% endif %}
+			        {% if item.life_state %} state={{ item.life_state }}{% endif %}<br>
+			      {% endfor %}
+			    </p>
+			    {% if npc_daily_plan.planning_context %}
+			      <p>
+			        <strong>Generated Plan Context Summary:</strong><br>
+			        Recent memories: {{ npc_daily_plan.planning_context.recent_memory_count|default:"0" }}<br>
+			        Reflections: {{ npc_daily_plan.planning_context.reflection_count|default:"0" }}<br>
+			        Observations: {{ npc_daily_plan.planning_context.observation_count|default:"0" }}<br>
+			        Completed requests: {{ npc_daily_plan.planning_context.completed_request_count|default:"0" }}<br>
+			        Pending requests: {{ npc_daily_plan.planning_context.pending_request_count|default:"0" }}<br>
+			        NPC goals: {{ npc_daily_plan.planning_context.npc_goal_count|default:"0" }}<br>
+			        Knowledge used: {{ npc_daily_plan.planning_context.knowledge_count|default:"0" }}<br>
+			        NPC beliefs used: {{ npc_daily_plan.planning_context.belief_count|default:"0" }}
+			      </p>
+			      <p>
+			        <strong>Planning Knowledge Context:</strong><br>
+			        {% if npc_daily_plan.planning_context.knowledge_used %}
+			          Knowledge used by planner:<br>
+			          {% for summary in npc_daily_plan.planning_context.knowledge_used %}
+			          - {{ summary }}<br>
+			          {% endfor %}
+			          {% if npc_daily_plan.planning_context.knowledge_ids %}
+			            Knowledge IDs: {{ npc_daily_plan.planning_context.knowledge_ids }}<br>
+			          {% endif %}
+			        {% else %}
+			          <em>No relevant NPC knowledge was used by this plan.</em>
+			        {% endif %}
+			      </p>
+			      <p>
+			        <strong>Planning NPC Belief Context:</strong><br>
+			        {% if npc_daily_plan.planning_context.beliefs_used %}
+			          Relevant NPC beliefs used by planner:<br>
+			          {% for belief in npc_daily_plan.planning_context.beliefs_used %}
+			          - {{ belief }}<br>
+			          {% endfor %}
+			          {% if npc_daily_plan.planning_context.belief_ids %}
+			            Belief IDs: {{ npc_daily_plan.planning_context.belief_ids }}<br>
+			          {% endif %}
+			        {% else %}
+			          <em>No relevant NPC beliefs were used by this plan.</em>
+			        {% endif %}
+			      </p>
+			    {% endif %}
+			  {% else %}
+			    <p><em>No generated daily plan exists for this NPC and current day.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>NPC Actions</strong></h3>
+			<div class="" style="width:100%">
+			  <p><strong>Authoritative World Time:</strong> {{ authoritative_world_time.display }}</p>
+			  <h4><strong>Active Actions</strong></h4>
+			  {% if active_actions %}
+			    {% for action in active_actions %}
+			      <p>
+			      	<strong>{{ action.action }}</strong><br>
+			      	Location: {{ action.location }}<br>
+			      	Status: {{ action.status }}<br>
+			      	Action World Time: Day {{ action.world_day }} {{ action.world_time }}
+			      </p>
+			    {% endfor %}
+			  {% else %}
+			    <p><em>No active scheduled actions for this NPC.</em></p>
+			  {% endif %}
+			  <h4><strong>Completed Actions</strong></h4>
+			  {% if completed_actions %}
+			    {% for action in completed_actions %}
+			      <p>
+			      	<strong>{{ action.action }}</strong><br>
+			      	Location: {{ action.location }}<br>
+			      	Status: {{ action.status }}<br>
+			      	Action World Time: Day {{ action.world_day }} {{ action.world_time }}<br>
+			      	Completed at: {{ action.completed_at }}
+			      </p>
+			    {% endfor %}
+			  {% else %}
+			    <p><em>No completed scheduled actions for this NPC.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>NPC Observations</strong></h3>
+			<div class="" style="width:100%">
+			  <p><strong>Authoritative World Time:</strong> {{ authoritative_world_time.display }}</p>
+			  {% if live_observations %}
+			    {% for observation in live_observations %}
+			      <p>
+			      	<strong>{{ observation.content }}</strong><br>
+			      	Action: {{ observation.action }}<br>
+			      	Source: {{ observation.source }}<br>
+			      	{% if observation.world_time %}
+			      	Entry World Time: Day {{ observation.world_day }} {{ observation.world_time }}<br>
+			      	{% else %}
+			      	World Time: <em>Not recorded for legacy observation</em><br>
+			      	{% endif %}
+			      	{% if observation.legacy_replay_time %}
+			      	<details>
+			      	  <summary>Debug / legacy replay time</summary>
+			      	  {{ observation.legacy_replay_time }}
+			      	</details>
+			      	{% endif %}
+			      	Importance: {{ observation.importance }}
+			      </p>
+			    {% endfor %}
+			  {% else %}
+			    <p><em>No action feedback observations have been saved for this NPC.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>Completed Requests</strong></h3>
+			<div class="" style="width:100%">
+			  <p><strong>Authoritative World Time:</strong> {{ authoritative_world_time.display }}</p>
+			  {% if completed_requests %}
+			    {% for request_memory in completed_requests %}
+			      <p>
+			      	<strong>{{ request_memory.content }}</strong><br>
+			      	Memory ID: {{ request_memory.id }}<br>
+			      	Action: {{ request_memory.action }}<br>
+			      	Topic: {{ request_memory.topic }}<br>
+			      	Status: {{ request_memory.status }}<br>
+			      	Completed time: {{ request_memory.completed_time }}<br>
+			      	{% if request_memory.completed_world_time %}
+			      	Completed world time: Day {{ request_memory.completed_world_day }} {{ request_memory.completed_world_time }}<br>
+			      	{% endif %}
+			      	{% if request_memory.legacy_replay_time %}
+			      	<details>
+			      	  <summary>Debug / legacy replay time</summary>
+			      	  {{ request_memory.legacy_replay_time }}
+			      	</details>
+			      	{% endif %}
+			      	Importance: {{ request_memory.importance }}
+			      </p>
+			    {% endfor %}
+			  {% else %}
+			    <p><em>No live requests have been marked completed for this NPC.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>World Clock</strong></h3>
+			<div class="" style="width:100%">
+			  <p><strong>Current time:</strong> {{ authoritative_world_time.display }}<br>
+			  <strong>Source of truth:</strong> world_state.current_day / world_state.current_time</p>
+			  {% if world_state.previous_day_summary %}
+			    <p><strong>Previous Day Summary:</strong><br>
+			    {% for line in world_state.previous_day_summary %}
+			      - {{ line }}<br>
+			    {% endfor %}
+			    </p>
+			  {% else %}
+			    <p><em>No previous day summary has been recorded.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>World State Summary</strong></h3>
+			<div class="" style="width:100%">
+			  <p>
+			    Active requests: {{ world_state.active_requests|length }}<br>
+			    Recent observations: {{ world_state.recent_observations|length }}<br>
+			    Completed events: {{ world_state.completed_events|length }}<br>
+			    Active actions: {{ world_state.active_actions|length }}<br>
+			    Completed actions: {{ world_state.completed_actions|length }}<br>
+			    Previous days: {{ world_state.previous_days|length }}<br>
+			    Last planner: {{ world_state.last_daily_planning.planner|default:"N/A" }}<br>
+			    Last planning day: {{ world_state.last_daily_planning.day|default:"N/A" }}
+			  </p>
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>Time Catch-up Log</strong></h3>
+			<div class="" style="width:100%">
+			  {% if world_state.time_catchup_log %}
+			    {% for catchup in world_state.time_catchup_log reversed %}
+			      <p>
+			      	<strong>Day {{ catchup.day }} {{ catchup.from_time }} -> {{ catchup.to_time }}</strong><br>
+			      	{% if catchup.actions %}
+			      	  {% for action in catchup.actions %}
+			      	    - {{ action.time }} {{ action.npc }}: {{ action.action }} @ {{ action.location }}<br>
+			      	  {% endfor %}
+			      	{% else %}
+			      	  <em>No missed actions were processed.</em><br>
+			      	{% endif %}
+			      </p>
+			    {% endfor %}
+			  {% else %}
+			    <p><em>No time jump catch-up has been recorded.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>World Timeline</strong></h3>
+			<div class="" style="width:100%">
+			  {% if world_timeline %}
+			    {% for day_entry in world_timeline %}
+			      <p>
+			      	<strong>Day {{ day_entry.day }}</strong><br>
+			      	{% if day_entry.summary %}
+			      	  {% for line in day_entry.summary %}
+			      	    - {{ line }}<br>
+			      	  {% endfor %}
+			      	{% else %}
+			      	  <em>No previous day events recorded.</em><br>
+			      	{% endif %}
+			      </p>
+			    {% endfor %}
+			  {% else %}
+			    <p><em>No previous day transitions have been recorded.</em></p>
+			  {% endif %}
+			</div>
+			<br>
+
+			<hr style="border:solid; border-width:1px">
+			<h3 style="font-size:1.65em"><strong>Agent's Memory</strong></h3>
+			<h4 style="font-size:1.45em"><strong>Event</strong></h4>
+			<div class="" style="width:100%">
+			  {% for node_details in a_mem_event %}
+				  <p>
+				  	<!-- <strong>Node ID: node_{{ node_details.node_count }}</strong><br> -->
+				  	<!-- Node Count: {{ node_details.node_count }} ||  -->
+				  	<!-- Type Count: {{ node_details.type_count }}  -->
+				  	<!-- <br> -->
+				  	[node_{{ node_details.node_count }}] {{ node_details.created }}: <strong>{{ node_details.description }}</strong>
+				  	<!-- || -->
+				  	<!-- Expiration: {{ node_details.expiration }} -->
+				  	<!-- <br> -->
+				  	<!-- S, P, O 
+				  	 node_details.subject , 
+				  	 node_details.predicate , 
+				  	 node_details.object 
+				  	<br> -->
+				  	<!-- Description: {{ node_details.description }} -->
+				  	<!-- <br> -->
+				  	<!-- Keywords: {{ node_details.keywords }} -->
+				  	<!-- <br> -->
+				  	<!-- Filling: {{ node_details.filling }} -->
+				  </p> 
+				   
+			  {% endfor %}
+			</div>
+			<br>
+
+			
+			<h4 style="font-size:1.45em"><strong>Agent's Conversation History</strong></h4>
+			<div class="" style="width:100%">
+			  {% for node_details in a_mem_chat %}
+				  <p>
+				  	Created: {{ node_details.created }} 
+				  	<br>
+				  	Description: {{ node_details.description }}
+				  	<br>
+				  	Filling: <br>
+				  	{% for name, utt in node_details.filling %}
+				  	<span style="font-style: italic;">{{ name }}</span>: {{ utt }}<br>
+				  	{% endfor %}
+				  </p> 
+			  {% endfor %}
+			</div>
+			<br>
+
+			<h4 style="font-size:1.45em"><strong>Agent's Thought</strong></h4>
+			<div class="" style="width:100%">
+			  {% for node_details in a_mem_thought %}
+				  <p>
+				  	[node_{{ node_details.node_count }}] {{ node_details.created }}: <strong>{{ node_details.description }}</strong> 
+
+				  	<br>(Depth: {{ node_details.depth }}; Evidence: {{ node_details.filling }})
+				  	
+				  </p> 
+			  {% endfor %}
+			</div>
+			<br>
+
+
+
+		</div>
+  </div>
+</div>
+{% endblock content %}

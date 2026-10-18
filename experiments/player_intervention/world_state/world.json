@@ -1,0 +1,650 @@
+{
+  "current_day": 1,
+  "current_time": "07:00",
+  "time_step_minutes": 60,
+  "last_tick": "2026-09-04T23:11:16",
+  "completed_events": [],
+  "recent_observations": [],
+  "active_requests": [],
+  "npc_schedules": {
+    "Mira Chen": [
+      {
+        "time": "07:00",
+        "action": "Open tea shop at 7:00 AM and greet regulars",
+        "location": "Tea Shop",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "09:00",
+        "action": "Open tea shop at 7:00 AM and greet regulars",
+        "location": "Tea Shop",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "11:00",
+        "action": "Read community news and observe market activity after lunch at 1:00 PM",
+        "location": "Market",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "13:00",
+        "action": "Read community news and observe market activity after lunch at 1:00 PM",
+        "location": "Market",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "15:00",
+        "action": "Read community news and observe market activity after lunch at 1:00 PM",
+        "location": "Market",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "17:00",
+        "action": "Close shop and walk through neighborhood to check for changes at 6:00 PM",
+        "location": "Tea Shop",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "19:00",
+        "action": "Close shop and walk through neighborhood to check for changes at 6:00 PM",
+        "location": "Tea Shop",
+        "source": "simulation_result_timeline"
+      }
+    ],
+    "Tovan Reed": [
+      {
+        "time": "07:00",
+        "action": "Morning patrol and vendor check-in at 7:00 AM",
+        "location": "Guard Post",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "09:00",
+        "action": "Morning patrol and vendor check-in at 7:00 AM",
+        "location": "Guard Post",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "11:00",
+        "action": "Mediate disputes and inspect new stalls at 12:00 PM",
+        "location": "Guard Post",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "13:00",
+        "action": "Mediate disputes and inspect new stalls at 12:00 PM",
+        "location": "Guard Post",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "15:00",
+        "action": "Mediate disputes and inspect new stalls at 12:00 PM",
+        "location": "Guard Post",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "17:00",
+        "action": "Evening sweep and suspicious activity report at 5:00 PM",
+        "location": "Guard Post",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "19:00",
+        "action": "Evening sweep and suspicious activity report at 5:00 PM",
+        "location": "Guard Post",
+        "source": "simulation_result_timeline"
+      }
+    ],
+    "Lysa Vale": [
+      {
+        "time": "07:00",
+        "action": "Morning: Visit market stalls to negotiate prices and ask about safe trade routes",
+        "location": "Market",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "09:00",
+        "action": "Morning: Visit market stalls to negotiate prices and ask about safe trade routes",
+        "location": "Market",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "11:00",
+        "action": "Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability",
+        "location": "Market",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "13:00",
+        "action": "Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability",
+        "location": "Market",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "15:00",
+        "action": "Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability",
+        "location": "Market",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "17:00",
+        "action": "Evening: Record promising trade leads and update travel notes",
+        "location": "Market",
+        "source": "simulation_result_timeline"
+      },
+      {
+        "time": "19:00",
+        "action": "Evening: Record promising trade leads and update travel notes",
+        "location": "Market",
+        "source": "simulation_result_timeline"
+      }
+    ]
+  },
+  "npc_daily_plans": {
+    "day_1": {
+      "Lysa Vale": {
+        "day": 1,
+        "schedule": [
+          {
+            "time": "07:00",
+            "action": "wake up",
+            "location": "Inn",
+            "duration": 30,
+            "from_location": "Inn",
+            "to_location": "Inn",
+            "life_state": "sleep_to_awake"
+          },
+          {
+            "time": "08:00",
+            "action": "visit market stalls",
+            "location": "Market",
+            "duration": 180,
+            "from_location": "Inn",
+            "to_location": "Market",
+            "life_state": "work"
+          },
+          {
+            "time": "14:00",
+            "action": "visit merchants about trade conditions",
+            "location": "Market",
+            "duration": 60,
+            "from_location": "Market",
+            "to_location": "Market",
+            "life_state": "trade_activity"
+          },
+          {
+            "time": "18:00",
+            "action": "review trade notes",
+            "location": "Inn",
+            "duration": 60,
+            "from_location": "Market",
+            "to_location": "Inn",
+            "life_state": "return_home"
+          },
+          {
+            "time": "22:00",
+            "action": "sleep",
+            "location": "Inn",
+            "duration": 480,
+            "from_location": "Inn",
+            "to_location": "Inn",
+            "life_state": "sleep"
+          }
+        ],
+        "planning_context": {
+          "agent_config": "full_agent",
+          "use_memory": true,
+          "use_knowledge": true,
+          "use_relationship": true,
+          "use_world_grounding": true,
+          "use_belief": true,
+          "recent_memory_count": 0,
+          "reflection_count": 0,
+          "observation_count": 0,
+          "completed_request_count": 0,
+          "pending_request_count": 0,
+          "npc_goal_count": 0,
+          "knowledge_count": 2,
+          "knowledge_ids": [
+            "knowledge_Lysa_Vale_task_20260904_230443_374038",
+            "knowledge_Lysa_Vale_market_information_20260904_225913_933511"
+          ],
+          "knowledge_used": [
+            "Lysa Vale investigated market conditions on Day 1 by visiting the market, talking with vendors, and collecting information about current trade conditions. She also completed the player's request to ask vendors about market conditions. Later she continued her usual routine: checking tea quality at a tea shop, taking lunch at the inn, closing her stall, checking local trade gossip in the village, dining, and reviewing trade notes to plan for the next day.",
+            "Visited the market and talked with vendors. Collected information about current trade conditions. Collected observations related to the investigation goal."
+          ],
+          "belief_count": 2,
+          "belief_ids": [
+            "market_sells_tea",
+            "north_route_unstable"
+          ],
+          "beliefs_used": [
+            "The market sells tea.",
+            "The northern trade route is unstable."
+          ]
+        },
+        "planner": "deterministic",
+        "planner_error": "",
+        "planner_metadata": {
+          "planner_attempt": false,
+          "requested_planner": "deterministic",
+          "parsed_successfully": false,
+          "planner_context_summary": {
+            "agent_config": "full_agent",
+            "use_memory": true,
+            "use_knowledge": true,
+            "use_relationship": true,
+            "use_world_grounding": true,
+            "use_belief": true,
+            "recent_memory_count": 0,
+            "reflection_count": 0,
+            "observation_count": 0,
+            "completed_request_count": 0,
+            "pending_request_count": 0,
+            "npc_goal_count": 0,
+            "knowledge_count": 2,
+            "knowledge_ids": [
+              "knowledge_Lysa_Vale_task_20260904_230443_374038",
+              "knowledge_Lysa_Vale_market_information_20260904_225913_933511"
+            ],
+            "knowledge_used": [
+              "Lysa Vale investigated market conditions on Day 1 by visiting the market, talking with vendors, and collecting information about current trade conditions. She also completed the player's request to ask vendors about market conditions. Later she continued her usual routine: checking tea quality at a tea shop, taking lunch at the inn, closing her stall, checking local trade gossip in the village, dining, and reviewing trade notes to plan for the next day.",
+              "Visited the market and talked with vendors. Collected information about current trade conditions. Collected observations related to the investigation goal."
+            ],
+            "belief_count": 2,
+            "belief_ids": [
+              "market_sells_tea",
+              "north_route_unstable"
+            ],
+            "beliefs_used": [
+              "The market sells tea.",
+              "The northern trade route is unstable."
+            ]
+          }
+        },
+        "generated_at": "2026-09-04T23:11:16"
+      },
+      "Mira Chen": {
+        "day": 1,
+        "schedule": [
+          {
+            "time": "07:00",
+            "action": "wake up",
+            "location": "Home",
+            "duration": 30,
+            "from_location": "Home",
+            "to_location": "Home",
+            "life_state": "sleep_to_awake"
+          },
+          {
+            "time": "08:00",
+            "action": "open tea shop",
+            "location": "Tea Shop",
+            "duration": 60,
+            "from_location": "Home",
+            "to_location": "Tea Shop",
+            "life_state": "travel_to_work"
+          },
+          {
+            "time": "10:00",
+            "action": "serve tea shop customers",
+            "location": "Tea Shop",
+            "duration": 180,
+            "from_location": "Tea Shop",
+            "to_location": "Tea Shop",
+            "life_state": "work"
+          },
+          {
+            "time": "14:00",
+            "action": "visit market",
+            "location": "Market",
+            "duration": 60,
+            "from_location": "Tea Shop",
+            "to_location": "Market",
+            "life_state": "social_activity"
+          },
+          {
+            "time": "17:00",
+            "action": "return home",
+            "location": "Home",
+            "duration": 90,
+            "from_location": "Market",
+            "to_location": "Home",
+            "life_state": "return_home"
+          },
+          {
+            "time": "22:00",
+            "action": "sleep",
+            "location": "Home",
+            "duration": 480,
+            "from_location": "Home",
+            "to_location": "Home",
+            "life_state": "sleep"
+          }
+        ],
+        "planning_context": {
+          "agent_config": "full_agent",
+          "use_memory": true,
+          "use_knowledge": true,
+          "use_relationship": true,
+          "use_world_grounding": true,
+          "use_belief": true,
+          "recent_memory_count": 0,
+          "reflection_count": 0,
+          "observation_count": 0,
+          "completed_request_count": 0,
+          "pending_request_count": 0,
+          "npc_goal_count": 1,
+          "knowledge_count": 1,
+          "knowledge_ids": [
+            "knowledge_Mira_Chen_player_20260904_230151_850251"
+          ],
+          "knowledge_used": [
+            "Mira Chen received a player request on Day 1 morning, reflected on following it up, spoke with the player at her tea shop that afternoon, continued her daily duties, and by Day 2 morning completed the requested action to help the player."
+          ],
+          "belief_count": 1,
+          "belief_ids": [
+            "tea_shop_sells_tea"
+          ],
+          "beliefs_used": [
+            "The tea shop serves tea."
+          ]
+        },
+        "planner": "deterministic",
+        "planner_error": "",
+        "planner_metadata": {
+          "planner_attempt": false,
+          "requested_planner": "deterministic",
+          "parsed_successfully": false,
+          "planner_context_summary": {
+            "agent_config": "full_agent",
+            "use_memory": true,
+            "use_knowledge": true,
+            "use_relationship": true,
+            "use_world_grounding": true,
+            "use_belief": true,
+            "recent_memory_count": 0,
+            "reflection_count": 0,
+            "observation_count": 0,
+            "completed_request_count": 0,
+            "pending_request_count": 0,
+            "npc_goal_count": 1,
+            "knowledge_count": 1,
+            "knowledge_ids": [
+              "knowledge_Mira_Chen_player_20260904_230151_850251"
+            ],
+            "knowledge_used": [
+              "Mira Chen received a player request on Day 1 morning, reflected on following it up, spoke with the player at her tea shop that afternoon, continued her daily duties, and by Day 2 morning completed the requested action to help the player."
+            ],
+            "belief_count": 1,
+            "belief_ids": [
+              "tea_shop_sells_tea"
+            ],
+            "beliefs_used": [
+              "The tea shop serves tea."
+            ]
+          }
+        },
+        "generated_at": "2026-09-04T23:11:16"
+      },
+      "Tovan Reed": {
+        "day": 1,
+        "schedule": [
+          {
+            "time": "07:00",
+            "action": "wake up",
+            "location": "Home",
+            "duration": 30,
+            "from_location": "Home",
+            "to_location": "Home",
+            "life_state": "sleep_to_awake"
+          },
+          {
+            "time": "08:00",
+            "action": "guard post patrol",
+            "location": "Guard Post",
+            "duration": 180,
+            "from_location": "Home",
+            "to_location": "Guard Post",
+            "life_state": "work"
+          },
+          {
+            "time": "14:00",
+            "action": "market patrol",
+            "location": "Market",
+            "duration": 60,
+            "from_location": "Guard Post",
+            "to_location": "Market",
+            "life_state": "patrol"
+          },
+          {
+            "time": "17:00",
+            "action": "return to guard post",
+            "location": "Guard Post",
+            "duration": 60,
+            "from_location": "Market",
+            "to_location": "Guard Post",
+            "life_state": "return_to_work"
+          },
+          {
+            "time": "20:00",
+            "action": "write evening guard notes",
+            "location": "Guard Post",
+            "duration": 60,
+            "from_location": "Guard Post",
+            "to_location": "Guard Post",
+            "life_state": "evening_work"
+          },
+          {
+            "time": "22:00",
+            "action": "return home and sleep",
+            "location": "Home",
+            "duration": 60,
+            "from_location": "Guard Post",
+            "to_location": "Home",
+            "life_state": "sleep"
+          }
+        ],
+        "planning_context": {
+          "agent_config": "full_agent",
+          "use_memory": true,
+          "use_knowledge": true,
+          "use_relationship": true,
+          "use_world_grounding": true,
+          "use_belief": true,
+          "recent_memory_count": 0,
+          "reflection_count": 0,
+          "observation_count": 0,
+          "completed_request_count": 0,
+          "pending_request_count": 0,
+          "npc_goal_count": 0,
+          "knowledge_count": 0,
+          "knowledge_ids": [],
+          "knowledge_used": [],
+          "belief_count": 1,
+          "belief_ids": [
+            "guard_post_security"
+          ],
+          "beliefs_used": [
+            "The guard post is the village security post."
+          ]
+        },
+        "planner": "deterministic",
+        "planner_error": "",
+        "planner_metadata": {
+          "planner_attempt": false,
+          "requested_planner": "deterministic",
+          "parsed_successfully": false,
+          "planner_context_summary": {
+            "agent_config": "full_agent",
+            "use_memory": true,
+            "use_knowledge": true,
+            "use_relationship": true,
+            "use_world_grounding": true,
+            "use_belief": true,
+            "recent_memory_count": 0,
+            "reflection_count": 0,
+            "observation_count": 0,
+            "completed_request_count": 0,
+            "pending_request_count": 0,
+            "npc_goal_count": 0,
+            "knowledge_count": 0,
+            "knowledge_ids": [],
+            "knowledge_used": [],
+            "belief_count": 1,
+            "belief_ids": [
+              "guard_post_security"
+            ],
+            "beliefs_used": [
+              "The guard post is the village security post."
+            ]
+          }
+        },
+        "generated_at": "2026-09-04T23:11:16"
+      }
+    }
+  },
+  "npc_goals": {},
+  "npc_knowledge": {},
+  "npc_relationships": {},
+  "planner_mode": "llm",
+  "active_actions": [],
+  "completed_actions": [],
+  "previous_days": [],
+  "previous_day_summary": [],
+  "npc_persistent_locations": {
+    "Mira Chen": {
+      "home": "Home",
+      "workplace": "Tea Shop"
+    },
+    "Tovan Reed": {
+      "home": "Home",
+      "workplace": "Guard Post"
+    },
+    "Lysa Vale": {
+      "home": "Inn",
+      "workplace": "Market"
+    }
+  },
+  "time_catchup_log": [],
+  "last_daily_planning": {
+    "day": 1,
+    "planner": "deterministic",
+    "planner_sources": {
+      "Lysa Vale": "deterministic",
+      "Mira Chen": "deterministic",
+      "Tovan Reed": "deterministic"
+    },
+    "planner_errors": {},
+    "context_counts": {
+      "Lysa Vale": {
+        "agent_config": "full_agent",
+        "use_memory": true,
+        "use_knowledge": true,
+        "use_relationship": true,
+        "use_world_grounding": true,
+        "use_belief": true,
+        "recent_memory_count": 0,
+        "reflection_count": 0,
+        "observation_count": 0,
+        "completed_request_count": 0,
+        "pending_request_count": 0,
+        "npc_goal_count": 0,
+        "knowledge_count": 2,
+        "knowledge_ids": [
+          "knowledge_Lysa_Vale_task_20260904_230443_374038",
+          "knowledge_Lysa_Vale_market_information_20260904_225913_933511"
+        ],
+        "knowledge_used": [
+          "Lysa Vale investigated market conditions on Day 1 by visiting the market, talking with vendors, and collecting information about current trade conditions. She also completed the player's request to ask vendors about market conditions. Later she continued her usual routine: checking tea quality at a tea shop, taking lunch at the inn, closing her stall, checking local trade gossip in the village, dining, and reviewing trade notes to plan for the next day.",
+          "Visited the market and talked with vendors. Collected information about current trade conditions. Collected observations related to the investigation goal."
+        ],
+        "belief_count": 2,
+        "belief_ids": [
+          "market_sells_tea",
+          "north_route_unstable"
+        ],
+        "beliefs_used": [
+          "The market sells tea.",
+          "The northern trade route is unstable."
+        ]
+      },
+      "Mira Chen": {
+        "agent_config": "full_agent",
+        "use_memory": true,
+        "use_knowledge": true,
+        "use_relationship": true,
+        "use_world_grounding": true,
+        "use_belief": true,
+        "recent_memory_count": 0,
+        "reflection_count": 0,
+        "observation_count": 0,
+        "completed_request_count": 0,
+        "pending_request_count": 0,
+        "npc_goal_count": 1,
+        "knowledge_count": 1,
+        "knowledge_ids": [
+          "knowledge_Mira_Chen_player_20260904_230151_850251"
+        ],
+        "knowledge_used": [
+          "Mira Chen received a player request on Day 1 morning, reflected on following it up, spoke with the player at her tea shop that afternoon, continued her daily duties, and by Day 2 morning completed the requested action to help the player."
+        ],
+        "belief_count": 1,
+        "belief_ids": [
+          "tea_shop_sells_tea"
+        ],
+        "beliefs_used": [
+          "The tea shop serves tea."
+        ]
+      },
+      "Tovan Reed": {
+        "agent_config": "full_agent",
+        "use_memory": true,
+        "use_knowledge": true,
+        "use_relationship": true,
+        "use_world_grounding": true,
+        "use_belief": true,
+        "recent_memory_count": 0,
+        "reflection_count": 0,
+        "observation_count": 0,
+        "completed_request_count": 0,
+        "pending_request_count": 0,
+        "npc_goal_count": 0,
+        "knowledge_count": 0,
+        "knowledge_ids": [],
+        "knowledge_used": [],
+        "belief_count": 1,
+        "belief_ids": [
+          "guard_post_security"
+        ],
+        "beliefs_used": [
+          "The guard post is the village security post."
+        ]
+      }
+    },
+    "generated_at": "2026-09-04T23:11:16"
+  },
+  "last_executed_actions": [],
+  "last_time_catchup_log": [],
+  "last_spatial_arrivals": [],
+  "last_arrival_observations": [],
+  "last_clean_simulation": {
+    "cleaned_at": "2026-09-04T23:11:16",
+    "cleared": {
+      "npc_goals": true,
+      "npc_knowledge": true,
+      "npc_relationships": true,
+      "active_requests": true,
+      "completed_events": true,
+      "recent_observations": true,
+      "previous_days": true,
+      "npc_daily_plans": true,
+      "completed_actions": true,
+      "live_memory_files": {
+        "live_memories": 12,
+        "reflections": 6,
+        "observations": 23
+      }
+    }
+  }
+}

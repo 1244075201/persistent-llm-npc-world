@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="max-width: 900px; padding: 42px 20px;">
+  <h1 style="font-size: 30px; margin-bottom: 12px;">Player Intervention Generation Failed</h1>
+  <p><strong>Scenario:</strong> {{ scenario }}</p>
+  <p><strong>Error:</strong> {{ message }}</p>
+  <p>Please use an existing replay or try again.</p>
+  <p>
+    <a class="btn btn-primary" href="/player_interventions/">Back to Player Interventions</a>
+    <a class="btn btn-default" href="/player_interventions/new/">Create Structured Intervention</a>
+  </p>
+
+  {% if stdout_tail %}
+  <h2 style="font-size: 20px; margin-top: 28px;">Output tail</h2>
+  <pre style="white-space: pre-wrap; max-height: 320px; overflow: auto;">{{ stdout_tail }}</pre>
+  {% endif %}
+
+  {% if stderr_tail %}
+  <h2 style="font-size: 20px; margin-top: 20px;">Error tail</h2>
+  <pre style="white-space: pre-wrap; max-height: 320px; overflow: auto;">{{ stderr_tail }}</pre>
+  {% endif %}
+</div>
+{% endblock content %}

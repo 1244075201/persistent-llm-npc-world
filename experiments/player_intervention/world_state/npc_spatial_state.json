@@ -1,0 +1,71 @@
+{
+  "Lysa Vale": {
+    "current_location": "Inn",
+    "current_tile": [
+      82,
+      23
+    ],
+    "target_location": null,
+    "target_tile": null,
+    "current_action": null,
+    "movement_status": "idle",
+    "from_location": null,
+    "route": [],
+    "route_index": 0,
+    "route_progress": 0,
+    "movement_start_time": null,
+    "estimated_arrival_time": null,
+    "world_day": 1,
+    "world_time": "07:00",
+    "current_address": "the Ville:The Willows Market and Pharmacy:store",
+    "target_address": "the Ville:The Willows Market and Pharmacy:store",
+    "source_memory_id": "",
+    "updated_at": "2026-09-04T23:11:16"
+  },
+  "Mira Chen": {
+    "current_location": "Home",
+    "current_tile": [
+      119,
+      25
+    ],
+    "target_location": null,
+    "target_tile": null,
+    "current_action": null,
+    "movement_status": "idle",
+    "from_location": null,
+    "route": [],
+    "route_index": 0,
+    "route_progress": 0,
+    "movement_start_time": null,
+    "estimated_arrival_time": null,
+    "world_day": 1,
+    "world_time": "07:00",
+    "current_address": "the Ville:Hobbs Cafe:cafe",
+    "target_address": "the Ville:Hobbs Cafe:cafe",
+    "source_memory_id": "",
+    "updated_at": "2026-09-04T23:11:16"
+  },
+  "Tovan Reed": {
+    "current_location": "Home",
+    "current_tile": [
+      62,
+      43
+    ],
+    "target_location": null,
+    "target_tile": null,
+    "current_action": null,
+    "movement_status": "idle",
+    "from_location": null,
+    "route": [],
+    "route_index": 0,
+    "route_progress": 0,
+    "movement_start_time": null,
+    "estimated_arrival_time": null,
+    "world_day": 1,
+    "world_time": "07:00",
+    "current_address": "the Ville:The Willows Market and Pharmacy:store",
+    "target_address": "the Ville:The Willows Market and Pharmacy:store",
+    "source_memory_id": "",
+    "updated_at": "2026-09-04T23:11:16"
+  }
+}

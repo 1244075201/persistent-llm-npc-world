@@ -1,0 +1,325 @@
+{
+  "metadata": {
+    "backend": "deepseek_api",
+    "model": "deepseek-v4-flash",
+    "npc_count": 3,
+    "tick_count": 7,
+    "planning_calls": 3,
+    "planning_success_count": 3,
+    "conversation_attempts": 2,
+    "conversation_success_count": 2,
+    "conversation_retry_count": 0,
+    "reflection_calls": 3,
+    "reflection_success_count": 3,
+    "reflection_failure_count": 0,
+    "reflection_total_elapsed_seconds": 9.823,
+    "reflection_average_seconds": 3.2743,
+    "total_llm_calls": 8,
+    "total_elapsed_seconds": 24.6392,
+    "average_llm_call_time": 3.075,
+    "estimated_total_input_tokens": null,
+    "estimated_total_output_tokens": null,
+    "estimated_total_cost_usd": null,
+    "simulation_completed": true
+  },
+  "npcs": [
+    {
+      "name": "Mira Chen",
+      "role": "tea shop owner",
+      "traits": "curious, cautious, observant",
+      "goal": "maintain neighborhood trust and understand changes around the market",
+      "lifestyle": "Mira opens the tea shop in the morning, speaks with regulars, and checks community news after lunch.",
+      "raw_daily_plan": "1) Open tea shop at 7:00 AM and greet regulars.\n2) Read community news and observe market activity after lunch at 1:00 PM.\n3) Close shop and walk through neighborhood to check for changes at 6:00 PM.",
+      "parsed_plan": [
+        "Open tea shop at 7:00 AM and greet regulars",
+        "Read community news and observe market activity after lunch at 1:00 PM",
+        "Close shop and walk through neighborhood to check for changes at 6:00 PM"
+      ],
+      "daily_plan": {
+        "morning": "Open tea shop at 7:00 AM and greet regulars",
+        "afternoon": "Read community news and observe market activity after lunch at 1:00 PM",
+        "evening": "Close shop and walk through neighborhood to check for changes at 6:00 PM"
+      },
+      "memory_stream": [
+        "At 07:00, Mira Chen was at Tea Shop and did: Open tea shop at 7:00 AM and greet regulars.",
+        "At 09:00, Mira Chen was at Tea Shop and did: Open tea shop at 7:00 AM and greet regulars.",
+        "At 11:00, Mira Chen was at Market and did: Read community news and observe market activity after lunch at 1:00 PM.",
+        "At 11:00, Mira Chen talked with Tovan Reed at Market: Mira Chen: Noticed the eastern road's been quiet lately — traders are skipping it. / Tovan Reed: Exactly. Three stalls didn't open this morning. That's two routes in a week. / Mira Chen: Prices climbing fast too. People are getting nervous, I can feel it. / Tovan Reed: I'm on stall inspection soon. Something's not right, and I mean to find out what.",
+        "At 13:00, Mira Chen was at Market and did: Read community news and observe market activity after lunch at 1:00 PM.",
+        "At 15:00, Mira Chen was at Market and did: Read community news and observe market activity after lunch at 1:00 PM.",
+        "At 17:00, Mira Chen was at Tea Shop and did: Close shop and walk through neighborhood to check for changes at 6:00 PM.",
+        "At 19:00, Mira Chen was at Tea Shop and did: Close shop and walk through neighborhood to check for changes at 6:00 PM."
+      ],
+      "reflections": [
+        "What is driving the sudden shift in trader routes and stall closures, and could it signal a deeper threat to the market's stability?",
+        "How can I reassure my regulars and maintain their trust when prices are climbing and the neighborhood feels increasingly uneasy?",
+        "What patterns should I watch for in the coming days to distinguish a temporary disruption from a lasting change that could reshape the community I rely on?"
+      ]
+    },
+    {
+      "name": "Tovan Reed",
+      "role": "market guard",
+      "traits": "loyal, practical, suspicious",
+      "goal": "keep the market orderly and identify suspicious changes before they spread",
+      "lifestyle": "Tovan patrols the market, checks disputes between vendors, and reports suspicious activity before dusk.",
+      "raw_daily_plan": "1) Morning patrol and vendor check-in at 7:00 AM.\n2) Mediate disputes and inspect new stalls at 12:00 PM.\n3) Evening sweep and suspicious activity report at 5:00 PM.",
+      "parsed_plan": [
+        "Morning patrol and vendor check-in at 7:00 AM",
+        "Mediate disputes and inspect new stalls at 12:00 PM",
+        "Evening sweep and suspicious activity report at 5:00 PM"
+      ],
+      "daily_plan": {
+        "morning": "Morning patrol and vendor check-in at 7:00 AM",
+        "afternoon": "Mediate disputes and inspect new stalls at 12:00 PM",
+        "evening": "Evening sweep and suspicious activity report at 5:00 PM"
+      },
+      "memory_stream": [
+        "At 07:00, Tovan Reed was at Guard Post and did: Morning patrol and vendor check-in at 7:00 AM.",
+        "At 07:00, Tovan Reed talked with Lysa Vale at Market: Tovan Reed: Morning, Lysa. Vendors seem jittery today — three stalls didn't open. / Lysa Vale: I noticed. Heard the eastern road's gone quiet; traders are skipping it. / Tovan Reed: That's the second route in a week. What are you hearing from the others? / Lysa Vale: Western pass is still safe, but prices are climbing fast. People are nervous.",
+        "At 09:00, Tovan Reed was at Guard Post and did: Morning patrol and vendor check-in at 7:00 AM.",
+        "At 11:00, Tovan Reed was at Guard Post and did: Mediate disputes and inspect new stalls at 12:00 PM.",
+        "At 11:00, Mira Chen talked with Tovan Reed at Market: Mira Chen: Noticed the eastern road's been quiet lately — traders are skipping it. / Tovan Reed: Exactly. Three stalls didn't open this morning. That's two routes in a week. / Mira Chen: Prices climbing fast too. People are getting nervous, I can feel it. / Tovan Reed: I'm on stall inspection soon. Something's not right, and I mean to find out what.",
+        "At 13:00, Tovan Reed was at Guard Post and did: Mediate disputes and inspect new stalls at 12:00 PM.",
+        "At 15:00, Tovan Reed was at Guard Post and did: Mediate disputes and inspect new stalls at 12:00 PM.",
+        "At 17:00, Tovan Reed was at Guard Post and did: Evening sweep and suspicious activity report at 5:00 PM.",
+        "At 19:00, Tovan Reed was at Guard Post and did: Evening sweep and suspicious activity report at 5:00 PM."
+      ],
+      "reflections": [
+        "What pattern connects the two silent trade routes and the rising prices—is this a coordinated disruption or separate incidents?",
+        "How reliable are my informants Lysa and Mira, and could their nervousness be amplifying false signals I should verify?",
+        "Should I escalate these observations to the watch captain tomorrow, or gather more proof to avoid sparking unnecessary panic?"
+      ]
+    },
+    {
+      "name": "Lysa Vale",
+      "role": "traveling merchant",
+      "traits": "sociable, ambitious, resourceful",
+      "goal": "protect her trade opportunities and learn which routes people still trust",
+      "lifestyle": "Lysa visits stalls, negotiates prices, shares news, and records promising trade leads in the evening.",
+      "raw_daily_plan": "1) Morning: Visit market stalls to negotiate prices and ask about safe trade routes.\n2) Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability.\n3) Evening: Record promising trade leads and update travel notes.",
+      "parsed_plan": [
+        "Morning: Visit market stalls to negotiate prices and ask about safe trade routes",
+        "Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability",
+        "Evening: Record promising trade leads and update travel notes"
+      ],
+      "daily_plan": {
+        "morning": "Morning: Visit market stalls to negotiate prices and ask about safe trade routes",
+        "afternoon": "Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability",
+        "evening": "Evening: Record promising trade leads and update travel notes"
+      },
+      "memory_stream": [
+        "At 07:00, Lysa Vale was at Market and did: Morning: Visit market stalls to negotiate prices and ask about safe trade routes.",
+        "At 07:00, Tovan Reed talked with Lysa Vale at Market: Tovan Reed: Morning, Lysa. Vendors seem jittery today — three stalls didn't open. / Lysa Vale: I noticed. Heard the eastern road's gone quiet; traders are skipping it. / Tovan Reed: That's the second route in a week. What are you hearing from the others? / Lysa Vale: Western pass is still safe, but prices are climbing fast. People are nervous.",
+        "At 09:00, Lysa Vale was at Market and did: Morning: Visit market stalls to negotiate prices and ask about safe trade routes.",
+        "At 11:00, Lysa Vale was at Market and did: Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability.",
+        "At 13:00, Lysa Vale was at Market and did: Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability.",
+        "At 15:00, Lysa Vale was at Market and did: Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability.",
+        "At 17:00, Lysa Vale was at Market and did: Evening: Record promising trade leads and update travel notes.",
+        "At 19:00, Lysa Vale was at Market and did: Evening: Record promising trade leads and update travel notes."
+      ],
+      "reflections": [
+        "Which trade routes are becoming unreliable, and what patterns are emerging from the rumors I gathered today?",
+        "How can I strengthen my relationships with jittery vendors and fellow merchants to secure better prices and inside information?",
+        "What risks am I overlooking by relying on the western pass as it becomes more expensive and crowded?"
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "time": "07:00",
+      "states": [
+        {
+          "npc": "Mira Chen",
+          "location": "Tea Shop",
+          "action": "Open tea shop at 7:00 AM and greet regulars"
+        },
+        {
+          "npc": "Tovan Reed",
+          "location": "Guard Post",
+          "action": "Morning patrol and vendor check-in at 7:00 AM"
+        },
+        {
+          "npc": "Lysa Vale",
+          "location": "Market",
+          "action": "Morning: Visit market stalls to negotiate prices and ask about safe trade routes"
+        }
+      ]
+    },
+    {
+      "time": "09:00",
+      "states": [
+        {
+          "npc": "Mira Chen",
+          "location": "Tea Shop",
+          "action": "Open tea shop at 7:00 AM and greet regulars"
+        },
+        {
+          "npc": "Tovan Reed",
+          "location": "Guard Post",
+          "action": "Morning patrol and vendor check-in at 7:00 AM"
+        },
+        {
+          "npc": "Lysa Vale",
+          "location": "Market",
+          "action": "Morning: Visit market stalls to negotiate prices and ask about safe trade routes"
+        }
+      ]
+    },
+    {
+      "time": "11:00",
+      "states": [
+        {
+          "npc": "Mira Chen",
+          "location": "Market",
+          "action": "Read community news and observe market activity after lunch at 1:00 PM"
+        },
+        {
+          "npc": "Tovan Reed",
+          "location": "Guard Post",
+          "action": "Mediate disputes and inspect new stalls at 12:00 PM"
+        },
+        {
+          "npc": "Lysa Vale",
+          "location": "Market",
+          "action": "Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability"
+        }
+      ]
+    },
+    {
+      "time": "13:00",
+      "states": [
+        {
+          "npc": "Mira Chen",
+          "location": "Market",
+          "action": "Read community news and observe market activity after lunch at 1:00 PM"
+        },
+        {
+          "npc": "Tovan Reed",
+          "location": "Guard Post",
+          "action": "Mediate disputes and inspect new stalls at 12:00 PM"
+        },
+        {
+          "npc": "Lysa Vale",
+          "location": "Market",
+          "action": "Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability"
+        }
+      ]
+    },
+    {
+      "time": "15:00",
+      "states": [
+        {
+          "npc": "Mira Chen",
+          "location": "Market",
+          "action": "Read community news and observe market activity after lunch at 1:00 PM"
+        },
+        {
+          "npc": "Tovan Reed",
+          "location": "Guard Post",
+          "action": "Mediate disputes and inspect new stalls at 12:00 PM"
+        },
+        {
+          "npc": "Lysa Vale",
+          "location": "Market",
+          "action": "Afternoon: Meet with fellow merchants at the inn to share news and discuss route reliability"
+        }
+      ]
+    },
+    {
+      "time": "17:00",
+      "states": [
+        {
+          "npc": "Mira Chen",
+          "location": "Tea Shop",
+          "action": "Close shop and walk through neighborhood to check for changes at 6:00 PM"
+        },
+        {
+          "npc": "Tovan Reed",
+          "location": "Guard Post",
+          "action": "Evening sweep and suspicious activity report at 5:00 PM"
+        },
+        {
+          "npc": "Lysa Vale",
+          "location": "Market",
+          "action": "Evening: Record promising trade leads and update travel notes"
+        }
+      ]
+    },
+    {
+      "time": "19:00",
+      "states": [
+        {
+          "npc": "Mira Chen",
+          "location": "Tea Shop",
+          "action": "Close shop and walk through neighborhood to check for changes at 6:00 PM"
+        },
+        {
+          "npc": "Tovan Reed",
+          "location": "Guard Post",
+          "action": "Evening sweep and suspicious activity report at 5:00 PM"
+        },
+        {
+          "npc": "Lysa Vale",
+          "location": "Market",
+          "action": "Evening: Record promising trade leads and update travel notes"
+        }
+      ]
+    }
+  ],
+  "conversations": [
+    {
+      "time": "07:00",
+      "location": "Market",
+      "participants": [
+        "Tovan Reed",
+        "Lysa Vale"
+      ],
+      "retry_used": false,
+      "lines": [
+        {
+          "speaker": "Tovan Reed",
+          "text": "Morning, Lysa. Vendors seem jittery today — three stalls didn't open."
+        },
+        {
+          "speaker": "Lysa Vale",
+          "text": "I noticed. Heard the eastern road's gone quiet; traders are skipping it."
+        },
+        {
+          "speaker": "Tovan Reed",
+          "text": "That's the second route in a week. What are you hearing from the others?"
+        },
+        {
+          "speaker": "Lysa Vale",
+          "text": "Western pass is still safe, but prices are climbing fast. People are nervous."
+        }
+      ]
+    },
+    {
+      "time": "11:00",
+      "location": "Market",
+      "participants": [
+        "Mira Chen",
+        "Tovan Reed"
+      ],
+      "retry_used": false,
+      "lines": [
+        {
+          "speaker": "Mira Chen",
+          "text": "Noticed the eastern road's been quiet lately — traders are skipping it."
+        },
+        {
+          "speaker": "Tovan Reed",
+          "text": "Exactly. Three stalls didn't open this morning. That's two routes in a week."
+        },
+        {
+          "speaker": "Mira Chen",
+          "text": "Prices climbing fast too. People are getting nervous, I can feel it."
+        },
+        {
+          "speaker": "Tovan Reed",
+          "text": "I'm on stall inspection soon. Something's not right, and I mean to find out what."
+        }
+      ]
+    }
+  ]
+}

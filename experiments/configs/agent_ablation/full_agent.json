@@ -1,0 +1,8 @@
+{
+  "name": "full_agent",
+  "use_memory": true,
+  "use_knowledge": true,
+  "use_relationship": true,
+  "use_world_grounding": true,
+  "use_belief": true
+}

@@ -1,0 +1,31 @@
+{
+  "fork_sim_code": "simplified_pipeline",
+  "start_date": "June 27, 2026",
+  "start_time": "00:00:00",
+  "curr_time": "June 27, 2026, 23:50:00",
+  "sec_per_step": 600,
+  "playback_interval_ms": 300,
+  "maze_name": "the_ville",
+  "persona_names": [
+    "Mira Chen",
+    "Tovan Reed",
+    "Lysa Vale"
+  ],
+  "step": 144,
+  "run_info": {
+    "backend": "deepseek_api",
+    "model": "deepseek-v4-flash",
+    "total_elapsed_seconds": 24.6392,
+    "average_llm_call_time": 3.075,
+    "estimated_cost_usd": null,
+    "visual_steps": 144,
+    "visual_step_minutes": 10.0,
+    "planning_calls": 3,
+    "planning_success_count": 3,
+    "conversation_attempts": 2,
+    "conversation_success_count": 2,
+    "conversation_retry_count": 0,
+    "reflection_calls": 3,
+    "reflection_success_count": 3
+  }
+}

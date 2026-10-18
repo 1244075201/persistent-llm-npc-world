@@ -1,0 +1,666 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<br>
+<br>
+<div>
+
+	<style>
+		/* Final dissertation presentation: keep the validated realtime runtime,
+		   but hide its historical replay and branch-generation controls. */
+		.replay-only,
+		.run-info-debug-panel,
+		#conversation-overlay-panel,
+		#live-interaction-form,
+		#simulation-event-draft-panel,
+		#apply-live-dialogue-button {
+			display: none !important;
+		}
+		#agent-configuration-panel {
+			display: none !important;
+		}
+		#game-viewport {
+			position: relative;
+			width: 100%;
+			max-width: 1200px;
+			margin: 0 auto;
+			background: #101319;
+			border-radius: 10px;
+			overflow: hidden;
+			box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+		}
+		#game-container {
+			text-align: center;
+		}
+		.demo-hud-panel {
+			position: absolute;
+			z-index: 30;
+			pointer-events: auto;
+			background: rgba(20, 20, 25, 0.84);
+			color: #f3f6fb;
+			border: 1px solid rgba(235, 241, 255, 0.22);
+			border-radius: 10px;
+			box-shadow: 0 8px 22px rgba(0,0,0,0.32);
+			backdrop-filter: blur(2px);
+		}
+		.demo-hud-panel h4,
+		.demo-hud-panel label,
+		.demo-hud-panel strong {
+			color: #ffffff;
+		}
+		.demo-hud-panel p,
+		.demo-hud-panel span {
+			color: #dce4f2;
+		}
+		.demo-hud-panel .form-control {
+			background: rgba(255,255,255,0.94);
+			color: #1d2530;
+			border-color: rgba(255,255,255,0.45);
+			height: 30px;
+			padding: 4px 8px;
+			font-size: 12px;
+		}
+		.demo-hud-panel textarea.form-control {
+			height: auto;
+			min-height: 54px;
+		}
+		.demo-hud-panel .form-control.locked-field {
+			background: rgba(226, 237, 255, 0.92);
+			border-color: #6da7f5;
+			box-shadow: 0 0 0 1px rgba(109,167,245,0.35);
+			pointer-events: none;
+		}
+		.demo-hud-panel .lock-status {
+			margin-top: 0.25em;
+			font-size: 0.86em;
+			color: #dce4f2;
+		}
+		.demo-hud-panel .btn {
+			font-size: 12px;
+			padding: 3px 8px;
+		}
+		#live-dialogue-panel {
+			margin-top: 0.85em;
+			padding-top: 0.75em;
+			border-top: 1px solid rgba(235,241,255,0.22);
+		}
+		#live-dialogue-history {
+			max-height: 140px;
+			min-height: 58px;
+			overflow-y: auto;
+			overflow-x: hidden;
+			pointer-events: auto;
+			overscroll-behavior: contain;
+			touch-action: auto;
+			user-select: text;
+			margin-top: 0.45em;
+			padding: 0.45em;
+			background: rgba(255,255,255,0.08);
+			border-radius: 6px;
+			font-size: 0.88em;
+		}
+		#live-dialogue-reply {
+			margin-top: 0.45em;
+			padding: 0.45em;
+			background: rgba(80, 140, 220, 0.18);
+			border-radius: 6px;
+			font-size: 0.9em;
+		}
+		#simulation-event-draft-panel {
+			display: none;
+			margin-top: 0.7em;
+			padding: 0.65em;
+			background: rgba(255, 246, 214, 0.12);
+			border: 1px solid rgba(255, 214, 102, 0.45);
+			border-radius: 8px;
+		}
+		#simulation-event-draft-panel .draft-readonly {
+			margin-bottom: 0.25em;
+			font-size: 0.9em;
+			color: #f7ecc8;
+		}
+		#simulation-event-draft-rationale,
+		#simulation-event-draft-summary {
+			margin-top: 0.35em;
+			font-size: 0.86em;
+			color: #f2e5c1;
+		}
+		#recent-npc-memory {
+			margin-top: 0.45em;
+			padding: 0.45em;
+			background: rgba(255,255,255,0.08);
+			border-radius: 6px;
+			font-size: 0.86em;
+			max-height: 110px;
+			overflow-y: auto;
+			overscroll-behavior: contain;
+		}
+		#live-dialogue-memories-used {
+			margin-top: 0.45em;
+			padding: 0.45em;
+			background: rgba(110, 180, 140, 0.14);
+			border-radius: 6px;
+			font-size: 0.86em;
+		}
+		.run-info-debug-panel {
+			margin-top: 1.25em;
+			border-top: 1px solid #cccccc;
+			border-bottom: 1px solid #cccccc;
+			padding: 0.75em 0;
+		}
+		.run-info-debug-panel summary {
+			cursor: pointer;
+			font-size: 1.05em;
+			color: #555555;
+			user-select: none;
+		}
+		.run-info-debug-panel summary:hover {
+			color: #222222;
+		}
+		.run-info-debug-panel .table-responsive {
+			margin-top: 0.75em;
+		}
+		.legacy-replay-time-debug {
+			display: none;
+		}
+		#npc-details-panel {
+			display: none;
+			position: absolute;
+			left: 330px;
+			bottom: 14px;
+			width: 430px;
+			max-height: 62vh;
+			overflow-y: auto;
+			padding: 0.85em;
+		}
+		#npc-details-panel-content {
+			margin-top: 0.5em;
+			background: rgba(255,255,255,0.08);
+			border-radius: 6px;
+			padding: 0.6em;
+			font-size: 0.88em;
+		}
+		#player-control-panel {
+			left: 14px;
+			bottom: 14px;
+			width: 300px;
+			max-height: 74vh;
+			overflow-y: auto;
+			padding: 0.8em;
+		}
+		#live-interaction-panel {
+			right: 14px;
+			top: 14px;
+			width: 340px;
+			max-height: 78vh;
+			overflow-y: auto;
+			padding: 0.85em;
+		}
+		#proximity-interaction-gate {
+			background: rgba(255,255,255,0.08) !important;
+			border-color: rgba(216,230,255,0.25) !important;
+		}
+		@media (max-width: 900px) {
+			#game-viewport {
+				max-width: 100%;
+			}
+			#player-control-panel,
+			#live-interaction-panel,
+			#npc-details-panel {
+				position: relative;
+				left: auto;
+				right: auto;
+				top: auto;
+				bottom: auto;
+				width: auto;
+				margin: 0.6em;
+				max-height: 45vh;
+			}
+		}
+	</style>
+
+	<div id="game-viewport">
+		<div id="game-container"></div>
+
+		<div id="player-control-panel" class="demo-hud-panel">
+			<h4 style="margin:0 0 0.45em 0;"><strong>Player Control</strong></h4>
+			<label style="font-weight:normal; display:block; margin-bottom:0.45em;">
+				<input id="enable-player-control-checkbox" type="checkbox" checked>
+				Enable Player Control
+			</label>
+			<button id="enable-player-control-button" type="button" class="btn btn-xs btn-primary" style="display:none;">Enable Player Control</button>
+			<button id="reset-player-control-button" type="button" class="btn btn-xs btn-default">Reset Position</button>
+			<label style="margin-left:0.45em; font-weight:normal;">
+				<input id="follow-player-camera-checkbox" type="checkbox" checked>
+				Follow Camera
+			</label>
+			<div style="margin-top:0.45em;">
+				Status: <span id="player-control-status">Disabled</span>
+			</div>
+			<div id="player-control-buttons" style="margin:0.55em 0 0.45em 0; display:inline-grid; grid-template-columns:32px 32px 32px; gap:4px; vertical-align:middle;">
+				<span></span>
+				<button id="player-move-up" type="button" class="btn btn-xs btn-default" aria-label="Move player up">U</button>
+				<span></span>
+				<button id="player-move-left" type="button" class="btn btn-xs btn-default" aria-label="Move player left">L</button>
+				<button id="player-move-down" type="button" class="btn btn-xs btn-default" aria-label="Move player down">D</button>
+				<button id="player-move-right" type="button" class="btn btn-xs btn-default" aria-label="Move player right">R</button>
+			</div>
+			<div style="font-size:0.9em;">Move with WASD or arrow keys.</div>
+			<div id="player-tile-status" style="font-size:0.85em; margin-top:0.35em;">Player tile: N/A</div>
+			<div id="player-walkable-status" style="font-size:0.85em;">Current Walkable: N/A</div>
+			<div style="margin-top:0.45em; font-size:0.86em;">
+				Debug Teleport:
+				<select id="player-debug-teleport-location" style="color:#111; max-width:8.5em;">
+					<option value="Town Center">Town Center</option>
+					<option value="Tea Shop">Tea Shop</option>
+					<option value="Market">Market</option>
+				</select>
+				<button id="player-debug-teleport-button" type="button" class="btn btn-xs btn-default">Teleport</button>
+			</div>
+			<details style="margin-top:0.3em;">
+				<summary style="cursor:pointer; color:#dce4f2; font-size:0.85em;">Collision debug</summary>
+				<div id="player-collision-debug" style="font-size:0.78em; color:#c6d0df; word-break:break-word;">Collision debug: N/A</div>
+			</details>
+			<div id="nearby-npc-status" style="font-size:0.95em; margin-top:0.5em;">Nearby NPC: none</div>
+			<div id="world-clock-panel" style="margin-top:0.7em; padding-top:0.55em; border-top:1px solid rgba(216,230,255,0.25);">
+				<div style="font-weight:700; margin-bottom:0.25em;">World Time</div>
+				<div style="font-size:0.92em;">
+					Current Day: <span id="world-current-day">{{ world_state.current_day }}</span><br>
+					Current Time: <span id="world-current-time">{{ world_state.current_time }}</span>
+				</div>
+				<div id="agent-configuration-panel" style="margin-top:0.55em; padding-top:0.45em; border-top:1px solid rgba(216,230,255,0.18); font-size:0.86em;">
+					<div style="font-weight:700; margin-bottom:0.25em;">Agent Configuration</div>
+					<select id="agent-config-select" style="color:#111; max-width:12.5em;">
+						<option value="baseline">Baseline</option>
+						<option value="memory_only">Memory Only</option>
+						<option value="memory_knowledge">Memory + Knowledge</option>
+						<option value="full_agent" selected>Full Agent</option>
+					</select>
+					<button id="apply-agent-config-button" type="button" class="btn btn-xs btn-default">Apply</button>
+					<div id="agent-config-status" style="margin-top:0.3em; color:#c6d0df;">Current: full_agent</div>
+					<div style="margin-top:0.25em; color:#c6d0df;">Use Clean Simulation after switching for independent screenshots.</div>
+				</div>
+				<div style="margin-top:0.45em; font-size:0.86em;">
+					Planner:
+					<select id="world-planner-mode" style="color:#111; max-width:9.5em;">
+						<option value="deterministic" {% if world_state.planner_mode != "llm" %}selected{% endif %}>Deterministic</option>
+						<option value="llm" {% if world_state.planner_mode == "llm" %}selected{% endif %}>LLM</option>
+					</select>
+					<button id="set-world-planner-mode-button" type="button" class="btn btn-xs btn-default">Set</button>
+					<button id="regenerate-daily-plan-button" type="button" class="btn btn-xs btn-default">Regenerate Daily Plan</button>
+				</div>
+				<button id="advance-world-hour-button" type="button" class="btn btn-xs btn-default" style="margin-top:0.4em;">Advance 1 Hour</button>
+				<button id="advance-world-10-button" type="button" class="btn btn-xs btn-default" style="margin-top:0.4em; margin-left:0.25em;">Advance 10 Minutes</button>
+				<button id="reset-world-time-button" type="button" class="btn btn-xs btn-default" style="margin-top:0.4em; margin-left:0.25em;">Reset World Time</button>
+				<button id="clean-simulation-button" type="button" class="btn btn-xs btn-danger" style="margin-top:0.4em; margin-left:0.25em;">Clean Simulation</button>
+				<div style="margin-top:0.45em; font-size:0.86em;">
+					Jump:
+					<input id="jump-world-day" type="number" min="1" value="{{ world_state.current_day }}" style="width:3.8em; color:#111;">
+					<input id="jump-world-time" type="text" value="{{ world_state.current_time }}" style="width:5.3em; color:#111;">
+					<button id="jump-world-time-button" type="button" class="btn btn-xs btn-default">Jump</button>
+				</div>
+				<div id="world-clock-status" style="font-size:0.82em; margin-top:0.3em; color:#c6d0df;">World clock ready.</div>
+				<div id="current-day-plan-panel" style="margin-top:0.55em; padding-top:0.45em; border-top:1px solid rgba(216,230,255,0.18);">
+					<div style="font-weight:700; margin-bottom:0.25em;">Current Day Plan</div>
+					<div id="current-day-plan-list" style="font-size:0.82em;"><em>No generated daily plan</em></div>
+				</div>
+				<div id="current-npc-actions-panel" style="margin-top:0.55em; padding-top:0.45em; border-top:1px solid rgba(216,230,255,0.18);">
+					<div style="font-weight:700; margin-bottom:0.25em;">Current NPC Actions</div>
+					<div id="current-npc-actions-list" style="font-size:0.85em;">{% if world_state.active_actions %}{% for action in world_state.active_actions %}<div><strong>{{ action.npc }}</strong>: {{ action.action }} ({{ action.world_time }})</div>{% endfor %}{% else %}<em>No scheduled actions</em>{% endif %}</div>
+				</div>
+				<div id="current-npc-movement-panel" style="margin-top:0.55em; padding-top:0.45em; border-top:1px solid rgba(216,230,255,0.18);">
+					<div style="font-weight:700; margin-bottom:0.25em;">Current NPC Movement</div>
+					<div id="current-npc-movement-list" style="font-size:0.85em;"><em>No persistent NPC movement</em></div>
+				</div>
+			</div>
+		</div>
+
+		<div id="live-interaction-panel" class="demo-hud-panel">
+			<h4 style="margin:0 0 0.4em 0;"><strong>Live Interaction</strong></h4>
+			<div id="proximity-interaction-gate" style="margin-bottom:0.65em; padding:0.55em; border:1px solid #d8e6ff; border-radius:5px;">
+				<span id="proximity-interaction-status" style="font-size:0.95em;">Player Control Mode: Move near an NPC to interact.</span>
+				<br>
+				<button id="interact-nearby-npc-button" type="button" class="btn btn-xs btn-info" style="margin-top:0.35em; display:none;">Interact with NPC</button>
+				<button id="clear-proximity-target-button" type="button" class="btn btn-xs btn-default" style="margin-top:0.35em; margin-left:0.3em; display:none;">Clear Target</button>
+				<div id="proximity-target-lock-status" style="margin-top:0.35em; font-size:0.9em;">Target not locked</div>
+			</div>
+			<form id="live-interaction-form" method="post" action="/player_interventions/inject/">
+				{% csrf_token %}
+				<input type="hidden" name="source_sim_code" value="{{ sim_code }}">
+				<input id="live-source-step" type="hidden" name="source_step" value="{{ step }}">
+				<input id="live-event-time-hidden" type="hidden" name="event_time" value="">
+				<input id="live-source-memory-id" type="hidden" name="source_memory_id" value="">
+				<div class="row">
+					<div class="col-md-6">
+						<label for="live-target-npc">Target</label>
+						<select id="live-target-npc" name="target_npc" class="form-control">
+							<option value="Mira Chen">Mira Chen</option>
+							<option value="Tovan Reed">Tovan Reed</option>
+							<option value="Lysa Vale">Lysa Vale</option>
+						</select>
+						<div id="live-target-lock-label" class="lock-status">Manual target selection</div>
+					</div>
+					<div class="col-md-6">
+						<label for="live-event-type">Event</label>
+						<select id="live-event-type" name="event_type" class="form-control">
+							<option value="social_request">social_request</option>
+							<option value="uncertain_report">uncertain_report</option>
+							<option value="object_disruption">object_disruption</option>
+						</select>
+					</div>
+				</div>
+				<div class="row" style="margin-top:0.55em;">
+					<div class="col-md-6">
+						<label for="live-location">Location</label>
+						<select id="live-location" name="location" class="form-control">
+							<option value="Tea Shop">Tea Shop</option>
+							<option value="Market">Market</option>
+							<option value="Guard Post">Guard Post</option>
+						</select>
+						<div id="live-location-lock-label" class="lock-status">Manual location selection</div>
+					</div>
+					<div class="col-md-6 legacy-replay-time-debug">
+						<label for="live-event-time-display">Legacy Replay Time</label>
+						<input id="live-event-time-display" type="text" class="form-control" value="" readonly>
+					</div>
+				</div>
+				<div style="margin-top:0.55em;">
+					<label for="live-replanning-scope">Scope</label>
+					<select id="live-replanning-scope" name="replanning_scope" class="form-control">
+						<option value="local_2h" selected>Local 2 hours</option>
+						<option value="full_day">Full remaining day</option>
+					</select>
+				</div>
+				<div style="margin-top:0.55em;">
+					<label for="live-player-action">Player action</label>
+					<textarea id="live-player-action" name="player_action" class="form-control" rows="2" maxlength="200" placeholder="Describe the player's action in one sentence."></textarea>
+				</div>
+				<div style="margin-top:0.65em;">
+					<button id="live-inject-button" class="btn btn-success" type="submit">Inject Event</button>
+					<div id="live-inject-help" style="margin-top:0.35em; font-size:0.9em;">Generation may take 30-90 seconds.</div>
+				</div>
+			</form>
+			<div id="live-dialogue-panel">
+				<h4 style="margin:0 0 0.35em 0;"><strong>Live Dialogue</strong></h4>
+				<div id="live-dialogue-status" style="font-size:0.9em;">Move close to an NPC and click Interact to start live dialogue.</div>
+				<div style="margin-top:0.5em;">
+					<label for="live-dialogue-utterance">Player says</label>
+					<textarea id="live-dialogue-utterance" class="form-control" rows="2" maxlength="200" placeholder="Say one short line to the locked NPC."></textarea>
+				</div>
+				<div style="margin-top:0.55em;">
+					<button id="send-live-dialogue-button" type="button" class="btn btn-primary">Send to NPC</button>
+					<button id="apply-live-dialogue-button" type="button" class="btn btn-warning" disabled>Generate Simulation Event Draft</button>
+				</div>
+				<div id="live-dialogue-reply"><em>NPC reply will appear here.</em></div>
+				<div style="margin-top:0.45em;"><strong>Recent NPC Memory</strong></div>
+				<div id="recent-npc-memory"><em>No live memories saved in this session yet.</em></div>
+				<div style="margin-top:0.45em;"><strong>Dialogue history</strong></div>
+				<div id="live-dialogue-history"><em>No live dialogue in this session.</em></div>
+				<button id="live-dialogue-jump-latest" type="button" class="btn btn-xs btn-default" style="display:none; margin-top:0.35em;">Jump to latest</button>
+				<div style="margin-top:0.45em;"><strong>Memories Used For This Reply</strong></div>
+				<div id="live-dialogue-memories-used"><em>No previous memory used.</em></div>
+				<div id="simulation-event-draft-panel">
+					<h4 style="margin:0 0 0.35em 0;"><strong>Simulation Event Draft</strong></h4>
+					<div id="simulation-event-draft-target" class="draft-readonly">Target: N/A</div>
+					<div id="simulation-event-draft-location" class="draft-readonly">Location: N/A</div>
+					<div id="simulation-event-draft-time" class="draft-readonly">Time: N/A</div>
+					<div class="row" style="margin-top:0.45em;">
+						<div class="col-md-6">
+							<label for="simulation-event-draft-type">Event type</label>
+							<select id="simulation-event-draft-type" class="form-control">
+								<option value="social_request">social_request</option>
+								<option value="uncertain_report">uncertain_report</option>
+								<option value="object_disruption">object_disruption</option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label for="simulation-event-draft-scope">Scope</label>
+							<select id="simulation-event-draft-scope" class="form-control">
+								<option value="local_2h" selected>Local 2 hours</option>
+								<option value="full_day">Full remaining day</option>
+							</select>
+						</div>
+					</div>
+					<div style="margin-top:0.5em;">
+						<label for="simulation-event-draft-action">Player action</label>
+						<textarea id="simulation-event-draft-action" class="form-control" rows="3" maxlength="200"></textarea>
+					</div>
+					<div id="simulation-event-draft-confidence" style="margin-top:0.4em; font-size:0.88em;">Draft confidence: N/A</div>
+					<div id="simulation-event-draft-rationale">Rationale: N/A</div>
+					<div id="simulation-event-draft-summary">Source dialogue summary: N/A</div>
+					<div style="margin-top:0.6em;">
+						<button id="confirm-simulation-event-draft" type="button" class="btn btn-success btn-xs">Confirm & Generate Local Branch</button>
+						<button id="copy-simulation-event-draft" type="button" class="btn btn-warning btn-xs">Copy to Inject Event</button>
+						<button id="cancel-simulation-event-draft" type="button" class="btn btn-default btn-xs">Cancel</button>
+					</div>
+					<div id="simulation-event-draft-status" style="margin-top:0.35em; font-size:0.86em;">Review before generating a branch.</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="npc-details-panel" class="demo-hud-panel">
+			<div style="display:flex; justify-content:space-between; align-items:center;">
+				<h4 id="npc-details-panel-title" style="margin:0;"><strong>NPC Details</strong></h4>
+				<button id="npc-details-close-button" type="button" class="btn btn-xs btn-default">Close</button>
+			</div>
+			<div id="npc-details-panel-status" style="font-size:0.85em; margin-top:0.35em;">Select an NPC to view persistent details.</div>
+			<div id="npc-details-panel-content"><em>No NPC details loaded.</em></div>
+		</div>
+	</div>
+
+	<div style="width:55%; margin: 0 auto; margin-top:4.5em">
+		<h3 style="margin-bottom:1.5em; font-size:1.5em"><strong>Persistent LLM-Based NPC World</strong></h3>
+
+		
+		<h3 class="replay-only" style="margin-bottom:-0.5em; font-size:1.5em">Replay Controls</h3>
+		<div class="row replay-only">
+			<div class="col-md-8" style="">
+				<details class="run-info-debug-panel">
+					<summary>Debug / Legacy Replay Time</summary>
+					<div id="game-time">
+						<h2><span id="game-time-content"></span></h2> 
+						<p style="font-size:1em">
+							Current Step: <span id="current-step-content">{{step}}</span> / {{final_step}}<br>
+							Playback interval: <span id="playback-interval-content">{{playback_interval_ms}}</span> ms
+						</p>
+					</div>
+				</details>
+			</div>
+			<div class="col-md-4">
+				<h2 style="text-align: right; {% if mode == 'simulate' %} display: none {% endif %}">
+					<button id="play_button" type="button" class="btn btn-default">
+				    <strong style=" font-size:1.2em"><i class="glyphicon glyphicon-play"></i> &nbsp;Play</strong>
+				  </button>
+				  
+				  <button id="pause_button" type="button" class="btn btn-default">
+				    <strong style=" font-size:1.2em"><i class="glyphicon glyphicon-pause"></i> &nbsp;Pause</strong>
+				  </button>
+				  <br>
+				  <button id="full_map_button" type="button" class="btn btn-default" style="margin-top:0.5em">
+				    <strong><i class="glyphicon glyphicon-globe"></i> &nbsp;Full Map</strong>
+				  </button>
+				  <button id="reset_view_button" type="button" class="btn btn-default" style="margin-top:0.5em">
+				    <strong><i class="glyphicon glyphicon-home"></i> &nbsp;Reset View</strong>
+				  </button>
+				</h2>
+				<div style="text-align:right; margin-top:0.5em;">
+					<span style="font-size:0.95em; color:#555;">Playback:</span>
+					<div class="btn-group btn-group-sm" role="group" aria-label="Playback mode">
+						<button id="step_mode_button" type="button" class="btn btn-default">Step</button>
+						<button id="smooth_mode_button" type="button" class="btn btn-primary">Smooth</button>
+					</div>
+				</div>
+				<div style="text-align:right; margin-top:0.65em;">
+					<label for="playback_speed_slider" style="font-size:0.95em; color:#555; font-weight:500;">
+						Playback speed: <span id="playback_speed_value">1.0x</span>
+					</label>
+					<input id="playback_speed_slider" type="range" min="0.1" max="2.0" step="0.1" value="1.0" style="width:190px; display:inline-block; vertical-align:middle; margin-left:0.5em;">
+				</div>
+				<p style="text-align:right">Zoom: <span id="camera-zoom-content">1.00</span>x</p>
+			</div>
+		</div>
+
+		<details class="run-info-debug-panel">
+			<summary><strong>Debug / Run Info</strong></summary>
+			<div class="table-responsive">
+				<table class="table table-condensed" style="margin-bottom:0; font-size:0.95em;">
+					<tbody>
+						<tr>
+							<th>Backend</th><td>{{ run_info.backend }}</td>
+							<th>Model</th><td>{{ run_info.model }}</td>
+							<th>Visual steps</th><td>{{ run_info.visual_steps }}</td>
+						</tr>
+						<tr>
+							<th>Planning calls</th><td>{{ run_info.planning_calls }}</td>
+							<th>Planning success</th><td>{{ run_info.planning_success_count }}</td>
+							<th>Visual step minutes</th><td>{{ run_info.visual_step_minutes }}</td>
+						</tr>
+						<tr>
+							<th>Conversation attempts</th><td>{{ run_info.conversation_attempts }}</td>
+							<th>Conversation success</th><td>{{ run_info.conversation_success_count }}</td>
+							<th>Conversation retries</th><td>{{ run_info.conversation_retry_count }}</td>
+						</tr>
+						<tr>
+							<th>Reflection calls</th><td>{{ run_info.reflection_calls }}</td>
+							<th>Reflection success</th><td>{{ run_info.reflection_success_count }}</td>
+							<th>Estimated cost USD</th><td>{{ run_info.estimated_cost_usd }}</td>
+						</tr>
+						<tr>
+							<th>Total elapsed seconds</th><td>{{ run_info.total_elapsed_seconds }}</td>
+							<th>Average LLM call time</th><td>{{ run_info.average_llm_call_time }}</td>
+							<th></th><td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</details>
+
+		<div id="conversation-overlay-panel" style="margin-top:1em; padding:0.85em 1em; border:1px solid #c9d3df; border-radius:8px; background:rgba(255,255,255,0.96); box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+			<h4 style="margin:0 0 0.5em 0;"><strong>Current Conversation</strong></h4>
+			<div id="conversation-overlay-content" style="font-size:0.98em; line-height:1.45;">
+				<em>No conversation at this step.</em>
+			</div>
+		</div>
+
+		<br>
+		<hr style="border-color:#999999">
+		<br>
+
+		<div class="row">
+			<div class="col-md-12" style="border:solid; padding:2em; border-radius: 15px">
+				<div class="row" style="">
+				{% for p in persona_names %}
+					<div class="col-md-2 col-sm-2" style="text-align:center; margin-bottom:0.8em;" >
+						<a href="#" id="on_screen_det_trigger-{{p.underscore}}">
+							<div class="row" style="padding:0">
+								<div class="col-md-4" id="on_screen_det_trigger_container-{{p.underscore}}" style="text-align:center; padding:0; padding-top:0.3em">
+									{% with 'assets/characters/profile/'|add:p.underscore|add:'.png' as image_static %}
+									<img src="{% static image_static %}" style="width:46px; padding:0; "> 
+									{% endwith %}
+									<br>
+									{{ p.initial }}
+								</div>
+								<div class="col-md-8" style="padding-top:0.5em; ">
+									<span style="font-size:1.5em" id="quick_emoji-{{p.underscore}}"></span>
+								</div>
+							</div>
+					  </a>
+					</div>
+				{% endfor %}
+				</div>
+			</div>
+		</div>
+		<br>
+
+		<div class="media" id="on_screen_det_content-init" style="background-color:#EEEEEE; padding:1em; padding-left:3.5em; padding-right:2em; border-radius:10px; ">
+		  <div class="media-left media-middle">
+		    <em>Click on one of the character sprites to see its current state in more detail. </em>
+		  </div>
+		</div>	
+
+
+		{% for p in persona_names %}
+			<div class="media" id="on_screen_det_content-{{p.underscore}}" style="background-color:#EEEEEE; padding:1em; padding-left:3.5em; padding-right:2em; border-radius:10px; display: none;">
+			  <div class="media-left media-middle">
+			    <a href="#">
+			    	{% with 'assets/characters/profile/'|add:p.underscore|add:'.png' as image_static %}
+						<img src="{% static image_static %}" style="width:5em"> 
+						{% endwith %}
+			    </a>
+			  </div>
+			  <div class="media-body" style='padding-left:3em; padding-top:0.5em; padding-bottom:1em'>
+			  	<div class="row">
+			    	<h2 class="col-md-8" id="name__{{ p.underscore }}" style="margin-bottom:0.8em; font-size:1.85em; ">
+			    		{{p.original}} &nbsp;&nbsp;
+			    		<a href="{% url 'replay_persona_state' sim_code step p.underscore %}" class="npc-state-details-link" data-persona="{{ p.underscore }}" data-persona-name="{{ p.original }}" style="font-size:0.6em">NPC Details</a>
+			    		&nbsp;
+			    		<a href="{% url 'replay_persona_state' sim_code step p.underscore %}" target="_blank" rel="noopener" style="font-size:0.55em">Open NPC State Details</a>
+			    	</h2>
+			    </div>
+			    <div style="">
+					  <p style="font-size:1.2em"><strong>Current Action:</strong> <br><span id="current_action__{{ p.underscore }}"></span></p>
+					  <p style="font-size:1.2em"><strong>Location:</strong> <br><span id="target_address__{{ p.underscore }}"></span></p>
+					  <p style="font-size:1.2em"><strong>Current Conversation:</strong> <br><span id="chat__{{ p.underscore }}"></span></p>
+					</div>
+			  </div>
+			</div>	
+		{% endfor %}
+
+
+	</div>
+</div>
+
+<div style="margin-top:10em"></div>  
+
+
+<div style="display: " id="temp_focus"></div>
+
+
+
+{% endblock content %}
+
+
+{% block js_content %}
+<script src='https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js'></script>
+{% include 'demo/main_script.html' %}
+<script>
+	{% for p in persona_names %}
+		$('#on_screen_det_trigger-{{p.underscore}}').click(function() {
+			$('#on_screen_det_content-init').css({
+		      'display': 'none',
+		    });
+			{% for p_i in persona_names %}
+		    $('#on_screen_det_content-{{p_i.underscore}}').css({
+		      'display': 'none',
+		    });
+		    $('#on_screen_det_trigger-{{p_i.underscore}}').css({
+	      'font-weight': '500',
+		    });
+		    $('#on_screen_det_trigger_container-{{p_i.underscore}}').css({
+		      'background-color': 'white',
+		      'border-radius': '10px'
+		    });
+    	{% endfor %}
+
+    	$('#on_screen_det_trigger-{{p.underscore}}').css({
+	      'font-weight': '900',
+	    });
+	    $('#on_screen_det_trigger_container-{{p.underscore}}').css({
+	      'background-color': '#ABFF84',
+	      'border-radius': '10px'
+	    });
+	    $('#on_screen_det_content-{{p.underscore}}').css({
+	      'display': 'block',
+	    });
+
+	    if (window.focusDemoPersona) {
+	    	window.focusDemoPersona("{{p.underscore}}");
+	    } else {
+	    	document.getElementById("temp_focus").innerHTML = "{{p.underscore}}";
+	    }
+
+		});
+	{% endfor %}
+</script>
+{% endblock js_content %}

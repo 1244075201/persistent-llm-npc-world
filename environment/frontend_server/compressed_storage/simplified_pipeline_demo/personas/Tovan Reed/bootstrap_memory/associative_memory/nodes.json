@@ -1,0 +1,302 @@
+{
+  "node_1": {
+    "node_count": 1,
+    "type_count": 1,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 07:00:00",
+    "expiration": null,
+    "subject": "Tovan Reed",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 07:00, Tovan Reed was at Guard Post and did: Morning patrol and vendor check-in at 7:00 AM.",
+    "embedding_key": "At 07:00, Tovan Reed was at Guard Post and did: Morning patrol and vendor check-in at 7:00 AM.",
+    "poignancy": 1,
+    "keywords": [
+      "Tovan Reed",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_2": {
+    "node_count": 2,
+    "type_count": 2,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 07:00:00",
+    "expiration": null,
+    "subject": "Tovan Reed",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 07:00, Tovan Reed talked with Lysa Vale at Market: Tovan Reed: Morning, Lysa. Vendors seem jittery today \u2014 three stalls didn't open. / Lysa Vale: I noticed. Heard the eastern road's gone quiet; traders are skipping it. / Tovan Reed: That's the second route in a week. What are you hearing from the others? / Lysa Vale: Western pass is still safe, but prices are climbing fast. People are nervous.",
+    "embedding_key": "At 07:00, Tovan Reed talked with Lysa Vale at Market: Tovan Reed: Morning, Lysa. Vendors seem jittery today \u2014 three stalls didn't open. / Lysa Vale: I noticed. Heard the eastern road's gone quiet; traders are skipping it. / Tovan Reed: That's the second route in a week. What are you hearing from the others? / Lysa Vale: Western pass is still safe, but prices are climbing fast. People are nervous.",
+    "poignancy": 1,
+    "keywords": [
+      "Tovan Reed",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_3": {
+    "node_count": 3,
+    "type_count": 3,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 09:00:00",
+    "expiration": null,
+    "subject": "Tovan Reed",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 09:00, Tovan Reed was at Guard Post and did: Morning patrol and vendor check-in at 7:00 AM.",
+    "embedding_key": "At 09:00, Tovan Reed was at Guard Post and did: Morning patrol and vendor check-in at 7:00 AM.",
+    "poignancy": 1,
+    "keywords": [
+      "Tovan Reed",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_4": {
+    "node_count": 4,
+    "type_count": 4,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 11:00:00",
+    "expiration": null,
+    "subject": "Tovan Reed",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 11:00, Tovan Reed was at Guard Post and did: Mediate disputes and inspect new stalls at 12:00 PM.",
+    "embedding_key": "At 11:00, Tovan Reed was at Guard Post and did: Mediate disputes and inspect new stalls at 12:00 PM.",
+    "poignancy": 1,
+    "keywords": [
+      "Tovan Reed",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_5": {
+    "node_count": 5,
+    "type_count": 5,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 11:00:00",
+    "expiration": null,
+    "subject": "Tovan Reed",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 11:00, Mira Chen talked with Tovan Reed at Market: Mira Chen: Noticed the eastern road's been quiet lately \u2014 traders are skipping it. / Tovan Reed: Exactly. Three stalls didn't open this morning. That's two routes in a week. / Mira Chen: Prices climbing fast too. People are getting nervous, I can feel it. / Tovan Reed: I'm on stall inspection soon. Something's not right, and I mean to find out what.",
+    "embedding_key": "At 11:00, Mira Chen talked with Tovan Reed at Market: Mira Chen: Noticed the eastern road's been quiet lately \u2014 traders are skipping it. / Tovan Reed: Exactly. Three stalls didn't open this morning. That's two routes in a week. / Mira Chen: Prices climbing fast too. People are getting nervous, I can feel it. / Tovan Reed: I'm on stall inspection soon. Something's not right, and I mean to find out what.",
+    "poignancy": 1,
+    "keywords": [
+      "Tovan Reed",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_6": {
+    "node_count": 6,
+    "type_count": 6,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 13:00:00",
+    "expiration": null,
+    "subject": "Tovan Reed",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 13:00, Tovan Reed was at Guard Post and did: Mediate disputes and inspect new stalls at 12:00 PM.",
+    "embedding_key": "At 13:00, Tovan Reed was at Guard Post and did: Mediate disputes and inspect new stalls at 12:00 PM.",
+    "poignancy": 1,
+    "keywords": [
+      "Tovan Reed",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_7": {
+    "node_count": 7,
+    "type_count": 7,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 15:00:00",
+    "expiration": null,
+    "subject": "Tovan Reed",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 15:00, Tovan Reed was at Guard Post and did: Mediate disputes and inspect new stalls at 12:00 PM.",
+    "embedding_key": "At 15:00, Tovan Reed was at Guard Post and did: Mediate disputes and inspect new stalls at 12:00 PM.",
+    "poignancy": 1,
+    "keywords": [
+      "Tovan Reed",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_8": {
+    "node_count": 8,
+    "type_count": 8,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 17:00:00",
+    "expiration": null,
+    "subject": "Tovan Reed",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 17:00, Tovan Reed was at Guard Post and did: Evening sweep and suspicious activity report at 5:00 PM.",
+    "embedding_key": "At 17:00, Tovan Reed was at Guard Post and did: Evening sweep and suspicious activity report at 5:00 PM.",
+    "poignancy": 1,
+    "keywords": [
+      "Tovan Reed",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_9": {
+    "node_count": 9,
+    "type_count": 9,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 19:00:00",
+    "expiration": null,
+    "subject": "Tovan Reed",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 19:00, Tovan Reed was at Guard Post and did: Evening sweep and suspicious activity report at 5:00 PM.",
+    "embedding_key": "At 19:00, Tovan Reed was at Guard Post and did: Evening sweep and suspicious activity report at 5:00 PM.",
+    "poignancy": 1,
+    "keywords": [
+      "Tovan Reed",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_10": {
+    "node_count": 10,
+    "type_count": 1,
+    "type": "chat",
+    "depth": 0,
+    "created": "2026-06-27 07:00:00",
+    "expiration": null,
+    "subject": "Tovan Reed",
+    "predicate": "talked with",
+    "object": "Lysa Vale",
+    "description": "Tovan Reed talked with Lysa Vale at Market.",
+    "embedding_key": "Tovan Reed talked with Lysa Vale at Market.",
+    "poignancy": 3,
+    "keywords": [
+      "Tovan Reed",
+      "Lysa Vale"
+    ],
+    "filling": [
+      [
+        "Tovan Reed",
+        "Morning, Lysa. Vendors seem jittery today \u2014 three stalls didn't open."
+      ],
+      [
+        "Lysa Vale",
+        "I noticed. Heard the eastern road's gone quiet; traders are skipping it."
+      ],
+      [
+        "Tovan Reed",
+        "That's the second route in a week. What are you hearing from the others?"
+      ],
+      [
+        "Lysa Vale",
+        "Western pass is still safe, but prices are climbing fast. People are nervous."
+      ]
+    ]
+  },
+  "node_11": {
+    "node_count": 11,
+    "type_count": 2,
+    "type": "chat",
+    "depth": 0,
+    "created": "2026-06-27 11:00:00",
+    "expiration": null,
+    "subject": "Tovan Reed",
+    "predicate": "talked with",
+    "object": "Mira Chen",
+    "description": "Tovan Reed talked with Mira Chen at Market.",
+    "embedding_key": "Tovan Reed talked with Mira Chen at Market.",
+    "poignancy": 3,
+    "keywords": [
+      "Tovan Reed",
+      "Mira Chen"
+    ],
+    "filling": [
+      [
+        "Mira Chen",
+        "Noticed the eastern road's been quiet lately \u2014 traders are skipping it."
+      ],
+      [
+        "Tovan Reed",
+        "Exactly. Three stalls didn't open this morning. That's two routes in a week."
+      ],
+      [
+        "Mira Chen",
+        "Prices climbing fast too. People are getting nervous, I can feel it."
+      ],
+      [
+        "Tovan Reed",
+        "I'm on stall inspection soon. Something's not right, and I mean to find out what."
+      ]
+    ]
+  },
+  "node_12": {
+    "node_count": 12,
+    "type_count": 1,
+    "type": "thought",
+    "depth": 1,
+    "created": "2026-06-27 19:00:00",
+    "expiration": null,
+    "subject": "Tovan Reed",
+    "predicate": "reflects on",
+    "object": "recent events",
+    "description": "What pattern connects the two silent trade routes and the rising prices\u2014is this a coordinated disruption or separate incidents?",
+    "embedding_key": "What pattern connects the two silent trade routes and the rising prices\u2014is this a coordinated disruption or separate incidents?",
+    "poignancy": 4,
+    "keywords": [
+      "Tovan Reed",
+      "recent events"
+    ],
+    "filling": []
+  },
+  "node_13": {
+    "node_count": 13,
+    "type_count": 2,
+    "type": "thought",
+    "depth": 1,
+    "created": "2026-06-27 19:00:00",
+    "expiration": null,
+    "subject": "Tovan Reed",
+    "predicate": "reflects on",
+    "object": "recent events",
+    "description": "How reliable are my informants Lysa and Mira, and could their nervousness be amplifying false signals I should verify?",
+    "embedding_key": "How reliable are my informants Lysa and Mira, and could their nervousness be amplifying false signals I should verify?",
+    "poignancy": 4,
+    "keywords": [
+      "Tovan Reed",
+      "recent events"
+    ],
+    "filling": []
+  },
+  "node_14": {
+    "node_count": 14,
+    "type_count": 3,
+    "type": "thought",
+    "depth": 1,
+    "created": "2026-06-27 19:00:00",
+    "expiration": null,
+    "subject": "Tovan Reed",
+    "predicate": "reflects on",
+    "object": "recent events",
+    "description": "Should I escalate these observations to the watch captain tomorrow, or gather more proof to avoid sparking unnecessary panic?",
+    "embedding_key": "Should I escalate these observations to the watch captain tomorrow, or gather more proof to avoid sparking unnecessary panic?",
+    "poignancy": 4,
+    "keywords": [
+      "Tovan Reed",
+      "recent events"
+    ],
+    "filling": []
+  }
+}

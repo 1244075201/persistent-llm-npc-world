@@ -1,0 +1,79 @@
+{
+  "vision_r": 8,
+  "att_bandwidth": 8,
+  "retention": 8,
+  "curr_time": "June 27, 2026, 19:00:00",
+  "curr_tile": [
+    84,
+    47
+  ],
+  "curr_arena": "store",
+  "curr_sector": "The Willows Market and Pharmacy",
+  "curr_address": "the Ville:The Willows Market and Pharmacy:store",
+  "daily_plan_req": "Morning patrol and vendor check-in at 7:00 AM; Mediate disputes and inspect new stalls at 12:00 PM; Evening sweep and suspicious activity report at 5:00 PM",
+  "name": "Tovan Reed",
+  "first_name": "Tovan",
+  "last_name": "Reed",
+  "age": 30,
+  "innate": "loyal, practical, suspicious",
+  "learned": "Tovan Reed is a market guard. Goal: keep the market orderly and identify suspicious changes before they spread",
+  "currently": "Tovan Reed is currently evening sweep and suspicious activity report at 5:00 pm.",
+  "lifestyle": "Tovan Reed follows a morning, afternoon, and evening routine.",
+  "living_area": "the Ville:The Willows Market and Pharmacy:store",
+  "daily_req": [
+    "Morning patrol and vendor check-in at 7:00 AM",
+    "Mediate disputes and inspect new stalls at 12:00 PM",
+    "Evening sweep and suspicious activity report at 5:00 PM"
+  ],
+  "f_daily_schedule": [
+    [
+      "Morning patrol and vendor check-in at 7:00 AM",
+      240
+    ],
+    [
+      "Mediate disputes and inspect new stalls at 12:00 PM",
+      240
+    ],
+    [
+      "Evening sweep and suspicious activity report at 5:00 PM",
+      240
+    ]
+  ],
+  "f_daily_schedule_hourly_org": [
+    [
+      "Morning patrol and vendor check-in at 7:00 AM",
+      240
+    ],
+    [
+      "Mediate disputes and inspect new stalls at 12:00 PM",
+      240
+    ],
+    [
+      "Evening sweep and suspicious activity report at 5:00 PM",
+      240
+    ]
+  ],
+  "act_address": "the Ville:The Willows Market and Pharmacy:store",
+  "act_start_time": "June 27, 2026, 19:00:00",
+  "act_duration": 120,
+  "act_description": "Evening sweep and suspicious activity report at 5:00 PM",
+  "act_pronunciatio": "\ud83d\udee1\ufe0f",
+  "act_event": [
+    "Tovan Reed",
+    "is",
+    "Evening sweep and suspicious activity report at 5:00 PM"
+  ],
+  "act_obj_description": null,
+  "act_obj_pronunciatio": null,
+  "act_obj_event": [
+    null,
+    null,
+    null
+  ],
+  "chatting_with": null,
+  "chat": null,
+  "chatting_with_buffer": {},
+  "chatting_end_time": null,
+  "act_path_set": true,
+  "planned_path": []
+}

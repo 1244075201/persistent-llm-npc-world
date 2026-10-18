@@ -1,0 +1,247 @@
+{
+  "node_1": {
+    "node_count": 1,
+    "type_count": 1,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 07:00:00",
+    "expiration": null,
+    "subject": "Mira Chen",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 07:00, Mira Chen was at Tea Shop and did: Open tea shop at 7:00 AM and greet regulars.",
+    "embedding_key": "At 07:00, Mira Chen was at Tea Shop and did: Open tea shop at 7:00 AM and greet regulars.",
+    "poignancy": 1,
+    "keywords": [
+      "Mira Chen",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_2": {
+    "node_count": 2,
+    "type_count": 2,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 09:00:00",
+    "expiration": null,
+    "subject": "Mira Chen",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 09:00, Mira Chen was at Tea Shop and did: Open tea shop at 7:00 AM and greet regulars.",
+    "embedding_key": "At 09:00, Mira Chen was at Tea Shop and did: Open tea shop at 7:00 AM and greet regulars.",
+    "poignancy": 1,
+    "keywords": [
+      "Mira Chen",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_3": {
+    "node_count": 3,
+    "type_count": 3,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 11:00:00",
+    "expiration": null,
+    "subject": "Mira Chen",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 11:00, Mira Chen was at Market and did: Read community news and observe market activity after lunch at 1:00 PM.",
+    "embedding_key": "At 11:00, Mira Chen was at Market and did: Read community news and observe market activity after lunch at 1:00 PM.",
+    "poignancy": 1,
+    "keywords": [
+      "Mira Chen",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_4": {
+    "node_count": 4,
+    "type_count": 4,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 11:00:00",
+    "expiration": null,
+    "subject": "Mira Chen",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 11:00, Mira Chen talked with Tovan Reed at Market: Mira Chen: Noticed the eastern road's been quiet lately \u2014 traders are skipping it. / Tovan Reed: Exactly. Three stalls didn't open this morning. That's two routes in a week. / Mira Chen: Prices climbing fast too. People are getting nervous, I can feel it. / Tovan Reed: I'm on stall inspection soon. Something's not right, and I mean to find out what.",
+    "embedding_key": "At 11:00, Mira Chen talked with Tovan Reed at Market: Mira Chen: Noticed the eastern road's been quiet lately \u2014 traders are skipping it. / Tovan Reed: Exactly. Three stalls didn't open this morning. That's two routes in a week. / Mira Chen: Prices climbing fast too. People are getting nervous, I can feel it. / Tovan Reed: I'm on stall inspection soon. Something's not right, and I mean to find out what.",
+    "poignancy": 1,
+    "keywords": [
+      "Mira Chen",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_5": {
+    "node_count": 5,
+    "type_count": 5,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 13:00:00",
+    "expiration": null,
+    "subject": "Mira Chen",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 13:00, Mira Chen was at Market and did: Read community news and observe market activity after lunch at 1:00 PM.",
+    "embedding_key": "At 13:00, Mira Chen was at Market and did: Read community news and observe market activity after lunch at 1:00 PM.",
+    "poignancy": 1,
+    "keywords": [
+      "Mira Chen",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_6": {
+    "node_count": 6,
+    "type_count": 6,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 15:00:00",
+    "expiration": null,
+    "subject": "Mira Chen",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 15:00, Mira Chen was at Market and did: Read community news and observe market activity after lunch at 1:00 PM.",
+    "embedding_key": "At 15:00, Mira Chen was at Market and did: Read community news and observe market activity after lunch at 1:00 PM.",
+    "poignancy": 1,
+    "keywords": [
+      "Mira Chen",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_7": {
+    "node_count": 7,
+    "type_count": 7,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 17:00:00",
+    "expiration": null,
+    "subject": "Mira Chen",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 17:00, Mira Chen was at Tea Shop and did: Close shop and walk through neighborhood to check for changes at 6:00 PM.",
+    "embedding_key": "At 17:00, Mira Chen was at Tea Shop and did: Close shop and walk through neighborhood to check for changes at 6:00 PM.",
+    "poignancy": 1,
+    "keywords": [
+      "Mira Chen",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_8": {
+    "node_count": 8,
+    "type_count": 8,
+    "type": "event",
+    "depth": 0,
+    "created": "2026-06-27 19:00:00",
+    "expiration": null,
+    "subject": "Mira Chen",
+    "predicate": "experienced",
+    "object": "simulation event",
+    "description": "At 19:00, Mira Chen was at Tea Shop and did: Close shop and walk through neighborhood to check for changes at 6:00 PM.",
+    "embedding_key": "At 19:00, Mira Chen was at Tea Shop and did: Close shop and walk through neighborhood to check for changes at 6:00 PM.",
+    "poignancy": 1,
+    "keywords": [
+      "Mira Chen",
+      "simulation event"
+    ],
+    "filling": []
+  },
+  "node_9": {
+    "node_count": 9,
+    "type_count": 1,
+    "type": "chat",
+    "depth": 0,
+    "created": "2026-06-27 11:00:00",
+    "expiration": null,
+    "subject": "Mira Chen",
+    "predicate": "talked with",
+    "object": "Tovan Reed",
+    "description": "Mira Chen talked with Tovan Reed at Market.",
+    "embedding_key": "Mira Chen talked with Tovan Reed at Market.",
+    "poignancy": 3,
+    "keywords": [
+      "Mira Chen",
+      "Tovan Reed"
+    ],
+    "filling": [
+      [
+        "Mira Chen",
+        "Noticed the eastern road's been quiet lately \u2014 traders are skipping it."
+      ],
+      [
+        "Tovan Reed",
+        "Exactly. Three stalls didn't open this morning. That's two routes in a week."
+      ],
+      [
+        "Mira Chen",
+        "Prices climbing fast too. People are getting nervous, I can feel it."
+      ],
+      [
+        "Tovan Reed",
+        "I'm on stall inspection soon. Something's not right, and I mean to find out what."
+      ]
+    ]
+  },
+  "node_10": {
+    "node_count": 10,
+    "type_count": 1,
+    "type": "thought",
+    "depth": 1,
+    "created": "2026-06-27 19:00:00",
+    "expiration": null,
+    "subject": "Mira Chen",
+    "predicate": "reflects on",
+    "object": "recent events",
+    "description": "What is driving the sudden shift in trader routes and stall closures, and could it signal a deeper threat to the market's stability?",
+    "embedding_key": "What is driving the sudden shift in trader routes and stall closures, and could it signal a deeper threat to the market's stability?",
+    "poignancy": 4,
+    "keywords": [
+      "Mira Chen",
+      "recent events"
+    ],
+    "filling": []
+  },
+  "node_11": {
+    "node_count": 11,
+    "type_count": 2,
+    "type": "thought",
+    "depth": 1,
+    "created": "2026-06-27 19:00:00",
+    "expiration": null,
+    "subject": "Mira Chen",
+    "predicate": "reflects on",
+    "object": "recent events",
+    "description": "How can I reassure my regulars and maintain their trust when prices are climbing and the neighborhood feels increasingly uneasy?",
+    "embedding_key": "How can I reassure my regulars and maintain their trust when prices are climbing and the neighborhood feels increasingly uneasy?",
+    "poignancy": 4,
+    "keywords": [
+      "Mira Chen",
+      "recent events"
+    ],
+    "filling": []
+  },
+  "node_12": {
+    "node_count": 12,
+    "type_count": 3,
+    "type": "thought",
+    "depth": 1,
+    "created": "2026-06-27 19:00:00",
+    "expiration": null,
+    "subject": "Mira Chen",
+    "predicate": "reflects on",
+    "object": "recent events",
+    "description": "What patterns should I watch for in the coming days to distinguish a temporary disruption from a lasting change that could reshape the community I rely on?",
+    "embedding_key": "What patterns should I watch for in the coming days to distinguish a temporary disruption from a lasting change that could reshape the community I rely on?",
+    "poignancy": 4,
+    "keywords": [
+      "Mira Chen",
+      "recent events"
+    ],
+    "filling": []
+  }
+}

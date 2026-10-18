@@ -1,0 +1,79 @@
+{
+  "vision_r": 8,
+  "att_bandwidth": 8,
+  "retention": 8,
+  "curr_time": "June 27, 2026, 19:00:00",
+  "curr_tile": [
+    77,
+    22
+  ],
+  "curr_arena": "cafe",
+  "curr_sector": "Hobbs Cafe",
+  "curr_address": "the Ville:Hobbs Cafe:cafe",
+  "daily_plan_req": "Open tea shop at 7:00 AM and greet regulars; Read community news and observe market activity after lunch at 1:00 PM; Close shop and walk through neighborhood to check for changes at 6:00 PM",
+  "name": "Mira Chen",
+  "first_name": "Mira",
+  "last_name": "Chen",
+  "age": 30,
+  "innate": "curious, cautious, observant",
+  "learned": "Mira Chen is a tea shop owner. Goal: maintain neighborhood trust and understand changes around the market",
+  "currently": "Mira Chen is currently close shop and walk through neighborhood to check for changes at 6:00 pm.",
+  "lifestyle": "Mira Chen follows a morning, afternoon, and evening routine.",
+  "living_area": "the Ville:Hobbs Cafe:cafe",
+  "daily_req": [
+    "Open tea shop at 7:00 AM and greet regulars",
+    "Read community news and observe market activity after lunch at 1:00 PM",
+    "Close shop and walk through neighborhood to check for changes at 6:00 PM"
+  ],
+  "f_daily_schedule": [
+    [
+      "Open tea shop at 7:00 AM and greet regulars",
+      240
+    ],
+    [
+      "Read community news and observe market activity after lunch at 1:00 PM",
+      240
+    ],
+    [
+      "Close shop and walk through neighborhood to check for changes at 6:00 PM",
+      240
+    ]
+  ],
+  "f_daily_schedule_hourly_org": [
+    [
+      "Open tea shop at 7:00 AM and greet regulars",
+      240
+    ],
+    [
+      "Read community news and observe market activity after lunch at 1:00 PM",
+      240
+    ],
+    [
+      "Close shop and walk through neighborhood to check for changes at 6:00 PM",
+      240
+    ]
+  ],
+  "act_address": "the Ville:Hobbs Cafe:cafe",
+  "act_start_time": "June 27, 2026, 19:00:00",
+  "act_duration": 120,
+  "act_description": "Close shop and walk through neighborhood to check for changes at 6:00 PM",
+  "act_pronunciatio": "\u2615",
+  "act_event": [
+    "Mira Chen",
+    "is",
+    "Close shop and walk through neighborhood to check for changes at 6:00 PM"
+  ],
+  "act_obj_description": null,
+  "act_obj_pronunciatio": null,
+  "act_obj_event": [
+    null,
+    null,
+    null
+  ],
+  "chatting_with": null,
+  "chat": null,
+  "chatting_with_buffer": {},
+  "chatting_end_time": null,
+  "act_path_set": true,
+  "planned_path": []
+}

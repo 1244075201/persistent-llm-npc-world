@@ -1,0 +1,3005 @@
+{% load staticfiles %}
+
+<script type="text/javascript">
+	/*
+	  Main resources: 
+	  https://www.youtube.com/watch?v=cKIG1lKwLeo&t=401s&ab_channel=HongLy
+	  For the ground zero code, see the exported files from here: 
+	  https://codepen.io/mikewesthad/pen/BVeoYP?editors=1111 
+
+	  Also worth taking a look: 
+	  https://www.youtube.com/watch?v=fdXcD9X4NrQ&ab_channel=MorganPage
+	  and 
+	  https://www.youtube.com/watch?v=MR2CvWxOEsw&ab_channel=MattWilber
+	 */
+
+
+	// ###########################################################################
+	// PREAMBLE
+	// ###########################################################################
+
+	// <step> -- one full loop around all three phases determined by <phase> is 
+	// a step. We use this to link the steps in the backend. 
+	let step = {{step}};
+	let sim_code = "{{sim_code}}";
+ 	let step_size = {{sec_per_step}} * 1000; // 10 seconds = 10000
+ 	const play_button = document.getElementById("play_button");
+ 	const pause_button = document.getElementById("pause_button");
+ 	const full_map_button = document.getElementById("full_map_button");
+ 	const reset_view_button = document.getElementById("reset_view_button");
+ 	const step_mode_button = document.getElementById("step_mode_button");
+ 	const smooth_mode_button = document.getElementById("smooth_mode_button");
+ 	const playback_speed_slider = document.getElementById("playback_speed_slider");
+ 	const playback_speed_value = document.getElementById("playback_speed_value");
+ 	const live_source_step = document.getElementById("live-source-step");
+ 	const live_interaction_panel = document.getElementById("live-interaction-panel");
+ 	const live_event_time_hidden = document.getElementById("live-event-time-hidden");
+ 	const live_event_time_display = document.getElementById("live-event-time-display");
+ 	const live_source_memory_id = document.getElementById("live-source-memory-id");
+ 	const live_interaction_form = document.getElementById("live-interaction-form");
+ 	const live_inject_button = document.getElementById("live-inject-button");
+ 	const live_inject_help = document.getElementById("live-inject-help");
+ 	const live_player_action = document.getElementById("live-player-action");
+ 	const live_replanning_scope = document.getElementById("live-replanning-scope");
+ 	const live_location_select = document.getElementById("live-location");
+ 	const live_target_lock_label = document.getElementById("live-target-lock-label");
+ 	const live_location_lock_label = document.getElementById("live-location-lock-label");
+ 	const enable_player_control_checkbox = document.getElementById("enable-player-control-checkbox");
+ 	const enable_player_control_button = document.getElementById("enable-player-control-button");
+ 	const reset_player_control_button = document.getElementById("reset-player-control-button");
+ 	const player_control_status = document.getElementById("player-control-status");
+ 	const nearby_npc_status = document.getElementById("nearby-npc-status");
+ 	const live_target_npc_select = document.getElementById("live-target-npc");
+ 	const player_move_up_button = document.getElementById("player-move-up");
+ 	const player_move_down_button = document.getElementById("player-move-down");
+ 	const player_move_left_button = document.getElementById("player-move-left");
+ 	const player_move_right_button = document.getElementById("player-move-right");
+ 	const follow_player_camera_checkbox = document.getElementById("follow-player-camera-checkbox");
+ 	const player_tile_status = document.getElementById("player-tile-status");
+ 	const player_walkable_status = document.getElementById("player-walkable-status");
+ 	const player_collision_debug = document.getElementById("player-collision-debug");
+ 	const player_debug_teleport_location = document.getElementById("player-debug-teleport-location");
+ 	const player_debug_teleport_button = document.getElementById("player-debug-teleport-button");
+ 	const proximity_interaction_status = document.getElementById("proximity-interaction-status");
+ 	const interact_nearby_npc_button = document.getElementById("interact-nearby-npc-button");
+ 	const clear_proximity_target_button = document.getElementById("clear-proximity-target-button");
+ 	const proximity_target_lock_status = document.getElementById("proximity-target-lock-status");
+ 	const live_dialogue_status = document.getElementById("live-dialogue-status");
+ 	const live_dialogue_utterance = document.getElementById("live-dialogue-utterance");
+ 	const send_live_dialogue_button = document.getElementById("send-live-dialogue-button");
+ 	const apply_live_dialogue_button = document.getElementById("apply-live-dialogue-button");
+ 	const live_dialogue_reply = document.getElementById("live-dialogue-reply");
+ 	const recent_npc_memory_container = document.getElementById("recent-npc-memory");
+ 	const live_dialogue_history_container = document.getElementById("live-dialogue-history");
+ 	const live_dialogue_jump_latest_button = document.getElementById("live-dialogue-jump-latest");
+ 	const live_dialogue_memories_used_container = document.getElementById("live-dialogue-memories-used");
+ 	const simulation_event_draft_panel = document.getElementById("simulation-event-draft-panel");
+ 	const simulation_event_draft_target = document.getElementById("simulation-event-draft-target");
+ 	const simulation_event_draft_location = document.getElementById("simulation-event-draft-location");
+ 	const simulation_event_draft_time = document.getElementById("simulation-event-draft-time");
+ 	const simulation_event_draft_type = document.getElementById("simulation-event-draft-type");
+ 	const simulation_event_draft_scope = document.getElementById("simulation-event-draft-scope");
+ 	const simulation_event_draft_action = document.getElementById("simulation-event-draft-action");
+ 	const simulation_event_draft_confidence = document.getElementById("simulation-event-draft-confidence");
+ 	const simulation_event_draft_rationale = document.getElementById("simulation-event-draft-rationale");
+ 	const simulation_event_draft_summary = document.getElementById("simulation-event-draft-summary");
+ 	const simulation_event_draft_status = document.getElementById("simulation-event-draft-status");
+ 	const confirm_simulation_event_draft = document.getElementById("confirm-simulation-event-draft");
+ 	const copy_simulation_event_draft = document.getElementById("copy-simulation-event-draft");
+ 	const cancel_simulation_event_draft = document.getElementById("cancel-simulation-event-draft");
+ 	const world_current_day = document.getElementById("world-current-day");
+ 	const world_current_time = document.getElementById("world-current-time");
+ 	const advance_world_hour_button = document.getElementById("advance-world-hour-button");
+ 	const advance_world_10_button = document.getElementById("advance-world-10-button");
+ 	const reset_world_time_button = document.getElementById("reset-world-time-button");
+ 	const clean_simulation_button = document.getElementById("clean-simulation-button");
+ 	const jump_world_time_button = document.getElementById("jump-world-time-button");
+ 	const jump_world_day_input = document.getElementById("jump-world-day");
+ 	const jump_world_time_input = document.getElementById("jump-world-time");
+ 	const world_planner_mode_select = document.getElementById("world-planner-mode");
+ 	const set_world_planner_mode_button = document.getElementById("set-world-planner-mode-button");
+ 	const regenerate_daily_plan_button = document.getElementById("regenerate-daily-plan-button");
+ 	const agent_config_select = document.getElementById("agent-config-select");
+ 	const apply_agent_config_button = document.getElementById("apply-agent-config-button");
+ 	const agent_config_status = document.getElementById("agent-config-status");
+ 	const world_clock_status = document.getElementById("world-clock-status");
+ 	const current_npc_actions_list = document.getElementById("current-npc-actions-list");
+ 	const current_npc_movement_list = document.getElementById("current-npc-movement-list");
+ 	const current_day_plan_list = document.getElementById("current-day-plan-list");
+ 	const npc_details_panel = document.getElementById("npc-details-panel");
+ 	const npc_details_panel_title = document.getElementById("npc-details-panel-title");
+ 	const npc_details_panel_status = document.getElementById("npc-details-panel-status");
+ 	const npc_details_panel_content = document.getElementById("npc-details-panel-content");
+ 	const npc_details_close_button = document.getElementById("npc-details-close-button");
+
+	// Phaser 3.0 global settings. 
+	// Configuration meant to be passed to the main Phaser game instance. 
+	const config = {
+	  type: Phaser.AUTO,
+	  width: 1500,
+	  height: 800,
+	  parent: "game-container",
+	  pixelArt: true,
+	  physics: {
+	    default: "arcade",
+	    arcade: {
+	      gravity: { y: 0 } } },
+	  scene: {
+	    preload: preload,
+	    create: create,
+	    update: update },
+	  scale: {zoom: 0.8} };
+
+	// const config = {
+	//   type: Phaser.AUTO,
+	//   width: 4480,
+	//   height: 3200,
+	//   parent: "game-container",
+	//   pixelArt: true,
+	//   physics: {
+	//     default: "arcade",
+	//     arcade: {
+	//       gravity: { y: 0 } } },
+	//   scene: {
+	//     preload: preload,
+	//     create: create,
+	//     update: update },
+	//   scale: {zoom: 1} };
+
+
+	// Creating the game instance and setting up the main Phaser variables that  
+	// will be used in it. 
+	const game = new Phaser.Game(config);
+	let cursors;
+	let player;
+	let main_camera;
+	let collisions_layer = null;
+	let collision_grid = null;
+	let collision_grid_width = 0;
+	let collision_grid_height = 0;
+	let collision_grid_loaded = false;
+	let collision_layer_loaded = false;
+	let world_width_pixels = 0;
+	let world_height_pixels = 0;
+	const min_camera_zoom = 0.35;
+	const max_camera_zoom = 2.0;
+	const default_camera_zoom = 1.0;
+	const default_camera_position = {x: 2400, y: 588};
+	const player_initial_spawn_position = {x: 2400, y: 608};
+	const valid_agent_configs = ["baseline", "memory_only", "memory_knowledge", "full_agent"];
+	let active_agent_config = "full_agent";
+
+	function agent_config_from_url() {
+		let params = new URLSearchParams(window.location.search || "");
+		let value = params.get("agent_config") || window.localStorage.getItem("demo_agent_config") || "full_agent";
+		return valid_agent_configs.indexOf(value) >= 0 ? value : "full_agent";
+	}
+
+	function update_agent_config_ui() {
+		if (agent_config_select) agent_config_select.value = active_agent_config;
+		if (agent_config_status) agent_config_status.textContent = "Current: " + active_agent_config;
+		document.querySelectorAll(".npc-state-details-link").forEach(function(link) {
+			let href = link.getAttribute("href") || "";
+			if (!href) return;
+			let url = new URL(href, window.location.origin);
+			url.searchParams.set("agent_config", active_agent_config);
+			link.setAttribute("href", url.pathname + url.search);
+		});
+		document.querySelectorAll('a[target="_blank"][rel="noopener"]').forEach(function(link) {
+			let href = link.getAttribute("href") || "";
+			if (href.indexOf("replay_persona_state") < 0) return;
+			let url = new URL(href, window.location.origin);
+			url.searchParams.set("agent_config", active_agent_config);
+			link.setAttribute("href", url.pathname + url.search);
+		});
+	}
+
+	function set_active_agent_config(config_name, update_url) {
+		active_agent_config = valid_agent_configs.indexOf(config_name) >= 0 ? config_name : "full_agent";
+		window.localStorage.setItem("demo_agent_config", active_agent_config);
+		if (update_url && window.history && window.history.replaceState) {
+			let url = new URL(window.location.href);
+			url.searchParams.set("agent_config", active_agent_config);
+			window.history.replaceState({}, "", url.pathname + url.search + url.hash);
+		}
+		update_agent_config_ui();
+	}
+
+	set_active_agent_config(agent_config_from_url(), false);
+
+	function clamp_camera_to_world() {
+		if (!main_camera) return;
+		let visible_width = main_camera.width / main_camera.zoom;
+		let visible_height = main_camera.height / main_camera.zoom;
+		let max_scroll_x = Math.max(0, world_width_pixels - visible_width);
+		let max_scroll_y = Math.max(0, world_height_pixels - visible_height);
+		main_camera.scrollX = Phaser.Math.Clamp(main_camera.scrollX, 0, max_scroll_x);
+		main_camera.scrollY = Phaser.Math.Clamp(main_camera.scrollY, 0, max_scroll_y);
+	}
+
+	function update_camera_status() {
+		if (!main_camera) return;
+		document.getElementById("camera-zoom-content").textContent =
+			main_camera.zoom.toFixed(2);
+	}
+
+	function use_manual_camera() {
+		if (main_camera) main_camera.stopFollow();
+	}
+
+	function show_full_map() {
+		if (!main_camera) return;
+		use_manual_camera();
+		let fit_zoom = Math.min(
+			main_camera.width / world_width_pixels,
+			main_camera.height / world_height_pixels
+		);
+		main_camera.setZoom(
+			Phaser.Math.Clamp(fit_zoom, min_camera_zoom, max_camera_zoom)
+		);
+		main_camera.centerOn(world_width_pixels / 2, world_height_pixels / 2);
+		clamp_camera_to_world();
+		update_camera_status();
+	}
+
+	function reset_camera_view() {
+		if (!main_camera) return;
+		main_camera.stopFollow();
+		main_camera.setZoom(default_camera_zoom);
+		player.setPosition(default_camera_position.x, default_camera_position.y);
+		main_camera.startFollow(player, true);
+		clamp_camera_to_world();
+		update_camera_status();
+	}
+
+	// Persona related variables. This should have the name of the persona as its 
+	// keys, and the instances of the Persona class as the values.
+	let persona_names = {{ persona_init_pos|safe }};
+	var spawn_tile_loc = {};
+	for (var key in persona_names){
+		spawn_tile_loc[key] = persona_names[key] ;
+	}
+
+	var personas = {};
+	var pronunciatios = {};
+	var speech_bubbles = {};
+	var conversation_bubbles = {};
+	var controllable_player_sprite = null;
+	var controllable_player_label = null;
+	let controllable_player_enabled = true;
+	const controllable_player_speed = 3.5;
+	const controllable_player_button_step = 20;
+	const controllable_player_proximity_threshold = 80;
+	let controllable_player_last_frame_ms = null;
+	let controllable_player_animation_frame = null;
+	let controllable_player_blocked_until = 0;
+	let nearby_npcs_cache = [];
+	let proximity_target_locked = false;
+	let proximity_locked_target = null;
+	let interaction_location_locked = false;
+	let interaction_locked_location = null;
+	let live_dialogue_histories = {{ session_dialogue_histories|safe }};
+	let current_live_context = {{ current_live_context|safe }};
+	let last_live_dialogue_turn = null;
+	let last_live_memory_entry = null;
+	let live_dialogue_bubble_until = {};
+	let live_dialogue_bubble_text = {};
+	let live_dialogue_last_render_signature = "";
+	let live_dialogue_timer_id = null;
+	let live_dialogue_send_started_ms = 0;
+	let current_simulation_event_draft = null;
+	let recent_live_memories = [];
+	let last_live_dialogue_memories_used = [];
+	let controllable_player_keys = {
+		left: false,
+		right: false,
+		up: false,
+		down: false
+	};
+	let key_w = null;
+	let key_a = null;
+	let key_s = null;
+	let key_d = null;
+	let anims_direction;
+	let pre_anims_direction;
+	let pre_anims_direction_dict = {};
+
+	// <tile_width> is the width of one individual tile (tiles are square)
+	let tile_width = 32;
+	// Important: tile_width % movement_speed has to be 0. 
+	// <movement_speed> determines how fast we move at each upate cylce. 
+	let movement_speed = {{play_speed}}; 
+
+	// Variables for storing movements that are sent from the backend server.
+	let execute_count_max = Math.ceil({{playback_frame_budget}}/movement_speed);
+	let execute_count = execute_count_max;
+	let playback_interval_ms = {{playback_interval_ms}};
+	let playback_elapsed_ms = 0;
+	let loaded_step = null;
+	const SMOOTH_FRAMES_PER_STEP = 20;
+	const BASE_KEY_STEP_INTERVAL_MS = playback_interval_ms > 0 ? playback_interval_ms : 300;
+	let playback_mode = "smooth";
+	let playback_speed_multiplier = 1.0;
+	let legacy_replay_playing = false;
+	let smooth_frame_index = 0;
+	let smooth_frame_elapsed_ms = 0;
+	let movement_target = {};
+	let all_movement = {{ all_movement|safe }};
+	let npc_spatial_state = {{ npc_spatial_state|safe }};
+	let npc_daily_plans = {{ npc_daily_plans|safe }};
+	let conversation_timeline = {{ conversation_timeline|safe }};
+ 	const movement_steps = Object.keys(all_movement).map(Number);
+ 	const final_step = Math.max(...movement_steps);
+
+  let start_datetime =new Date(Date.parse("{{start_datetime}}"));
+  var datetime_options = {
+  	hour: '2-digit',
+  	minute: '2-digit',
+  	hour12: false
+  };
+  var datetime_options_seconds = {
+  	hour: '2-digit',
+  	minute: '2-digit',
+  	second: '2-digit',
+  	hour12: false
+  };
+
+  function update_playback_mode_buttons() {
+  	if (!step_mode_button || !smooth_mode_button) return;
+  	if (playback_mode === "smooth") {
+  		smooth_mode_button.className = "btn btn-primary";
+  		step_mode_button.className = "btn btn-default";
+  	} else {
+  		smooth_mode_button.className = "btn btn-default";
+  		step_mode_button.className = "btn btn-primary";
+  	}
+  }
+
+  function clamp_speed(value) {
+  	let parsed = parseFloat(value);
+  	if (Number.isNaN(parsed)) parsed = 1.0;
+  	return Math.max(0.1, Math.min(2.0, parsed));
+  }
+
+  function update_speed_display() {
+  	if (playback_speed_value) {
+  		playback_speed_value.textContent = playback_speed_multiplier.toFixed(1) + "x";
+  	}
+  	if (playback_speed_slider) {
+  		playback_speed_slider.value = playback_speed_multiplier.toFixed(1);
+  	}
+  }
+
+  function effective_key_step_interval_ms() {
+  	return BASE_KEY_STEP_INTERVAL_MS / playback_speed_multiplier;
+  }
+
+  function effective_smooth_frame_interval_ms() {
+  	return Math.max(16, effective_key_step_interval_ms() / SMOOTH_FRAMES_PER_STEP);
+  }
+
+  function set_playback_speed(value) {
+  	playback_speed_multiplier = clamp_speed(value);
+  	try {
+  		localStorage.setItem("replay_speed_multiplier", playback_speed_multiplier.toFixed(1));
+  	} catch (error) {}
+  	update_speed_display();
+  }
+
+  function load_playback_speed() {
+  	let stored_speed = "1.0";
+  	try {
+  		stored_speed = localStorage.getItem("replay_speed_multiplier") || "1.0";
+  	} catch (error) {}
+  	set_playback_speed(stored_speed);
+  }
+
+  function display_time_for_step(step_value, alpha) {
+  	let base_time = new Date(Date.parse("{{start_datetime}}"));
+  	let bounded_alpha = Math.max(0, Math.min(1, alpha || 0));
+  	let display_time = new Date(base_time.getTime() + (step_value * step_size) + (bounded_alpha * step_size));
+  	let options = playback_mode === "smooth" ? datetime_options_seconds : datetime_options;
+  	document.getElementById("game-time-content").innerHTML = display_time.toLocaleTimeString("en-GB", options);
+  	document.getElementById("current-step-content").innerHTML = step_value;
+  	update_live_interaction_fields(step_value);
+  }
+
+  function key_step_time_string(step_value) {
+  	let total_seconds = Math.max(0, step_value) * (step_size / 1000);
+  	let total_minutes = Math.floor(total_seconds / 60) % (24 * 60);
+  	let hours = Math.floor(total_minutes / 60);
+  	let minutes = total_minutes % 60;
+  	return String(hours).padStart(2, "0") + ":" + String(minutes).padStart(2, "0");
+  }
+
+  function update_live_interaction_fields(step_value) {
+  	let event_time = key_step_time_string(step_value);
+  	if (live_source_step) live_source_step.value = String(step_value);
+  	if (live_event_time_hidden) live_event_time_hidden.value = event_time;
+  	if (live_event_time_display) live_event_time_display.value = event_time + " (legacy replay key step)";
+  }
+
+  function is_text_editable_element(element) {
+  	if (!element) return false;
+  	let tag = (element.tagName || "").toLowerCase();
+  	if (tag === "input" || tag === "textarea" || tag === "select") return true;
+  	return element.isContentEditable === true;
+  }
+
+  function is_text_input_focused() {
+  	return is_text_editable_element(document.activeElement);
+  }
+
+  function input_has_text_focus() {
+  	return is_text_input_focused();
+  }
+
+  function isolate_hud_pointer_events() {
+  	let hud_panels = document.querySelectorAll(".demo-hud-panel");
+  	let pointer_events = ["pointerdown", "mousedown", "mousemove", "mouseup", "click", "touchstart", "touchmove"];
+  	for (let i=0; i<hud_panels.length; i++) {
+  		let panel = hud_panels[i];
+  		for (let j=0; j<pointer_events.length; j++) {
+  			panel.addEventListener(pointer_events[j], function(event) {
+  				event.stopPropagation();
+  			}, {passive: true});
+  		}
+  		panel.addEventListener("wheel", function(event) {
+  			event.stopPropagation();
+  		}, {passive: true});
+  	}
+  	if (live_dialogue_history_container) {
+  		live_dialogue_history_container.addEventListener("wheel", function(event) {
+  			event.stopPropagation();
+  		}, {passive: true});
+  		live_dialogue_history_container.addEventListener("scroll", function(event) {
+  			if (is_near_history_bottom(live_dialogue_history_container)) {
+  				set_live_dialogue_new_message_indicator(false);
+  			}
+  		}, {passive: true});
+  		live_dialogue_history_container.addEventListener("mousedown", function(event) {
+  			event.stopPropagation();
+  		}, {passive: true});
+  		live_dialogue_history_container.addEventListener("pointerdown", function(event) {
+  			event.stopPropagation();
+  		}, {passive: true});
+  	}
+  	if (live_dialogue_jump_latest_button) {
+  		live_dialogue_jump_latest_button.addEventListener("click", function(event) {
+  			event.stopPropagation();
+  			if (live_dialogue_history_container) {
+  				live_dialogue_history_container.scrollTop = live_dialogue_history_container.scrollHeight;
+  			}
+  			set_live_dialogue_new_message_indicator(false);
+  		});
+  	}
+  }
+
+  isolate_hud_pointer_events();
+
+  function should_ignore_player_keyboard_event(event) {
+  	if (event && event.isComposing) return true;
+  	if (event && is_text_editable_element(event.target)) return true;
+  	return is_text_input_focused();
+  }
+
+  function blur_text_input_if_focused() {
+  	if (is_text_input_focused() && document.activeElement && document.activeElement.blur) {
+  		document.activeElement.blur();
+  	}
+  }
+
+  function update_player_control_status() {
+  	if (player_control_status) {
+  		player_control_status.textContent = controllable_player_enabled ? "Enabled" : "Disabled";
+  	}
+  	if (enable_player_control_checkbox) {
+  		enable_player_control_checkbox.checked = controllable_player_enabled;
+  	}
+  	if (enable_player_control_button) {
+  		enable_player_control_button.textContent = controllable_player_enabled ? "Disable Player Control" : "Enable Player Control";
+  	}
+  }
+
+  function set_controllable_player_visible(is_visible) {
+  	if (controllable_player_sprite) controllable_player_sprite.setVisible(is_visible);
+  	if (controllable_player_label) controllable_player_label.setVisible(is_visible);
+  }
+
+  function clear_controllable_player_keys() {
+  	controllable_player_keys.left = false;
+  	controllable_player_keys.right = false;
+  	controllable_player_keys.up = false;
+  	controllable_player_keys.down = false;
+  }
+
+  function sync_controllable_player_label() {
+  	if (!controllable_player_sprite || !controllable_player_label) return;
+  	controllable_player_label.x = controllable_player_sprite.x - 8;
+  	controllable_player_label.y = controllable_player_sprite.y - 48;
+  }
+
+  function player_pixel_to_tile(x, y) {
+  	return {
+  		x: Math.floor(x / tile_width),
+  		y: Math.floor(y / tile_width)
+  	};
+  }
+
+  function parse_collision_grid(raw_csv) {
+  	if (!raw_csv) return;
+  	let values = raw_csv.split(",").map(function(value) { return value.trim(); }).filter(function(value) { return value.length > 0; });
+  	collision_grid_width = Math.ceil(world_width_pixels / tile_width) || 140;
+  	collision_grid_height = Math.ceil(world_height_pixels / tile_width) || 100;
+  	if (values.length < collision_grid_width * collision_grid_height) {
+  		collision_grid_width = 140;
+  		collision_grid_height = Math.ceil(values.length / collision_grid_width);
+  	}
+  	collision_grid = [];
+  	for (let y=0; y<collision_grid_height; y++) {
+  		let row = [];
+  		for (let x=0; x<collision_grid_width; x++) {
+  			let value = values[(y * collision_grid_width) + x] || "0";
+  			row.push(value !== "0");
+  		}
+  		collision_grid.push(row);
+  	}
+  	collision_grid_loaded = collision_grid.length > 0;
+  }
+
+  function tile_properties_summary(tile) {
+  	if (!tile || !tile.properties) return "{}";
+  	let keys = Object.keys(tile.properties);
+  	if (keys.length === 0) return "{}";
+  	return keys.slice(0, 4).map(function(key) {
+  		return key + ":" + String(tile.properties[key]);
+  	}).join(",");
+  }
+
+  function is_tile_blocked_by_tiled_layer(tile) {
+  	if (!tile) return false;
+  	if (tile.collides === true) return true;
+  	if (tile.properties) {
+  		if (tile.properties.collide === true) return true;
+  		if (tile.properties.collision === true) return true;
+  		if (tile.properties.blocked === true) return true;
+  		if (tile.properties.walkable === false) return true;
+  	}
+  	// This is a dedicated collision layer. In this layer, any non-empty tile
+  	// should block movement even if tile properties are not populated.
+  	if (tile.index !== undefined && tile.index !== null && tile.index >= 0) return true;
+  	return false;
+  }
+
+  function player_collision_debug_info(tile_x, tile_y) {
+  	let layer_tile = collisions_layer ? collisions_layer.getTileAt(tile_x, tile_y) : null;
+  	let grid_blocked = collision_grid_loaded && collision_grid[tile_y] ? collision_grid[tile_y][tile_x] === true : false;
+  	let layer_blocked = is_tile_blocked_by_tiled_layer(layer_tile);
+  	return {
+  		layer_tile: layer_tile,
+  		layer_index: layer_tile ? layer_tile.index : "none",
+  		layer_props: tile_properties_summary(layer_tile),
+  		grid_blocked: grid_blocked,
+  		layer_blocked: layer_blocked,
+  		blocked: grid_blocked || layer_blocked
+  	};
+  }
+
+  function is_player_tile_walkable(tile_x, tile_y) {
+  	if (tile_x < 0 || tile_y < 0) return false;
+  	if (tile_x >= Math.ceil(world_width_pixels / tile_width)) return false;
+  	if (tile_y >= Math.ceil(world_height_pixels / tile_width)) return false;
+  	let debug = player_collision_debug_info(tile_x, tile_y);
+  	return !debug.blocked;
+  }
+
+  function can_move_player_to(x, y) {
+  	let foot_y = y + 12;
+  	let sample_points = [
+  		{x: x - 8, y: foot_y},
+  		{x: x, y: foot_y},
+  		{x: x + 8, y: foot_y}
+  	];
+  	for (let i=0; i<sample_points.length; i++) {
+  		let tile = player_pixel_to_tile(sample_points[i].x, sample_points[i].y);
+  		if (!is_player_tile_walkable(tile.x, tile.y)) return false;
+  	}
+  	return true;
+  }
+
+  function nearest_walkable_player_position(x, y) {
+  	if (can_move_player_to(x, y)) return {x: x, y: y};
+  	let base_tile = player_pixel_to_tile(x, y + 12);
+  	let max_radius = 18;
+  	for (let radius=1; radius<=max_radius; radius++) {
+  		for (let dy=-radius; dy<=radius; dy++) {
+  			for (let dx=-radius; dx<=radius; dx++) {
+  				if (Math.max(Math.abs(dx), Math.abs(dy)) !== radius) continue;
+  				let candidate_x = (base_tile.x + dx) * tile_width + tile_width / 2;
+  				let candidate_y = (base_tile.y + dy) * tile_width + tile_width / 2 - 12;
+  				if (can_move_player_to(candidate_x, candidate_y)) return {x: candidate_x, y: candidate_y};
+  			}
+  		}
+  	}
+  	return {
+  		x: Phaser.Math.Clamp(default_camera_position.x, 0, Math.max(0, world_width_pixels - 32)),
+  		y: Phaser.Math.Clamp(default_camera_position.y, 0, Math.max(0, world_height_pixels - 32))
+  	};
+  }
+
+  function update_player_tile_status(message) {
+  	if (!player_tile_status) return;
+  	if (!controllable_player_enabled || !controllable_player_sprite) {
+  		player_tile_status.textContent = "Player tile: N/A";
+  		player_tile_status.style.color = "#555";
+  		if (player_walkable_status) player_walkable_status.textContent = "Current Walkable: N/A";
+  		return;
+  	}
+  	let tile = player_pixel_to_tile(controllable_player_sprite.x, controllable_player_sprite.y + 12);
+  	let debug = player_collision_debug_info(tile.x, tile.y);
+  	let suffix = message ? " - " + message : "";
+  	player_tile_status.textContent = "Player tile: (" + tile.x + ", " + tile.y + ")" + suffix;
+  	player_tile_status.style.color = message === "Blocked" || debug.blocked ? "#a94442" : "#555";
+  	if (player_walkable_status) {
+  		player_walkable_status.textContent = "Current Walkable: " + (!debug.blocked ? "true" : "false") +
+  			" | Collision Status: " + (debug.blocked ? "blocked" : "clear");
+  		player_walkable_status.style.color = debug.blocked ? "#ffb3b3" : "#bde9c6";
+  	}
+  	if (player_collision_debug) {
+  		let world_text = "world=(" + Math.round(controllable_player_sprite.x) + "," + Math.round(controllable_player_sprite.y) + ")";
+  		let camera_text = main_camera ? " camera=(" + Math.round(main_camera.scrollX) + "," + Math.round(main_camera.scrollY) + ")" : " camera=N/A";
+  		player_collision_debug.textContent =
+  			"Collision debug: " + world_text +
+  			camera_text +
+  			" tile=(" + tile.x + "," + tile.y + ")" +
+  			" layerLoaded=" + collision_layer_loaded +
+  			" gridLoaded=" + collision_grid_loaded +
+  			" tileIndex=" + debug.layer_index +
+  			" props={" + debug.layer_props + "}" +
+  			" gridBlocked=" + debug.grid_blocked +
+  			" layerBlocked=" + debug.layer_blocked +
+  			" blocked=" + debug.blocked;
+  	}
+  }
+
+  function follow_controllable_player_camera() {
+  	if (!main_camera || !controllable_player_sprite) return;
+  	if (!controllable_player_enabled) return;
+  	if (!follow_player_camera_checkbox || !follow_player_camera_checkbox.checked) return;
+  	main_camera.stopFollow();
+  	main_camera.scrollX = Phaser.Math.Linear(
+  		main_camera.scrollX,
+  		controllable_player_sprite.x - (main_camera.width / main_camera.zoom) / 2,
+  		0.18
+  	);
+  	main_camera.scrollY = Phaser.Math.Linear(
+  		main_camera.scrollY,
+  		controllable_player_sprite.y - (main_camera.height / main_camera.zoom) / 2,
+  		0.18
+  	);
+  	clamp_camera_to_world();
+  	update_camera_status();
+  }
+
+  function set_controllable_player_position(x, y) {
+  	if (!controllable_player_sprite) return;
+  	let max_x = Math.max(0, world_width_pixels - 32);
+  	let max_y = Math.max(0, world_height_pixels - 32);
+  	let next_x = Phaser.Math.Clamp(x, 0, max_x);
+  	let next_y = Phaser.Math.Clamp(y, 0, max_y);
+  	controllable_player_sprite.setPosition(next_x, next_y);
+  	if (controllable_player_sprite.body) {
+  		controllable_player_sprite.body.reset(next_x, next_y);
+  	}
+  	sync_controllable_player_label();
+  	update_player_tile_status();
+  	follow_controllable_player_camera();
+  	update_nearby_npc_status();
+  }
+
+  function default_controllable_player_position() {
+  	let target_persona = live_target_npc_select ? live_target_npc_select.value.split(" ").join("_") : "";
+  	if (target_persona && personas[target_persona] && personas[target_persona].visible) {
+  		let target_x = personas[target_persona].body ? personas[target_persona].body.x : personas[target_persona].x;
+  		let target_y = personas[target_persona].body ? personas[target_persona].body.y : personas[target_persona].y;
+  		return {
+ 			x: target_x - 48,
+ 			y: target_y + 12
+  		};
+  	}
+  	let center = main_camera ? main_camera.midPoint : {x: default_camera_position.x, y: default_camera_position.y};
+  	return {x: center.x, y: center.y};
+  }
+
+  function reset_controllable_player_position() {
+  	if (!controllable_player_sprite) return;
+  	let pos = default_controllable_player_position();
+  	pos = nearest_walkable_player_position(pos.x, pos.y);
+  	set_controllable_player_position(pos.x, pos.y);
+  }
+
+  function debug_teleport_position_for(location_name) {
+  	let location = location_name || "Town Center";
+  	if (location === "Tea Shop" && personas.Mira_Chen && personas.Mira_Chen.visible) {
+  		return {x: personas.Mira_Chen.body ? personas.Mira_Chen.body.x - 56 : personas.Mira_Chen.x - 56, y: personas.Mira_Chen.body ? personas.Mira_Chen.body.y + 8 : personas.Mira_Chen.y + 8};
+  	}
+  	if (location === "Market" && personas.Lysa_Vale && personas.Lysa_Vale.visible) {
+  		return {x: personas.Lysa_Vale.body ? personas.Lysa_Vale.body.x - 56 : personas.Lysa_Vale.x - 56, y: personas.Lysa_Vale.body ? personas.Lysa_Vale.body.y + 8 : personas.Lysa_Vale.y + 8};
+  	}
+  	return {x: default_camera_position.x, y: default_camera_position.y};
+  }
+
+  function teleport_controllable_player(location_name) {
+  	if (!controllable_player_sprite) return;
+  	let pos = debug_teleport_position_for(location_name);
+  	pos = nearest_walkable_player_position(pos.x, pos.y);
+  	set_controllable_player_position(pos.x, pos.y);
+  }
+
+  function set_controllable_player_enabled(is_enabled) {
+  	controllable_player_enabled = is_enabled;
+  	if (controllable_player_enabled && controllable_player_sprite) {
+  		reset_controllable_player_position();
+  	}
+  	set_controllable_player_visible(controllable_player_enabled);
+  	if (!controllable_player_enabled) clear_controllable_player_keys();
+  	update_player_control_status();
+  	update_player_tile_status();
+  	update_nearby_npc_status();
+  }
+
+  function readable_persona_name(persona_name) {
+  	return persona_name.split("_").join(" ");
+  }
+
+  function infer_location_from_persona_state(persona_name) {
+  	let record = movement_record_for(persona_name, step);
+  	let text = "";
+  	if (record) {
+  		text = [
+  			record["description"] || "",
+  			record["action"] || "",
+  			record["location"] || ""
+  		].join(" ").toLowerCase();
+  	}
+  	if (text.indexOf("hobbs") >= 0 || text.indexOf("cafe") >= 0 || text.indexOf("tea") >= 0) return "Tea Shop";
+  	if (text.indexOf("market") >= 0 || text.indexOf("store") >= 0 || text.indexOf("willows") >= 0) return "Market";
+  	if (text.indexOf("guard") >= 0) return "Guard Post";
+  	return null;
+  }
+
+  function infer_interaction_location_from_nearby_npc(npc_name, npc_state, player_tile, player_world_position) {
+  	let persona_key = npc_name ? npc_name.split(" ").join("_") : "";
+  	let inferred_location = infer_location_from_persona_state(persona_key);
+  	if (inferred_location) return inferred_location;
+
+  	let fallback_text = [
+  		npc_name || "",
+  		npc_state && npc_state["description"] ? npc_state["description"] : "",
+  		npc_state && npc_state["action"] ? npc_state["action"] : "",
+  		npc_state && npc_state["location"] ? npc_state["location"] : ""
+  	].join(" ").toLowerCase();
+  	if (fallback_text.indexOf("mira") >= 0 || fallback_text.indexOf("tea") >= 0 || fallback_text.indexOf("cafe") >= 0 || fallback_text.indexOf("hobbs") >= 0) return "Tea Shop";
+  	if (fallback_text.indexOf("lysa") >= 0 || fallback_text.indexOf("market") >= 0 || fallback_text.indexOf("store") >= 0 || fallback_text.indexOf("willows") >= 0) return "Market";
+  	if (fallback_text.indexOf("tovan") >= 0 || fallback_text.indexOf("guard") >= 0) return "Guard Post";
+  	return null;
+  }
+
+  function set_select_locked(select_element, is_locked) {
+  	if (!select_element) return;
+  	if (is_locked) select_element.classList.add("locked-field"); else select_element.classList.remove("locked-field");
+  	select_element.setAttribute("aria-readonly", is_locked ? "true" : "false");
+  	select_element.title = is_locked ? "Locked by proximity interaction" : "";
+  }
+
+  function sync_target_location_lock_ui() {
+  	set_select_locked(live_target_npc_select, controllable_player_enabled && proximity_target_locked);
+  	set_select_locked(live_location_select, controllable_player_enabled && interaction_location_locked);
+  	if (live_target_lock_label) {
+  		if (!controllable_player_enabled) {
+  			live_target_lock_label.textContent = "Manual target selection";
+  		} else if (proximity_target_locked && proximity_locked_target) {
+  			live_target_lock_label.textContent = "Target locked: " + proximity_locked_target;
+  		} else if (nearby_npcs_cache.length > 0) {
+  			live_target_lock_label.textContent = "Click Interact to lock nearby NPC";
+  		} else {
+  			live_target_lock_label.textContent = "Move closer to an NPC";
+  		}
+  	}
+  	if (live_location_lock_label) {
+  		if (!controllable_player_enabled) {
+  			live_location_lock_label.textContent = "Manual location selection";
+  		} else if (interaction_location_locked && interaction_locked_location) {
+  			live_location_lock_label.textContent = "Location locked: " + interaction_locked_location;
+  		} else if (proximity_target_locked) {
+  			live_location_lock_label.textContent = "Could not infer location. Please select manually.";
+  		} else {
+  			live_location_lock_label.textContent = "Will be inferred after Interact";
+  		}
+  	}
+  }
+
+  function csrf_token_value() {
+  	let token_input = document.querySelector("input[name='csrfmiddlewaretoken']");
+  	return token_input ? token_input.value : "";
+  }
+
+  function update_world_clock_display(data) {
+  	if (!data) return;
+  	if (world_current_day) world_current_day.textContent = data.current_day || "1";
+  	if (world_current_time) world_current_time.textContent = data.current_time || "08:00";
+  	if (world_planner_mode_select && data.planner_mode) world_planner_mode_select.value = data.planner_mode;
+  	if (data.npc_spatial_state) npc_spatial_state = data.npc_spatial_state;
+  	if (data.npc_daily_plans) npc_daily_plans = data.npc_daily_plans;
+  	render_current_npc_actions(data.active_actions || [], data.last_executed_actions || []);
+  	render_current_npc_movement();
+  	render_current_day_plan();
+  	updatePersistentNPCSprites(0);
+  	if (world_clock_status) {
+  		if (data.status) {
+  			let catchup_count = data.last_time_catchup_log ? data.last_time_catchup_log.length : 0;
+  			world_clock_status.textContent = data.status + (catchup_count ? " Catch-up actions: " + catchup_count + "." : "");
+  			return;
+  		}
+  		let summary_count = data.previous_day_summary ? data.previous_day_summary.length : 0;
+  		let arrival_count = data.last_spatial_arrivals ? data.last_spatial_arrivals.length : 0;
+  		world_clock_status.textContent = "Advanced " + (data.time_step_minutes || 60) + " minutes." +
+  			(summary_count ? " Previous day summary updated." : "") +
+  			(arrival_count ? " Arrival observation recorded." : "");
+  	}
+  }
+
+  function render_current_npc_actions(active_actions, last_executed_actions) {
+  	if (!current_npc_actions_list) return;
+  	current_npc_actions_list.innerHTML = "";
+  	let actions = (last_executed_actions && last_executed_actions.length > 0) ? last_executed_actions : (active_actions || []);
+  	if (!actions.length) {
+  		let empty = document.createElement("em");
+  		empty.textContent = "No scheduled actions";
+  		current_npc_actions_list.appendChild(empty);
+  		return;
+  	}
+  	actions.slice(-5).forEach(function(action) {
+  		let row = document.createElement("div");
+  		let npc = action.npc || "NPC";
+  		let label = document.createElement("strong");
+  		label.textContent = npc + ": ";
+  		row.appendChild(label);
+  		row.appendChild(document.createTextNode((action.action || "scheduled action") + " (" + (action.world_time || "world time unknown") + ")"));
+  		current_npc_actions_list.appendChild(row);
+  	});
+  }
+
+  function render_current_npc_movement() {
+  	if (!current_npc_movement_list) return;
+  	current_npc_movement_list.innerHTML = "";
+  	let entries = Object.entries(npc_spatial_state || {}).filter(function(pair) {
+  		let entry = pair[1] || {};
+  		return entry.current_action || entry.movement_status === "moving" || entry.target_location;
+  	});
+  	if (!entries.length) {
+  		let empty = document.createElement("em");
+  		empty.textContent = "No persistent NPC movement";
+  		current_npc_movement_list.appendChild(empty);
+  		return;
+  	}
+  	entries.forEach(function(pair) {
+  		let npc = pair[0];
+  		let entry = pair[1] || {};
+  		let row = document.createElement("div");
+  		row.style.marginBottom = "0.35em";
+  		let title = document.createElement("strong");
+  		title.textContent = npc;
+  		row.appendChild(title);
+  		let current_location = entry.current_location || "Unknown";
+  		let target_location = entry.target_location || "None";
+  		let progress = entry.route_progress;
+  		if (progress === undefined || progress === null || progress === "") progress = 0;
+  		row.appendChild(document.createElement("br"));
+  		row.appendChild(document.createTextNode("Action: " + (entry.current_action || "None")));
+  		row.appendChild(document.createElement("br"));
+  		row.appendChild(document.createTextNode("From: " + current_location + " -> To: " + target_location));
+  		row.appendChild(document.createElement("br"));
+  		row.appendChild(document.createTextNode("Status: " + (entry.movement_status || "idle") + ", Progress: " + progress + "%"));
+  		if (entry.estimated_arrival_time) {
+  			row.appendChild(document.createElement("br"));
+  			row.appendChild(document.createTextNode("ETA: " + entry.estimated_arrival_time));
+  		}
+  		current_npc_movement_list.appendChild(row);
+  	});
+  }
+
+  function render_current_day_plan() {
+  	if (!current_day_plan_list) return;
+  	current_day_plan_list.innerHTML = "";
+  	let day = world_current_day ? world_current_day.textContent.trim() : "1";
+  	let day_key = "day_" + (day || "1");
+  	let plans = (npc_daily_plans || {})[day_key] || {};
+  	let entries = Object.entries(plans);
+  	if (!entries.length) {
+  		let empty = document.createElement("em");
+  		empty.textContent = "No generated daily plan";
+  		current_day_plan_list.appendChild(empty);
+  		return;
+  	}
+  	entries.forEach(function(pair) {
+  		let npc = pair[0];
+  		let plan = pair[1] || {};
+  		let schedule = plan.schedule || [];
+  		let row = document.createElement("div");
+  		row.style.marginBottom = "0.45em";
+  		let title = document.createElement("strong");
+  		title.textContent = npc;
+  		row.appendChild(title);
+  		if (plan.planner) {
+  			row.appendChild(document.createTextNode(" (" + plan.planner + ")"));
+  		}
+  		schedule.slice(0, 6).forEach(function(item) {
+  			row.appendChild(document.createElement("br"));
+  			let route_text = item.from_location || item.to_location ? " [" + (item.from_location || item.location || "?") + " -> " + (item.to_location || item.location || "?") + "]" : "";
+  			let duration_text = item.duration ? " (" + item.duration + "m)" : "";
+  			row.appendChild(document.createTextNode((item.time || "??:??") + " " + (item.action || "action") + " @ " + (item.location || "location") + route_text + duration_text));
+  		});
+  		current_day_plan_list.appendChild(row);
+  	});
+  }
+
+  let persistent_visual_progress = {};
+  let persistent_visual_route_key = {};
+
+  function persistent_route_key(entry) {
+  	let route = entry && entry.route ? entry.route : [];
+  	return (entry.current_action || "") + "|" + (entry.movement_start_time || "") + "|" + JSON.stringify(route);
+  }
+
+  function interpolate_route_tile(route, progress) {
+  	if (!route || !route.length) return null;
+  	if (route.length === 1) return route[0];
+  	let bounded = Math.max(0, Math.min(1, progress));
+  	let scaled = bounded * (route.length - 1);
+  	let index = Math.floor(scaled);
+  	let next_index = Math.min(route.length - 1, index + 1);
+  	let alpha = scaled - index;
+  	let start = route[index];
+  	let end = route[next_index];
+  	return [
+  		start[0] + (end[0] - start[0]) * alpha,
+  		start[1] + (end[1] - start[1]) * alpha
+  	];
+  }
+
+  function sync_persistent_npc_sprite_overlays(persona_key, sprite) {
+  	if (!sprite || !sprite.body) return;
+  	if (pronunciatios[persona_key]) {
+  		pronunciatios[persona_key].x = sprite.body.x + 18;
+  		pronunciatios[persona_key].y = sprite.body.y - 42 - 25;
+  	}
+  	if (speech_bubbles[persona_key]) {
+  		speech_bubbles[persona_key].x = sprite.body.x + 80;
+  		speech_bubbles[persona_key].y = sprite.body.y - 39;
+  	}
+  }
+
+  function set_persistent_npc_walk_animation(persona_key, sprite, dx, dy, is_moving) {
+  	if (!sprite || !sprite.anims) return;
+  	if (!is_moving || (Math.abs(dx) < 0.05 && Math.abs(dy) < 0.05)) {
+  		sprite.anims.stop();
+  		if (pre_anims_direction_dict[persona_key] == "l") sprite.setTexture(persona_key, "left"); else
+  		if (pre_anims_direction_dict[persona_key] == "r") sprite.setTexture(persona_key, "right"); else
+  		if (pre_anims_direction_dict[persona_key] == "u") sprite.setTexture(persona_key, "up"); else
+  		if (pre_anims_direction_dict[persona_key] == "d") sprite.setTexture(persona_key, "down");
+  		return;
+  	}
+  	let direction = "";
+  	if (Math.abs(dx) > Math.abs(dy) && dx > 0) direction = "r"; else
+  	if (Math.abs(dx) > Math.abs(dy) && dx < 0) direction = "l"; else
+  	if (dy > 0) direction = "d"; else
+  	if (dy < 0) direction = "u";
+  	if (!direction) return;
+  	pre_anims_direction_dict[persona_key] = direction;
+  	let animation_name = persona_key + (
+  		direction === "l" ? "-left-walk" :
+  		direction === "r" ? "-right-walk" :
+  		direction === "u" ? "-up-walk" :
+  		"-down-walk"
+  	);
+  	sprite.anims.play(animation_name, true);
+  }
+
+  function apply_persistent_npc_movement_overlay() {
+  	if (!npc_spatial_state || !personas) return;
+  	Object.keys(npc_spatial_state).forEach(function(npc_name) {
+  		let persona_key = npc_name.split(" ").join("_");
+  		let sprite = personas[persona_key];
+  		if (!sprite || !sprite.visible) return;
+  		let entry = npc_spatial_state[npc_name] || {};
+  		let route = entry.route || [];
+  		if (!route.length || !(entry.current_action || entry.target_location)) return;
+  		let key = persistent_route_key(entry);
+  		if (persistent_visual_route_key[npc_name] !== key) {
+  			persistent_visual_route_key[npc_name] = key;
+  			persistent_visual_progress[npc_name] = Math.max(0, Math.min(1, (Number(entry.route_progress || 0) / 100)));
+  		}
+  		let target_progress = Math.max(0, Math.min(1, (Number(entry.route_progress || 0) / 100)));
+  		if (entry.movement_status === "completed") target_progress = 1;
+  		let current_progress = persistent_visual_progress[npc_name] || 0;
+  		persistent_visual_progress[npc_name] = Phaser.Math.Linear(current_progress, target_progress, 0.08);
+  		if (Math.abs(persistent_visual_progress[npc_name] - target_progress) < 0.002) {
+  			persistent_visual_progress[npc_name] = target_progress;
+  		}
+  		let tile = interpolate_route_tile(route, persistent_visual_progress[npc_name] || 0);
+  		if (!tile) return;
+  		let next_x = tile[0] * tile_width;
+  		let next_y = tile[1] * tile_width;
+  		let prev_x = sprite.body.x;
+  		let prev_y = sprite.body.y;
+  		sprite.body.x = next_x;
+  		sprite.body.y = next_y;
+  		movement_target[persona_key] = [sprite.body.x, sprite.body.y];
+  		sync_persistent_npc_sprite_overlays(persona_key, sprite);
+  		set_persistent_npc_walk_animation(
+  			persona_key,
+  			sprite,
+  			next_x - prev_x,
+  			next_y - prev_y,
+  			entry.movement_status === "moving"
+  		);
+  	});
+  }
+
+  function updatePersistentNPCSprites(delta) {
+  	apply_persistent_npc_movement_overlay();
+  	update_speech_bubbles(step);
+  }
+
+  function current_world_time_for_draft() {
+  	let day = world_current_day ? world_current_day.textContent.trim() : "{{ world_state.current_day }}";
+  	let time_text = world_current_time ? world_current_time.textContent.trim() : "{{ world_state.current_time }}";
+  	return {
+  		world_day: day || "1",
+  		world_time: time_text || "08:00",
+  		world_time_display: "Day " + (day || "1") + " " + (time_text || "08:00")
+  	};
+  }
+
+  function advance_world_clock(step_minutes, button_element) {
+  	if (button_element) button_element.disabled = true;
+  	if (world_clock_status) world_clock_status.textContent = "Advancing world time...";
+  	let form_data = new FormData();
+  	form_data.append("step_minutes", String(step_minutes || 60));
+  	fetch("/player_interventions/world_tick/", {
+  		method: "POST",
+  		headers: {"X-CSRFToken": csrf_token_value()},
+  		body: form_data
+  	})
+  	.then(function(response) {
+  		return response.json().then(function(data) {
+  			if (!response.ok || !data.ok) throw data;
+  			return data;
+  		});
+  	})
+  	.then(function(data) {
+  		update_world_clock_display(data);
+  		apply_persistent_npc_movement_overlay();
+  	})
+  	.catch(function(error) {
+  		if (world_clock_status) world_clock_status.textContent = (error && error.error) ? error.error : "World tick failed.";
+  	})
+  	.finally(function() {
+  		if (button_element) button_element.disabled = false;
+  	});
+  }
+
+  function advance_world_clock_one_hour() {
+  	advance_world_clock(60, advance_world_hour_button);
+  }
+
+  function advance_world_clock_ten_minutes() {
+  	advance_world_clock(10, advance_world_10_button);
+  }
+
+  function reset_world_time() {
+  	if (reset_world_time_button) reset_world_time_button.disabled = true;
+  	if (world_clock_status) world_clock_status.textContent = "Resetting world time...";
+  	fetch("/player_interventions/world_reset/", {
+  		method: "POST",
+  		headers: {"X-CSRFToken": csrf_token_value()}
+  	})
+  	.then(function(response) {
+  		return response.json().then(function(data) {
+  			if (!response.ok || !data.ok) throw data;
+  			return data;
+  		});
+  	})
+  	.then(function(data) {
+  		update_world_clock_display(data);
+  		apply_persistent_npc_movement_overlay();
+  	})
+  	.catch(function(error) {
+  		if (world_clock_status) world_clock_status.textContent = (error && error.error) ? error.error : "World reset failed.";
+  	})
+  	.finally(function() {
+  		if (reset_world_time_button) reset_world_time_button.disabled = false;
+  	});
+  }
+
+  function clear_live_interaction_frontend_state() {
+  	live_dialogue_histories = {};
+  	current_live_context = {};
+  	last_live_memory_entry = null;
+  	last_live_dialogue_memories_used = [];
+  	if (live_dialogue_utterance) live_dialogue_utterance.value = "";
+  	if (live_dialogue_reply) live_dialogue_reply.innerHTML = "<em>NPC reply will appear here.</em>";
+  	if (live_dialogue_status) live_dialogue_status.textContent = "Move close to an NPC and click Interact to start live dialogue.";
+  	if (live_dialogue_history_container) live_dialogue_history_container.innerHTML = "<em>No live dialogue in this session.</em>";
+  	if (live_dialogue_memories_used_container) live_dialogue_memories_used_container.innerHTML = "<em>No previous memory used.</em>";
+  	if (simulation_event_draft_panel) simulation_event_draft_panel.style.display = "none";
+  	current_simulation_event_draft = null;
+  }
+
+  function clean_simulation() {
+  	if (!window.confirm("Clean Simulation will remove player interaction history. Continue?")) return;
+  	if (clean_simulation_button) clean_simulation_button.disabled = true;
+  	if (world_clock_status) world_clock_status.textContent = "Cleaning simulation state...";
+  	fetch("/player_interventions/clean_simulation/", {
+  		method: "POST",
+  		headers: {"X-CSRFToken": csrf_token_value()}
+  	})
+  	.then(function(response) {
+  		return response.json().then(function(data) {
+  			if (!response.ok || !data.ok) throw data;
+  			return data;
+  		});
+  	})
+  	.then(function(data) {
+  		clear_live_interaction_frontend_state();
+  		update_world_clock_display(data);
+  		apply_persistent_npc_movement_overlay();
+  	})
+  	.catch(function(error) {
+  		if (world_clock_status) world_clock_status.textContent = (error && error.error) ? error.error : "Clean simulation failed.";
+  	})
+  	.finally(function() {
+  		if (clean_simulation_button) clean_simulation_button.disabled = false;
+  	});
+  }
+
+  function jump_world_time() {
+  	if (jump_world_time_button) jump_world_time_button.disabled = true;
+  	if (world_clock_status) world_clock_status.textContent = "Jumping world time...";
+  	let form_data = new FormData();
+  	form_data.append("day", jump_world_day_input ? jump_world_day_input.value : "1");
+  	form_data.append("time", jump_world_time_input ? jump_world_time_input.value : "08:00");
+  	fetch("/player_interventions/world_jump/", {
+  		method: "POST",
+  		headers: {"X-CSRFToken": csrf_token_value()},
+  		body: form_data
+  	})
+  	.then(function(response) {
+  		return response.json().then(function(data) {
+  			if (!response.ok || !data.ok) throw data;
+  			return data;
+  		});
+  	})
+  	.then(function(data) {
+  		update_world_clock_display(data);
+  		apply_persistent_npc_movement_overlay();
+  	})
+  	.catch(function(error) {
+  		if (world_clock_status) world_clock_status.textContent = (error && error.error) ? error.error : "World jump failed.";
+  	})
+  	.finally(function() {
+  		if (jump_world_time_button) jump_world_time_button.disabled = false;
+  	});
+  }
+
+  function set_world_planner_mode() {
+  	if (set_world_planner_mode_button) set_world_planner_mode_button.disabled = true;
+  	if (world_clock_status) world_clock_status.textContent = "Updating planner mode...";
+  	let form_data = new FormData();
+  	form_data.append("planner_mode", world_planner_mode_select ? world_planner_mode_select.value : "deterministic");
+  	fetch("/player_interventions/world_planner_mode/", {
+  		method: "POST",
+  		headers: {"X-CSRFToken": csrf_token_value()},
+  		body: form_data
+  	})
+  	.then(function(response) {
+  		return response.json().then(function(data) {
+  			if (!response.ok || !data.ok) throw data;
+  			return data;
+  		});
+  	})
+  	.then(function(data) {
+  		update_world_clock_display(data);
+  		apply_persistent_npc_movement_overlay();
+  	})
+  	.catch(function(error) {
+  		if (world_clock_status) world_clock_status.textContent = (error && error.error) ? error.error : "Planner mode update failed.";
+  	})
+  	.finally(function() {
+  		if (set_world_planner_mode_button) set_world_planner_mode_button.disabled = false;
+  	});
+  }
+
+  function regenerate_daily_plan() {
+  	if (regenerate_daily_plan_button) regenerate_daily_plan_button.disabled = true;
+  	if (world_clock_status) world_clock_status.textContent = "Regenerating daily plan...";
+  	let form_data = new FormData();
+  	let day = world_current_day ? world_current_day.textContent.trim() : "";
+  	if (day) form_data.append("day", day);
+  	fetch("/player_interventions/regenerate_daily_plan/", {
+  		method: "POST",
+  		headers: {"X-CSRFToken": csrf_token_value()},
+  		body: form_data
+  	})
+  	.then(function(response) {
+  		return response.json().then(function(data) {
+  			if (!response.ok || !data.ok) throw data;
+  			return data;
+  		});
+  	})
+  	.then(function(data) {
+  		update_world_clock_display(data);
+  		apply_persistent_npc_movement_overlay();
+  		if (world_clock_status) {
+  			world_clock_status.textContent = "Regenerated daily plan for " + (data.generated_npcs || []).join(", ") + ".";
+  		}
+  	})
+  	.catch(function(error) {
+  		if (world_clock_status) world_clock_status.textContent = (error && error.error) ? error.error : "Daily plan regeneration failed.";
+  	})
+  	.finally(function() {
+  		if (regenerate_daily_plan_button) regenerate_daily_plan_button.disabled = false;
+  	});
+  }
+
+  function restore_live_context_from_session() {
+  	if (!current_live_context || !current_live_context.target_npc) return;
+  	proximity_locked_target = current_live_context.target_npc;
+  	proximity_target_locked = true;
+  	interaction_locked_location = current_live_context.location || (live_location_select ? live_location_select.value : "");
+  	interaction_location_locked = !!interaction_locked_location;
+  	if (live_target_npc_select) live_target_npc_select.value = proximity_locked_target;
+  	if (live_location_select && interaction_locked_location) live_location_select.value = interaction_locked_location;
+  	if (current_live_context.last_player_message || current_live_context.last_npc_reply) {
+  		last_live_dialogue_turn = {
+  			target_npc: proximity_locked_target,
+  			location: interaction_locked_location,
+  			player_utterance: current_live_context.last_player_message || "",
+  			npc_reply: current_live_context.last_npc_reply || ""
+  		};
+  	}
+  	if (live_dialogue_utterance && current_live_context.last_player_message && !live_dialogue_utterance.value) {
+  		live_dialogue_utterance.value = current_live_context.last_player_message;
+  	}
+  	if (live_dialogue_reply && current_live_context.last_npc_reply) {
+  		live_dialogue_reply.textContent = proximity_locked_target + ": " + current_live_context.last_npc_reply;
+  	}
+  }
+
+  function extract_persistent_npc_details(html_text) {
+  	let parser = new DOMParser();
+  	let doc = parser.parseFromString(html_text, "text/html");
+  	let wanted = {
+  		"Live Memories": true,
+  		"NPC Reflections": true,
+  		"NPC Spatial State": true,
+  		"NPC Schedules": true,
+  		"Generated Daily Plan": true,
+  		"NPC Actions": true,
+  		"NPC Observations": true,
+  		"Completed Requests": true,
+  		"World Clock": true,
+  		"World State Summary": true,
+  		"World Timeline": true
+  	};
+  	let wrapper = document.createElement("div");
+  	doc.querySelectorAll("h3").forEach(function(header) {
+  		let title = (header.textContent || "").trim();
+  		if (!wanted[title]) return;
+  		let header_clone = document.createElement("h5");
+  		header_clone.textContent = title;
+  		header_clone.style.marginTop = "0.8em";
+  		header_clone.style.color = "#ffffff";
+  		wrapper.appendChild(header_clone);
+  		let next = header.nextElementSibling;
+  		if (next) {
+  			let clone = next.cloneNode(true);
+  			clone.querySelectorAll("a").forEach(function(anchor) {
+  				anchor.removeAttribute("href");
+  			});
+  			wrapper.appendChild(clone);
+  		}
+  	});
+  	if (!wrapper.children.length) {
+  		let empty = document.createElement("em");
+  		empty.textContent = "No persistent NPC details found.";
+  		wrapper.appendChild(empty);
+  	}
+  	return wrapper;
+  }
+
+  function open_npc_details_panel(url, persona_name) {
+  	if (!npc_details_panel || !npc_details_panel_content) return;
+  	npc_details_panel.style.display = "block";
+  	if (npc_details_panel_title) npc_details_panel_title.innerHTML = "<strong>NPC Details: " + persona_name + "</strong>";
+  	if (npc_details_panel_status) npc_details_panel_status.textContent = "Loading persistent details...";
+  	npc_details_panel_content.innerHTML = "<em>Loading...</em>";
+  	fetch(url, {headers: {"X-Requested-With": "XMLHttpRequest"}})
+  	.then(function(response) {
+  		if (!response.ok) throw new Error("Could not load NPC Details.");
+  		return response.text();
+  	})
+  	.then(function(html_text) {
+  		npc_details_panel_content.innerHTML = "";
+  		npc_details_panel_content.appendChild(extract_persistent_npc_details(html_text));
+  		if (npc_details_panel_status) npc_details_panel_status.textContent = "Loaded without leaving the replay page.";
+  	})
+  	.catch(function(error) {
+  		if (npc_details_panel_status) npc_details_panel_status.textContent = error.message || "Could not load NPC Details.";
+  		npc_details_panel_content.innerHTML = "<em>NPC details failed to load.</em>";
+  	});
+  }
+
+  function live_dialogue_key() {
+  	let target = proximity_locked_target || (live_target_npc_select ? live_target_npc_select.value : "");
+  	return sim_code + "::" + target;
+  }
+
+  function current_live_dialogue_history() {
+  	let key = live_dialogue_key();
+  	if (!live_dialogue_histories[key]) live_dialogue_histories[key] = [];
+  	return live_dialogue_histories[key];
+  }
+
+  function is_near_history_bottom(element) {
+  	if (!element) return true;
+  	return element.scrollHeight - element.scrollTop - element.clientHeight <= 20;
+  }
+
+  function set_live_dialogue_new_message_indicator(is_visible) {
+  	if (!live_dialogue_jump_latest_button) return;
+  	live_dialogue_jump_latest_button.style.display = is_visible ? "inline-block" : "none";
+  	live_dialogue_jump_latest_button.textContent = is_visible ? "New message below - Jump to latest" : "Jump to latest";
+  }
+
+  function live_dialogue_history_signature(history) {
+  	return live_dialogue_key() + "::" + history.length + "::" + history.map(function(item) {
+  		return item.role + ":" + item.text;
+  	}).join("|");
+  }
+
+  function render_live_dialogue_history(force_scroll_bottom) {
+  	if (!live_dialogue_history_container) return;
+  	let history = current_live_dialogue_history();
+  	let signature = live_dialogue_history_signature(history);
+  	if (signature === live_dialogue_last_render_signature && !force_scroll_bottom) {
+  		return;
+  	}
+  	let should_auto_scroll = force_scroll_bottom || is_near_history_bottom(live_dialogue_history_container);
+  	let previous_scroll_top = live_dialogue_history_container.scrollTop;
+  	live_dialogue_history_container.innerHTML = "";
+  	if (history.length === 0) {
+  		let empty = document.createElement("em");
+  		empty.textContent = "No live dialogue in this session.";
+  		live_dialogue_history_container.appendChild(empty);
+  		live_dialogue_last_render_signature = signature;
+  		set_live_dialogue_new_message_indicator(false);
+  		return;
+  	}
+  	for (let i=0; i<history.length; i++) {
+  		let row = document.createElement("div");
+  		row.style.marginBottom = "0.3em";
+  		let label = document.createElement("strong");
+  		label.textContent = (history[i].role === "player" ? "Player" : (proximity_locked_target || "NPC")) + ": ";
+  		let text = document.createElement("span");
+  		text.textContent = history[i].text || "";
+  		row.appendChild(label);
+  		row.appendChild(text);
+  		live_dialogue_history_container.appendChild(row);
+  	}
+  	live_dialogue_last_render_signature = signature;
+  	if (should_auto_scroll) {
+  		live_dialogue_history_container.scrollTop = live_dialogue_history_container.scrollHeight;
+  		set_live_dialogue_new_message_indicator(false);
+  	} else {
+  		live_dialogue_history_container.scrollTop = previous_scroll_top;
+  		set_live_dialogue_new_message_indicator(true);
+  	}
+  }
+
+  function update_live_dialogue_ui() {
+  	let has_locked_target = controllable_player_enabled && proximity_target_locked && proximity_locked_target;
+  	if (live_dialogue_status) {
+  		if (has_locked_target) {
+  			let location_text = (interaction_location_locked && interaction_locked_location) || (live_location_select ? live_location_select.value : "Unknown");
+  			live_dialogue_status.textContent = "Target: " + proximity_locked_target + " | Location: " + location_text;
+  		} else {
+  			live_dialogue_status.textContent = "Move close to an NPC and click Interact to start live dialogue.";
+  		}
+  	}
+  	if (send_live_dialogue_button) send_live_dialogue_button.disabled = !has_locked_target;
+  	if (live_dialogue_utterance) live_dialogue_utterance.disabled = !has_locked_target;
+  	if (apply_live_dialogue_button) apply_live_dialogue_button.disabled = !last_live_dialogue_turn;
+  	render_live_dialogue_history();
+  	render_recent_npc_memories();
+  	render_live_dialogue_memories_used();
+  }
+
+  function show_live_dialogue_bubble(target_npc, reply_text) {
+  	let persona_key = (target_npc || "").split(" ").join("_");
+  	live_dialogue_bubble_text[persona_key] = reply_text || "";
+  	live_dialogue_bubble_until[persona_key] = Date.now() + 7000;
+  }
+
+  function render_recent_npc_memories() {
+  	if (!recent_npc_memory_container) return;
+  	recent_npc_memory_container.innerHTML = "";
+  	if (!recent_live_memories || recent_live_memories.length === 0) {
+  		let empty = document.createElement("em");
+  		empty.textContent = "No live memories saved in this session yet.";
+  		recent_npc_memory_container.appendChild(empty);
+  		return;
+  	}
+  	recent_live_memories.slice(0, 3).forEach(function(memory) {
+  		let row = document.createElement("div");
+  		row.style.marginBottom = "0.45em";
+  		let content = document.createElement("div");
+  		content.textContent = memory.content || "";
+  		let meta = document.createElement("div");
+  		meta.style.fontSize = "0.88em";
+  		meta.style.color = "#dce4f2";
+  		meta.textContent = "Source: " + (memory.source || "unknown") + " | Time: " + (memory.time || "unknown");
+  		row.appendChild(content);
+  		row.appendChild(meta);
+  		recent_npc_memory_container.appendChild(row);
+  	});
+  }
+
+  function render_live_dialogue_memories_used() {
+  	if (!live_dialogue_memories_used_container) return;
+  	live_dialogue_memories_used_container.innerHTML = "";
+  	if (!last_live_dialogue_memories_used || last_live_dialogue_memories_used.length === 0) {
+  		let empty = document.createElement("em");
+  		empty.textContent = "No previous memory used.";
+  		live_dialogue_memories_used_container.appendChild(empty);
+  		return;
+  	}
+  	last_live_dialogue_memories_used.slice(0, 3).forEach(function(memory_text) {
+  		let row = document.createElement("div");
+  		row.style.marginBottom = "0.35em";
+  		row.textContent = "- " + memory_text;
+  		live_dialogue_memories_used_container.appendChild(row);
+  	});
+  }
+
+  function keyword_matches(text, keywords) {
+  	let lower = (text || "").toLowerCase();
+  	return keywords.filter(function(keyword) {
+  		return lower.indexOf(keyword) >= 0;
+  	});
+  }
+
+  function summarize_dialogue_for_draft(history) {
+  	let player_lines = history.filter(function(item) { return item.role === "player"; }).map(function(item) { return item.text; });
+  	let npc_lines = history.filter(function(item) { return item.role === "npc"; }).map(function(item) { return item.text; });
+  	let last_player = player_lines[player_lines.length - 1] || "";
+  	let last_npc = npc_lines[npc_lines.length - 1] || "";
+  	if (last_player && last_npc) {
+  		return "Player: " + last_player + " | NPC: " + last_npc;
+  	}
+  	return last_player || last_npc || "No source dialogue.";
+  }
+
+  function infer_event_type_from_dialogue(text) {
+  	let social = keyword_matches(text, [
+  		"can you", "could you", "please", "help", "favor", "favour",
+  		"would you", "ask", "introduce", "show", "tell me"
+  	]);
+  	let uncertain = keyword_matches(text, [
+  		"i heard", "maybe", "i think", "not sure", "someone said",
+  		"rumor", "rumour", "suspicious", "might", "possibly"
+  	]);
+  	let object = keyword_matches(text, [
+  		"moved", "blocked", "took", "placed", "dropped", "lost",
+  		"missing", "crate", "crates", "ledger", "object"
+  	]);
+  	let categories = [];
+  	if (social.length > 0) categories.push("social_request");
+  	if (uncertain.length > 0) categories.push("uncertain_report");
+  	if (object.length > 0) categories.push("object_disruption");
+  	if (categories.length === 0) {
+  		return {
+  			event_type: "social_request",
+  			confidence: "low",
+  			matches: [],
+  			rationale: "No clear event keywords were found, so the draft defaults to a conservative social request. Please review before generating a branch."
+  		};
+  	}
+  	if (categories.length > 1) {
+  		let priority = object.length > 0 ? "object_disruption" : (uncertain.length > 0 ? "uncertain_report" : "social_request");
+  		return {
+  			event_type: priority,
+  			confidence: "medium",
+  			matches: categories,
+  			rationale: "Multiple event categories matched. The draft selected " + priority + "; please review the event type before generating a branch."
+  		};
+  	}
+  	let event_type = categories[0];
+  	let rationale_by_type = {
+  		social_request: "The dialogue contains a request that may affect the NPC's short-term priorities while preserving autonomy.",
+  		uncertain_report: "The dialogue contains uncertain or reported information that should be handled without treating it as confirmed fact.",
+  		object_disruption: "The dialogue describes a physical or object-related disruption that may require practical local adjustment."
+  	};
+  	return {
+  		event_type: event_type,
+  		confidence: "high",
+  		matches: categories,
+  		rationale: rationale_by_type[event_type]
+  	};
+  }
+
+  function build_player_action_for_draft(target_npc, location, event_type, history) {
+  	let player_lines = history.filter(function(item) { return item.role === "player"; }).map(function(item) { return item.text; });
+  	let latest_player = player_lines[player_lines.length - 1] || (last_live_dialogue_turn ? last_live_dialogue_turn.player_utterance : "");
+  	let combined = player_lines.slice(-2).join(" ").trim() || latest_player;
+  	let action = "";
+  	if (event_type === "uncertain_report") {
+  		action = "Player tells " + target_npc + " at the " + location + " an unverified report: " + combined;
+  		if (!/not sure|maybe|might|possibly|i heard|someone said|rumou?r/i.test(action)) {
+  			action += " The report should remain unconfirmed.";
+  		}
+  	} else if (event_type === "object_disruption") {
+  		action = "Player reports or causes a local object disruption near " + target_npc + " at the " + location + ": " + combined;
+  	} else {
+  		action = "Player asks " + target_npc + " at the " + location + " to consider a short request: " + combined;
+  		if (/mira chen/i.test(target_npc)) {
+  			action += " Mira should preserve her tea shop responsibilities.";
+  		}
+  	}
+  	action = action.replace(/\s+/g, " ").trim();
+  	if (action.length > 200) {
+  		action = action.substring(0, 197).trim() + "...";
+  	}
+  	return action;
+  }
+
+  function generate_simulation_event_draft() {
+  	if (!proximity_target_locked || !proximity_locked_target) {
+  		if (simulation_event_draft_status) simulation_event_draft_status.textContent = "Move close to an NPC and click Interact before generating a draft.";
+  		return null;
+  	}
+  	let history = current_live_dialogue_history().slice(-6);
+  	if (history.length === 0 && last_live_dialogue_turn) {
+  		history = [
+  			{role: "player", text: last_live_dialogue_turn.player_utterance},
+  			{role: "npc", text: last_live_dialogue_turn.npc_reply}
+  		];
+  	}
+  	if (history.length === 0) {
+  		if (simulation_event_draft_status) simulation_event_draft_status.textContent = "No live dialogue is available for a draft yet.";
+  		return null;
+  	}
+  	let location_value = (interaction_location_locked && interaction_locked_location) || (live_location_select ? live_location_select.value : "Tea Shop");
+  	let source_text = history.map(function(item) {
+  		return (item.role === "player" ? "Player: " : proximity_locked_target + ": ") + item.text;
+  	}).join(" ");
+  	let inference = infer_event_type_from_dialogue(source_text);
+  	let player_action = build_player_action_for_draft(proximity_locked_target, location_value, inference.event_type, history);
+  	let event_time = live_event_time_hidden ? live_event_time_hidden.value : "";
+  	let world_time = current_world_time_for_draft();
+  	return {
+  		target_npc: proximity_locked_target,
+  		location: location_value,
+  		event_type: inference.event_type,
+  		event_time: world_time.world_time_display,
+  		world_day: world_time.world_day,
+  		world_time: world_time.world_time,
+  		world_time_display: world_time.world_time_display,
+  		legacy_replay_time: event_time,
+  		source_memory_id: last_live_memory_entry ? (last_live_memory_entry.id || last_live_memory_entry.memory_id || "") : "",
+  		step: step,
+  		replanning_scope: "local_2h",
+  		player_action: player_action,
+  		confidence: inference.confidence,
+  		rationale: inference.rationale,
+  		source_dialogue_summary: summarize_dialogue_for_draft(history)
+  	};
+  }
+
+  function render_simulation_event_draft(draft) {
+  	current_simulation_event_draft = draft;
+  	if (!draft || !simulation_event_draft_panel) return;
+  	simulation_event_draft_panel.style.display = "block";
+  	if (simulation_event_draft_target) simulation_event_draft_target.textContent = "Target: " + draft.target_npc;
+  	if (simulation_event_draft_location) simulation_event_draft_location.textContent = "Location: " + draft.location;
+  	if (simulation_event_draft_time) {
+  		simulation_event_draft_time.textContent = "World Time: " + (draft.world_time_display || draft.event_time || "current world time") +
+  			(draft.legacy_replay_time ? " | Legacy replay time: " + draft.legacy_replay_time : "");
+  	}
+  	if (simulation_event_draft_type) simulation_event_draft_type.value = draft.event_type;
+  	if (simulation_event_draft_scope) simulation_event_draft_scope.value = draft.replanning_scope;
+  	if (simulation_event_draft_action) simulation_event_draft_action.value = draft.player_action;
+  	if (simulation_event_draft_confidence) simulation_event_draft_confidence.textContent = "Draft confidence: " + draft.confidence + ". Please review before generating branch.";
+  	if (simulation_event_draft_rationale) simulation_event_draft_rationale.textContent = "Rationale: " + draft.rationale;
+  	if (simulation_event_draft_summary) simulation_event_draft_summary.textContent = "Source dialogue summary: " + draft.source_dialogue_summary;
+  	if (simulation_event_draft_status) simulation_event_draft_status.textContent = "Draft generated heuristically. No API call was made.";
+  }
+
+  function copy_simulation_event_draft_to_inject_form() {
+  	if (!current_simulation_event_draft) return false;
+  	let draft = current_simulation_event_draft;
+  	let event_type = simulation_event_draft_type ? simulation_event_draft_type.value : draft.event_type;
+  	let scope = simulation_event_draft_scope ? simulation_event_draft_scope.value : draft.replanning_scope;
+  	let action = simulation_event_draft_action ? simulation_event_draft_action.value.trim() : draft.player_action;
+  	if (live_target_npc_select) live_target_npc_select.value = draft.target_npc;
+  	if (live_location_select) live_location_select.value = draft.location;
+  	let event_type_select = document.getElementById("live-event-type");
+  	if (event_type_select) event_type_select.value = event_type;
+  	if (live_replanning_scope) live_replanning_scope.value = scope;
+  	if (live_player_action) live_player_action.value = action.substring(0, 200);
+  	if (live_source_memory_id) live_source_memory_id.value = draft.source_memory_id || "";
+  	if (live_inject_button) live_inject_button.style.boxShadow = "0 0 0 3px rgba(255,193,7,0.45)";
+  	if (live_inject_help) live_inject_help.textContent = "Simulation event draft was copied into Inject Event. Review, then generate a branch when ready.";
+  	if (simulation_event_draft_status) simulation_event_draft_status.textContent = "Draft copied to Inject Event.";
+  	return true;
+  }
+
+  function generate_simulation_event_draft_from_dialogue() {
+  	let draft = generate_simulation_event_draft();
+  	if (draft) render_simulation_event_draft(draft);
+  }
+
+  function confirm_simulation_event_draft_and_generate_branch() {
+  	if (!copy_simulation_event_draft_to_inject_form()) return;
+  	if (live_interaction_form) {
+  		if (simulation_event_draft_status) simulation_event_draft_status.textContent = "Submitting draft to existing Inject Event pipeline...";
+  		live_interaction_form.requestSubmit();
+  	}
+  }
+
+  function send_live_dialogue() {
+  	if (!proximity_target_locked || !proximity_locked_target || !live_dialogue_utterance) return;
+  	let utterance = live_dialogue_utterance.value.trim();
+  	if (!utterance) {
+  		if (live_dialogue_reply) live_dialogue_reply.textContent = "Enter a short player line before sending.";
+  		return;
+  	}
+  	if (utterance.length > 200) {
+  		if (live_dialogue_reply) live_dialogue_reply.textContent = "Player line must be 200 characters or fewer.";
+  		return;
+  	}
+  	let location_value = (interaction_location_locked && interaction_locked_location) || (live_location_select ? live_location_select.value : "");
+  	let history = current_live_dialogue_history().slice(-6);
+  	let payload = new URLSearchParams();
+  	payload.append("sim_code", sim_code);
+  	payload.append("step", String(step));
+  	payload.append("target_npc", proximity_locked_target);
+  	payload.append("location", location_value);
+  	payload.append("player_utterance", utterance);
+  	payload.append("current_time", live_event_time_hidden ? live_event_time_hidden.value : "");
+  	payload.append("event_type", "social_request");
+  	payload.append("dialogue_history", JSON.stringify(history));
+  	payload.append("agent_config", active_agent_config);
+  	live_dialogue_send_started_ms = Date.now();
+  	if (live_dialogue_timer_id) window.clearInterval(live_dialogue_timer_id);
+  	if (send_live_dialogue_button) {
+  		send_live_dialogue_button.disabled = true;
+  		send_live_dialogue_button.textContent = "Thinking...";
+  		live_dialogue_timer_id = window.setInterval(function() {
+  			let elapsed = ((Date.now() - live_dialogue_send_started_ms) / 1000).toFixed(1);
+  			send_live_dialogue_button.textContent = "Thinking... " + elapsed + "s";
+  		}, 250);
+  	}
+  	if (live_dialogue_reply) live_dialogue_reply.textContent = "Waiting for NPC reply...";
+  	last_live_dialogue_memories_used = [];
+  	render_live_dialogue_memories_used();
+  	fetch("/player_interventions/live_dialogue/", {
+  		method: "POST",
+  		headers: {
+  			"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+  			"X-CSRFToken": csrf_token_value()
+  		},
+  		body: payload.toString()
+  	})
+  	.then(function(response) {
+  		return response.json().then(function(data) {
+  			if (!response.ok || !data.ok) throw data;
+  			return data;
+  		});
+  	})
+  	.then(function(data) {
+  		let dialogue_history = current_live_dialogue_history();
+  		dialogue_history.push({role: "player", text: data.player_utterance});
+  		dialogue_history.push({role: "npc", text: data.npc_reply});
+  		last_live_dialogue_turn = {
+  			target_npc: data.target_npc,
+  			location: data.location,
+  			player_utterance: data.player_utterance,
+  			npc_reply: data.npc_reply
+  		};
+  		last_live_memory_entry = data.live_memory_entry || last_live_memory_entry;
+  		live_dialogue_utterance.value = "";
+  		if (live_dialogue_reply) {
+  			let elapsed_text = data.elapsed_total_sec || data.elapsed_sec;
+  			live_dialogue_reply.textContent = data.target_npc + ": " + data.npc_reply + (elapsed_text ? " (reply received in " + elapsed_text + "s)" : "");
+  		}
+  		recent_live_memories = data.recent_memories || recent_live_memories;
+  		last_live_dialogue_memories_used = data.recent_memories_used || data.memories_used || [];
+  		show_live_dialogue_bubble(data.target_npc, data.npc_reply);
+  		update_live_dialogue_ui();
+  	})
+  	.catch(function(error) {
+  		let message = error && error.error ? error.error : "Live dialogue failed.";
+  		if (live_dialogue_reply) live_dialogue_reply.textContent = message;
+  	})
+  	.finally(function() {
+  		if (live_dialogue_timer_id) {
+  			window.clearInterval(live_dialogue_timer_id);
+  			live_dialogue_timer_id = null;
+  		}
+  		if (send_live_dialogue_button) {
+  			send_live_dialogue_button.textContent = "Send to NPC";
+  			send_live_dialogue_button.disabled = !(controllable_player_enabled && proximity_target_locked && proximity_locked_target);
+  		}
+  	});
+  }
+
+  function set_live_target_from_proximity(readable_name, lock_target) {
+  	if (!readable_name) return;
+  	if (live_target_npc_select) {
+  		live_target_npc_select.value = readable_name;
+  	}
+  	let persona_key = readable_name.split(" ").join("_");
+  	let npc_state = movement_record_for(persona_key, step);
+  	let player_tile = controllable_player_sprite ? player_pixel_to_tile(controllable_player_sprite.x, controllable_player_sprite.y) : null;
+  	let player_world_position = controllable_player_sprite ? {x: controllable_player_sprite.x, y: controllable_player_sprite.y} : null;
+  	let inferred_location = infer_interaction_location_from_nearby_npc(readable_name, npc_state, player_tile, player_world_position);
+  	if (inferred_location && live_location_select) {
+  		live_location_select.value = inferred_location;
+  		if (lock_target) {
+  			interaction_location_locked = true;
+  			interaction_locked_location = inferred_location;
+  		}
+  	} else if (lock_target) {
+  		interaction_location_locked = false;
+  		interaction_locked_location = null;
+  	}
+  	if (live_replanning_scope) live_replanning_scope.value = "local_2h";
+  	if (lock_target) {
+  		proximity_target_locked = true;
+  		proximity_locked_target = readable_name;
+  		if (live_interaction_panel) {
+  			live_interaction_panel.style.borderColor = "#2f80ed";
+  			live_interaction_panel.style.boxShadow = "0 0 0 2px rgba(47,128,237,0.22)";
+  		}
+  	}
+  	sync_target_location_lock_ui();
+  	update_proximity_interaction_gate();
+  }
+
+  function clear_proximity_target_lock() {
+  	proximity_target_locked = false;
+  	proximity_locked_target = null;
+  	interaction_location_locked = false;
+  	interaction_locked_location = null;
+  	if (live_interaction_panel) {
+  		live_interaction_panel.style.borderColor = "rgba(235, 241, 255, 0.22)";
+  		live_interaction_panel.style.boxShadow = "0 8px 22px rgba(0,0,0,0.32)";
+  	}
+  	sync_target_location_lock_ui();
+  	update_proximity_interaction_gate();
+  }
+
+  function update_proximity_interaction_gate() {
+  	let nearest = nearby_npcs_cache.length > 0 ? readable_persona_name(nearby_npcs_cache[0].name) : null;
+  	sync_target_location_lock_ui();
+  	update_live_dialogue_ui();
+  	if (!controllable_player_enabled) {
+  		if (proximity_interaction_status) proximity_interaction_status.textContent = "Player Control disabled: manual Inject Event is available.";
+  		if (interact_nearby_npc_button) interact_nearby_npc_button.style.display = "none";
+  		if (clear_proximity_target_button) clear_proximity_target_button.style.display = proximity_target_locked ? "inline-block" : "none";
+  		if (proximity_target_lock_status) proximity_target_lock_status.textContent = "Manual Target and Location selection";
+  		if (live_inject_button) live_inject_button.disabled = false;
+  		if (live_inject_help) live_inject_help.textContent = "Generation may take 30-90 seconds.";
+  		return;
+  	}
+  	if (proximity_target_locked && proximity_locked_target) {
+  		if (proximity_interaction_status) proximity_interaction_status.textContent = "Target locked by proximity: " + proximity_locked_target;
+  		if (interact_nearby_npc_button) interact_nearby_npc_button.style.display = "none";
+  		if (clear_proximity_target_button) clear_proximity_target_button.style.display = "inline-block";
+  		if (proximity_target_lock_status) {
+  			let location_text = interaction_location_locked && interaction_locked_location ? "; Location locked: " + interaction_locked_location : "; Location not inferred";
+  			proximity_target_lock_status.textContent = "Target locked: " + proximity_locked_target + location_text;
+  		}
+  		if (live_inject_button) live_inject_button.disabled = false;
+  		if (live_inject_help) {
+  			live_inject_help.textContent = interaction_location_locked && interaction_locked_location ?
+  				"Inject will target " + proximity_locked_target + " at " + interaction_locked_location + "." :
+  				"Target is locked. Location could not be inferred, so select it manually.";
+  		}
+  		return;
+  	}
+  	if (!nearest) {
+  		if (proximity_interaction_status) proximity_interaction_status.textContent = "No nearby NPC. Move closer to an NPC to interact.";
+  		if (interact_nearby_npc_button) interact_nearby_npc_button.style.display = "none";
+  		if (clear_proximity_target_button) clear_proximity_target_button.style.display = "none";
+  		if (proximity_target_lock_status) proximity_target_lock_status.textContent = "Target not locked";
+  		if (live_inject_button) live_inject_button.disabled = true;
+  		if (live_inject_help) live_inject_help.textContent = "Move closer to an NPC to enable interaction.";
+  		return;
+  	}
+  	if (proximity_interaction_status) proximity_interaction_status.textContent = "Nearby NPC: " + nearest;
+  	if (interact_nearby_npc_button) {
+  		interact_nearby_npc_button.style.display = "inline-block";
+  		interact_nearby_npc_button.textContent = "Interact with " + nearest;
+  	}
+  	if (clear_proximity_target_button) clear_proximity_target_button.style.display = "none";
+  	if (proximity_target_lock_status) proximity_target_lock_status.textContent = "Target not locked";
+  	if (live_inject_button) live_inject_button.disabled = true;
+  	if (live_inject_help) live_inject_help.textContent = "Click Interact to lock the nearby NPC before injecting.";
+  }
+
+  function update_nearby_npc_status() {
+  	if (!nearby_npc_status) return;
+  	if (!controllable_player_enabled || !controllable_player_sprite) {
+  		nearby_npcs_cache = [];
+  		nearby_npc_status.textContent = "Nearby NPC: none";
+  		update_proximity_interaction_gate();
+  		return;
+  	}
+  	let nearby = [];
+  	for (let i=0; i<Object.keys(personas).length; i++) {
+  		let persona_name = Object.keys(personas)[i];
+  		if (persona_name === "Player") continue;
+  		let npc_sprite = personas[persona_name];
+  		if (!npc_sprite || !npc_sprite.visible) continue;
+ 		let npc_x = npc_sprite.body ? npc_sprite.body.x : (npc_sprite.x || 0);
+ 		let npc_y = npc_sprite.body ? npc_sprite.body.y : (npc_sprite.y || 0);
+ 		let dx = npc_x - controllable_player_sprite.x;
+ 		let dy = npc_y - controllable_player_sprite.y;
+  		let distance = Math.sqrt(dx * dx + dy * dy);
+  		if (distance <= controllable_player_proximity_threshold) {
+  			nearby.push({name: persona_name, distance: distance});
+  		}
+  	}
+  	nearby.sort(function(a, b) { return a.distance - b.distance; });
+  	nearby_npcs_cache = nearby;
+  	if (nearby.length === 0) {
+  		nearby_npc_status.textContent = "Nearby NPC: none";
+  		update_proximity_interaction_gate();
+  		return;
+  	}
+  	let readable_names = nearby.map(function(item) { return readable_persona_name(item.name); });
+  	nearby_npc_status.textContent = "Nearby NPCs: " + readable_names.join(", ");
+  	if (live_target_npc_select && !proximity_target_locked) {
+  		live_target_npc_select.value = readable_names[0];
+  	}
+  	update_proximity_interaction_gate();
+  }
+
+  function move_controllable_player_by(dx, dy) {
+  	if (!controllable_player_enabled || !controllable_player_sprite) return;
+  	if (dx === 0 && dy === 0) return;
+  	let moved = false;
+  	let current_x = controllable_player_sprite.x;
+  	let current_y = controllable_player_sprite.y;
+  	let target_x = current_x + dx;
+  	let target_y = current_y + dy;
+  	if (can_move_player_to(target_x, current_y)) {
+  		current_x = target_x;
+  		moved = true;
+  	}
+  	if (can_move_player_to(current_x, target_y)) {
+  		current_y = target_y;
+  		moved = true;
+  	}
+  	if (moved) {
+  		set_controllable_player_position(current_x, current_y);
+  	} else {
+  		controllable_player_blocked_until = Date.now() + 550;
+  		update_player_tile_status("Blocked");
+  		follow_controllable_player_camera();
+  	}
+  }
+
+  function update_controllable_player(delta) {
+  	if (!controllable_player_enabled || !controllable_player_sprite) return;
+  	let vx = 0;
+  	let vy = 0;
+  	if (input_has_text_focus()) {
+  		clear_controllable_player_keys();
+  	} else {
+ 		if (controllable_player_keys.left) vx -= 1;
+ 		if (controllable_player_keys.right) vx += 1;
+ 		if (controllable_player_keys.up) vy -= 1;
+ 		if (controllable_player_keys.down) vy += 1;
+  	}
+  	let moving = vx !== 0 || vy !== 0;
+  	if (moving) {
+  		let length = Math.sqrt(vx * vx + vy * vy);
+  		vx = vx / length;
+  		vy = vy / length;
+ 		let frame_scale = Math.max(0.25, Math.min(3, (delta || 16) / 16));
+ 		move_controllable_player_by(vx * controllable_player_speed * frame_scale, vy * controllable_player_speed * frame_scale);
+  		if (Math.abs(vx) > Math.abs(vy) && vx > 0) controllable_player_sprite.anims.play("PlayerControl-right-walk", true); else
+  		if (Math.abs(vx) > Math.abs(vy) && vx < 0) controllable_player_sprite.anims.play("PlayerControl-left-walk", true); else
+  		if (vy > 0) controllable_player_sprite.anims.play("PlayerControl-down-walk", true); else
+  		if (vy < 0) controllable_player_sprite.anims.play("PlayerControl-up-walk", true);
+  	} else {
+  		controllable_player_sprite.anims.stop();
+  	}
+ 	sync_controllable_player_label();
+ 	if (Date.now() > controllable_player_blocked_until) update_player_tile_status();
+ 	follow_controllable_player_camera();
+ 	update_nearby_npc_status();
+  }
+
+  function set_controllable_key_from_event(event, is_down) {
+  	let key = event.key || "";
+  	let handled = true;
+  	if (key === "ArrowLeft" || key === "a" || key === "A") controllable_player_keys.left = is_down; else
+  	if (key === "ArrowRight" || key === "d" || key === "D") controllable_player_keys.right = is_down; else
+  	if (key === "ArrowUp" || key === "w" || key === "W") controllable_player_keys.up = is_down; else
+  	if (key === "ArrowDown" || key === "s" || key === "S") controllable_player_keys.down = is_down; else
+  		handled = false;
+  	return handled;
+  }
+
+  document.addEventListener("keydown", function(event) {
+  	if (should_ignore_player_keyboard_event(event)) {
+  		clear_controllable_player_keys();
+  		return;
+  	}
+  	if (!controllable_player_enabled) return;
+  	if (set_controllable_key_from_event(event, true)) {
+  		event.preventDefault();
+  	}
+  }, {passive: false});
+
+  document.addEventListener("keyup", function(event) {
+  	if (should_ignore_player_keyboard_event(event)) {
+  		clear_controllable_player_keys();
+  		return;
+  	}
+  	if (set_controllable_key_from_event(event, false)) {
+  		if (controllable_player_enabled) event.preventDefault();
+  	}
+  }, {passive: false});
+
+  document.addEventListener("focusin", function(event) {
+  	if (is_text_editable_element(event.target)) {
+  		clear_controllable_player_keys();
+  	}
+  });
+
+  document.addEventListener("focusout", function(event) {
+  	clear_controllable_player_keys();
+  });
+
+  window.addEventListener("blur", clear_controllable_player_keys);
+
+  function controllable_player_raf_loop(timestamp) {
+  	if (controllable_player_last_frame_ms === null) {
+  		controllable_player_last_frame_ms = timestamp;
+  	}
+  	let delta = timestamp - controllable_player_last_frame_ms;
+  	controllable_player_last_frame_ms = timestamp;
+  	update_controllable_player(delta);
+  	apply_persistent_npc_movement_overlay();
+  	controllable_player_animation_frame = window.requestAnimationFrame(controllable_player_raf_loop);
+  }
+
+  controllable_player_animation_frame = window.requestAnimationFrame(controllable_player_raf_loop);
+
+  function truncate_conversation_text(text, max_length) {
+  	if (!text) return "";
+  	if (text.length <= max_length) return text;
+  	return text.substring(0, max_length - 3) + "...";
+  }
+
+  function current_conversation_lines(step_value) {
+  	let lines = conversation_timeline[String(step_value)];
+  	if (!Array.isArray(lines)) return [];
+  	return lines;
+  }
+
+  function update_conversation_overlay(step_value) {
+  	let container = document.getElementById("conversation-overlay-content");
+  	if (!container) return;
+  	let lines = current_conversation_lines(step_value);
+  	container.innerHTML = "";
+  	if (lines.length === 0) {
+  		let empty = document.createElement("em");
+  		empty.textContent = "No conversation at this step.";
+  		container.appendChild(empty);
+  		return;
+  	}
+  	for (let i=0; i<lines.length; i++) {
+  		let line = lines[i] || {};
+  		let row = document.createElement("div");
+  		row.style.marginBottom = "0.35em";
+  		let speaker = document.createElement("strong");
+  		speaker.textContent = (line.speaker || "Unknown") + ": ";
+  		let text = document.createElement("span");
+  		text.textContent = line.text || "";
+  		row.appendChild(speaker);
+  		row.appendChild(text);
+  		container.appendChild(row);
+  	}
+  }
+
+  function speaker_bubble_lines(step_value) {
+  	let lines = current_conversation_lines(step_value);
+  	let by_speaker = {};
+  	for (let i=0; i<lines.length; i++) {
+  		let speaker = (lines[i] || {}).speaker || "";
+  		if (speaker && !(speaker in by_speaker)) {
+  			by_speaker[speaker.split(" ").join("_")] = lines[i];
+  		}
+  	}
+  	return by_speaker;
+  }
+
+  function movement_record_for(persona_name, step_value) {
+  	let step_data = all_movement[String(step_value)] || all_movement[step_value] || {};
+  	return step_data[persona_name.replace("_", " ")] || {};
+  }
+
+  function movement_pixels_for(record, persona_name) {
+  	let movement_value = Array.isArray(record["movement"])
+  		? record["movement"]
+  		: spawn_tile_loc[persona_name];
+  	return [movement_value[0] * tile_width, movement_value[1] * tile_width];
+  }
+
+  function set_persona_detail_content(persona_name, record) {
+  	let pronunciatio_content = record["pronunciatio"] || "";
+  	let description_content = record["description"] || "No current action @ Unknown";
+  	let chat_content_raw = record["chat"] || null;
+  	let chat_content = "";
+  	if (chat_content_raw != null ){
+      for (let j=0; j<chat_content_raw.length; j++) {
+      	chat_content += chat_content_raw[j][0] + ": " + chat_content_raw[j][1] + "<br>";
+      }
+    } else {
+    	chat_content = "<em>None at the moment</em>";
+    }
+
+  	let rgx = new RegExp(/(\p{L}{1})\p{L}+/, 'gu');
+  	let initials = [...persona_name.matchAll(rgx)] || [];
+  	initials = (
+  	  (initials.shift()?.[1] || '') + (initials.pop()?.[1] || '')
+  	).toUpperCase();
+  	pronunciatios[persona_name].setText(initials + ": " + pronunciatio_content);
+
+  	let action_target = description_content.split("@");
+  	document.getElementById("quick_emoji-"+persona_name).innerHTML = pronunciatio_content;
+  	document.getElementById("current_action__"+persona_name).innerHTML = action_target[0] || description_content;
+  	document.getElementById("target_address__"+persona_name).innerHTML = action_target[1] || " Unknown";
+  	document.getElementById("chat__"+persona_name).innerHTML = chat_content;
+  }
+
+  function update_speech_bubbles(step_value) {
+  	let bubble_lines = speaker_bubble_lines(step_value);
+  	for (let i=0; i<Object.keys(conversation_bubbles).length; i++) {
+  		let bubble_persona_name = Object.keys(conversation_bubbles)[i];
+  		let bubble = conversation_bubbles[bubble_persona_name];
+  		let line = bubble_lines[bubble_persona_name];
+  		let speaker_sprite = personas[bubble_persona_name];
+  		let live_until = live_dialogue_bubble_until[bubble_persona_name] || 0;
+  		if (Date.now() < live_until && speaker_sprite && speaker_sprite.visible) {
+  			bubble.setText(bubble_persona_name.split("_").join(" ") + ": " + truncate_conversation_text(live_dialogue_bubble_text[bubble_persona_name] || "", 110));
+  			bubble.x = speaker_sprite.body.x - 28;
+  			bubble.y = speaker_sprite.body.y - 108;
+  			bubble.setVisible(true);
+  			continue;
+  		}
+  		if (legacy_replay_playing && line && speaker_sprite && speaker_sprite.visible) {
+  			bubble.setText((line.speaker || "Unknown") + ": " + truncate_conversation_text(line.text || "", 110));
+  			bubble.x = speaker_sprite.body.x - 28;
+  			bubble.y = speaker_sprite.body.y - 108;
+  			bubble.setVisible(true);
+  		} else {
+  			bubble.setVisible(false);
+  		}
+  	}
+  }
+
+  function update_smooth_personas(alpha) {
+  	for (let i=0; i<Object.keys(personas).length; i++) {
+  		let persona_name = Object.keys(personas)[i];
+  		let curr_persona = personas[persona_name];
+  		let curr_pronunciatio = pronunciatios[persona_name];
+  		let curr_speech_bubble = speech_bubbles[persona_name];
+  		let current_record = movement_record_for(persona_name, step);
+  		let next_record = movement_record_for(persona_name, Math.min(step + 1, final_step));
+  		let is_visible = current_record["visible"] !== false;
+
+  		curr_persona.setVisible(is_visible);
+  		curr_pronunciatio.setVisible(is_visible);
+  		curr_speech_bubble.setVisible(is_visible);
+  		if (!is_visible) {
+  			curr_persona.anims.stop();
+  			continue;
+  		}
+
+  		let current_pos = movement_pixels_for(current_record, persona_name);
+  		let next_pos = next_record && next_record["visible"] !== false
+  			? movement_pixels_for(next_record, persona_name)
+  			: current_pos;
+  		let display_x = current_pos[0] + (next_pos[0] - current_pos[0]) * alpha;
+  		let display_y = current_pos[1] + (next_pos[1] - current_pos[1]) * alpha;
+  		curr_persona.body.x = display_x;
+  		curr_persona.body.y = display_y;
+  		movement_target[persona_name] = [display_x, display_y];
+
+  		curr_pronunciatio.x = curr_persona.body.x + 18;
+  		curr_pronunciatio.y = curr_persona.body.y - 42 - 25;
+  		curr_speech_bubble.x = curr_persona.body.x + 80;
+  		curr_speech_bubble.y = curr_persona.body.y - 39;
+  		set_persona_detail_content(persona_name, current_record);
+
+  		let dx = next_pos[0] - current_pos[0];
+  		let dy = next_pos[1] - current_pos[1];
+  		if (Math.abs(dx) > Math.abs(dy) && dx > 0) pre_anims_direction_dict[persona_name] = "r"; else
+  		if (Math.abs(dx) > Math.abs(dy) && dx < 0) pre_anims_direction_dict[persona_name] = "l"; else
+  		if (dy > 0) pre_anims_direction_dict[persona_name] = "d"; else
+  		if (dy < 0) pre_anims_direction_dict[persona_name] = "u";
+  	}
+  }
+
+  function set_playback_mode(mode) {
+  	playback_mode = mode === "step" ? "step" : "smooth";
+  	smooth_frame_index = 0;
+  	smooth_frame_elapsed_ms = 0;
+  	playback_elapsed_ms = 0;
+  	execute_count = execute_count_max;
+  	start_datetime = new Date(Date.parse("{{start_datetime}}") + step * step_size);
+  	display_time_for_step(step, 0);
+  	update_playback_mode_buttons();
+  }
+ 	document.getElementById("game-time-content").innerHTML = start_datetime.toLocaleTimeString("en-GB", datetime_options);
+ 	
+
+	// ###########################################################################
+	// ENGINE
+	// ###########################################################################
+
+	// Joon: Phaser 3.0 is oriented around "scenes" -- recall how Pokemon plays: 
+	//       there is the outdoor space, and then there is the indoor space; when
+	//       you go inside, you transition to a new "scene" and the outdoor space
+	//       basically disappears. 
+	//       A scene in Phaser has four key methods that are called at different
+	//       stages of rendering for different purposes. They are: 
+	//       init() -> preload() -> create() -> update()
+	//         init() is called only once at the very beginning. This is the 
+	//           initialization function in case that is needed. 
+	//         preload() is called once and preloads any of the assets
+	//         create() is also called once after preloading... creates sprites 
+	//           and actually displays stuff
+	//         update() is called on each frame during the game play 
+
+	function preload() {  
+		// For managing cross origin errors. We need to set this, change AWS 
+		// CORS settings, and django AWS settings. 
+		this.load.crossOrigin = '';
+
+	  // Loading the necessary images (e.g., the background image, character 
+	  // sprites). 
+	  // Joon: for load.image, the first parameter is simply the key value that
+	  //       you are passing in. The second parameter should be pointed to the
+	  //       png file that contains the tileset. 
+	  //       Also IMPORTANT: when you create a tileset in Tiled, always be  
+	  //       sure to check the "embedded" option. 
+	  this.load.image("blocks_1", "{% static 'assets/the_ville/visuals/map_assets/blocks/blocks_1.png' %}");
+	  this.load.image("walls", "{% static 'assets/the_ville/visuals/map_assets/v1/Room_Builder_32x32.png' %}");
+	  this.load.image("interiors_pt1", "{% static 'assets/the_ville/visuals/map_assets/v1/interiors_pt1.png' %}");
+	  this.load.image("interiors_pt2", "{% static 'assets/the_ville/visuals/map_assets/v1/interiors_pt2.png' %}");
+	  this.load.image("interiors_pt3", "{% static 'assets/the_ville/visuals/map_assets/v1/interiors_pt3.png' %}");
+	  this.load.image("interiors_pt4", "{% static 'assets/the_ville/visuals/map_assets/v1/interiors_pt4.png' %}");
+	  this.load.image("interiors_pt5", "{% static 'assets/the_ville/visuals/map_assets/v1/interiors_pt5.png' %}");
+	  this.load.image("CuteRPG_Field_B", "{% static 'assets/the_ville/visuals/map_assets/cute_rpg_word_VXAce/tilesets/CuteRPG_Field_B.png' %}");
+	  this.load.image("CuteRPG_Field_C", "{% static 'assets/the_ville/visuals/map_assets/cute_rpg_word_VXAce/tilesets/CuteRPG_Field_C.png' %}");
+	  this.load.image("CuteRPG_Harbor_C", "{% static 'assets/the_ville/visuals/map_assets/cute_rpg_word_VXAce/tilesets/CuteRPG_Harbor_C.png' %}");
+	  this.load.image("CuteRPG_Village_B", "{% static 'assets/the_ville/visuals/map_assets/cute_rpg_word_VXAce/tilesets/CuteRPG_Village_B.png' %}");
+	  this.load.image("CuteRPG_Forest_B", "{% static 'assets/the_ville/visuals/map_assets/cute_rpg_word_VXAce/tilesets/CuteRPG_Forest_B.png' %}");
+	  this.load.image("CuteRPG_Desert_C", "{% static 'assets/the_ville/visuals/map_assets/cute_rpg_word_VXAce/tilesets/CuteRPG_Desert_C.png' %}");
+	  this.load.image("CuteRPG_Mountains_B", "{% static 'assets/the_ville/visuals/map_assets/cute_rpg_word_VXAce/tilesets/CuteRPG_Mountains_B.png' %}");
+	  this.load.image("CuteRPG_Desert_B", "{% static 'assets/the_ville/visuals/map_assets/cute_rpg_word_VXAce/tilesets/CuteRPG_Desert_B.png' %}");
+	  this.load.image("CuteRPG_Forest_C", "{% static 'assets/the_ville/visuals/map_assets/cute_rpg_word_VXAce/tilesets/CuteRPG_Forest_C.png' %}");
+
+	  // Joon: This is the export json file you get from Tiled. 
+	  this.load.tilemapTiledJSON("map", "{% static 'assets/the_ville/visuals/the_ville_jan7.json' %}");
+	  this.load.text("collision_maze_csv", "{% static 'assets/the_ville/matrix/maze/collision_maze.csv' %}");
+
+	  // An atlas is a way to pack multiple images together into one texture. I'm 
+	  // using it to load all the player animations (walking left, walking right, 
+	  // etc.) in one image. For more info see:
+	  // https://labs.phaser.io/view.html?src=src/animation/texture%20atlas%20animation.js
+	  // If you don't use an atlas, you can do the same thing with a spritesheet, 
+	  // see: https://labs.phaser.io/view.html?src=src/animation/single%20sprite%20sheet.js
+	  // Joon: Technically, I think this guy had the best tutorial for atlas: 
+	  //       https://www.youtube.com/watch?v=fdXcD9X4NrQ&ab_channel=MorganPage
+	  this.load.atlas("atlas", "{% static 'assets/characters/Yuriko_Yamamoto.png' %}", 
+	  												     "{% static 'assets/characters/atlas.json' %}");
+	  this.load.atlas("PlayerControl", "{% static 'assets/characters/Player.png' %}",
+	  												     "{% static 'assets/characters/atlas.json' %}");
+
+	  {% for p in persona_names %}
+		  {% with 'assets/characters/'|add:p.underscore|add:'.png' as image_static %}
+			  this.load.atlas("{{p.underscore}}", "{% static image_static %}", 
+		  										  		     "{% static 'assets/characters/atlas.json' %}");
+			{% endwith %}
+	  {% endfor %}
+
+	  this.load.image('speech_bubble', "{% static 'assets/speech_bubble/v3.png' %}");
+	}
+
+	function create() {  
+	  const map = this.make.tilemap({ key: "map" });
+	  // Joon: Logging map is really helpful for debugging here: 
+	  //       console.log(map);
+
+	  // The first parameter is the name you gave to the tileset in Tiled and then
+	  // the key of the tileset image in Phaser's cache (i.e. the name you used in
+	  // preload)
+	  // Joon: for the first parameter here, really take a look at the 
+	  //       console.log(map) output. You need to make sure that the name 
+	  //       matches.
+	  const collisions = map.addTilesetImage("blocks", "blocks_1");
+	  const walls = map.addTilesetImage("Room_Builder_32x32", "walls");
+	  const interiors_pt1 = map.addTilesetImage("interiors_pt1", "interiors_pt1");
+	  const interiors_pt2 = map.addTilesetImage("interiors_pt2", "interiors_pt2");
+	  const interiors_pt3 = map.addTilesetImage("interiors_pt3", "interiors_pt3");
+	  const interiors_pt4 = map.addTilesetImage("interiors_pt4", "interiors_pt4");
+	  const interiors_pt5 = map.addTilesetImage("interiors_pt5", "interiors_pt5");
+	  const CuteRPG_Field_B = map.addTilesetImage("CuteRPG_Field_B", "CuteRPG_Field_B");
+	  const CuteRPG_Field_C = map.addTilesetImage("CuteRPG_Field_C", "CuteRPG_Field_C");
+	  const CuteRPG_Harbor_C = map.addTilesetImage("CuteRPG_Harbor_C", "CuteRPG_Harbor_C");
+	  const CuteRPG_Village_B = map.addTilesetImage("CuteRPG_Village_B", "CuteRPG_Village_B");
+	  const CuteRPG_Forest_B = map.addTilesetImage("CuteRPG_Forest_B", "CuteRPG_Forest_B");
+	  const CuteRPG_Desert_C = map.addTilesetImage("CuteRPG_Desert_C", "CuteRPG_Desert_C");
+	  const CuteRPG_Mountains_B = map.addTilesetImage("CuteRPG_Mountains_B", "CuteRPG_Mountains_B");
+	  const CuteRPG_Desert_B = map.addTilesetImage("CuteRPG_Desert_B", "CuteRPG_Desert_B");
+	  const CuteRPG_Forest_C = map.addTilesetImage("CuteRPG_Forest_C", "CuteRPG_Forest_C");
+
+	  // The first parameter is the layer name (or index) taken from Tiled, the 
+	  // second parameter is the tileset you set above, and the final two 
+	  // parameters are the x, y coordinate. 
+	  // Joon: The "layer name" that comes as the first parameter value  
+	  //       literally is taken from our Tiled layer name. So to find out what
+	  //       they are; you actually need to open up tiled and see how you 
+	  //       named things there. 
+	  let tileset_group_1 = [CuteRPG_Field_B, CuteRPG_Field_C, CuteRPG_Harbor_C, CuteRPG_Village_B, 
+	  											 CuteRPG_Forest_B, CuteRPG_Desert_C, CuteRPG_Mountains_B, CuteRPG_Desert_B, CuteRPG_Forest_C,
+	  											 interiors_pt1, interiors_pt2, interiors_pt3, interiors_pt4, interiors_pt5, walls];
+	  const bottomGroundLayer = map.createLayer("Bottom Ground", tileset_group_1, 0, 0);
+	  const exteriorGroundLayer = map.createLayer("Exterior Ground", tileset_group_1, 0, 0);
+	  const exteriorDecorationL1Layer = map.createLayer("Exterior Decoration L1", tileset_group_1, 0, 0);
+	  const exteriorDecorationL2Layer = map.createLayer("Exterior Decoration L2", tileset_group_1, 0, 0);
+	  const interiorGroundLayer = map.createLayer("Interior Ground", tileset_group_1, 0, 0);
+	  const wallLayer = map.createLayer("Wall", [CuteRPG_Field_C, walls], 0, 0);
+	  const interiorFurnitureL1Layer = map.createLayer("Interior Furniture L1", tileset_group_1, 0, 0);
+	  const interiorFurnitureL2Layer = map.createLayer("Interior Furniture L2 ", tileset_group_1, 0, 0);
+	  const foregroundL1Layer = map.createLayer("Foreground L1", tileset_group_1, 0, 0);
+	  const foregroundL2Layer = map.createLayer("Foreground L2", tileset_group_1, 0, 0);
+
+	  const collisionsLayer = map.createLayer("Collisions", collisions, 0, 0);
+	  // const groundLayer = map.createLayer("Ground", walls, 0, 0);
+	  // const indoorGroundLayer = map.createLayer("Indoor Ground", walls, 0, 0);
+	  // const wallsLayer = map.createLayer("Walls", walls, 0, 0);
+	  // const interiorsLayer = map.createLayer("Furnitures", interiors, 0, 0);
+	  // const builtInLayer = map.createLayer("Built-ins", interiors, 0, 0);
+	  // const appliancesLayer = map.createLayer("Appliances", interiors, 0, 0);
+	  // const foregroundLayer = map.createLayer("Foreground", interiors, 0, 0);
+
+	  // Joon : This is where you want to create a custom field for the tileset
+	  //        in Tiled. Take a look at this guy's tutorial: 
+	  //        https://www.youtube.com/watch?v=MR2CvWxOEsw&ab_channel=MattWilber
+	  collisionsLayer.setCollisionByProperty({ collide: true });
+	  // By default, everything gets depth sorted on the screen in the order we 
+	  // created things. Here, we want the "Above Player" layer to sit on top of 
+	  // the player, so we explicitly give it a depth. Higher depths will sit on 
+	  // top of lower depth objects.
+	  // Collisions layer should get a negative depth since we do not want to see
+	  // it. 
+	  collisionsLayer.setDepth(-1);
+	  collisions_layer = collisionsLayer;
+	  collision_layer_loaded = !!collisions_layer;
+	  foregroundL1Layer.setDepth(2);
+	  foregroundL2Layer.setDepth(2);
+
+	  // *** SET UP CAMERA *** 
+	  // "player" is to be set as the center of mass for our "camera." We 
+	  // basically create a game character sprite as we would for our personas 
+	  // but we move it to depth -1 and let it pass through the collision map;  
+	  // that is, do not have the following line: 
+	  // this.physics.add.collider(player, collisionsLayer);
+	  // OLD NOTE: Create a sprite with physics enabled via the physics system. 
+	  // The image  used for the sprite has a bit of whitespace, so I'm using 
+	  // setSize & setOffset to control the size of the player's body.
+	  player = this.physics.add.
+	                sprite(2400, 588, "atlas", "down").
+	                setSize(30, 40).
+	                setOffset(0, 0);
+	  player.setDepth(-1);
+	  // Setting up the camera. 
+	  main_camera = this.cameras.main;
+	  world_width_pixels = map.widthInPixels;
+	  world_height_pixels = map.heightInPixels;
+	  parse_collision_grid(this.cache.text.get("collision_maze_csv"));
+	  main_camera.startFollow(player);
+	  main_camera.setBounds(0, 0, world_width_pixels, world_height_pixels);
+	  cursors = this.input.keyboard.createCursorKeys();
+	  this.input.keyboard.removeCapture([
+	  	Phaser.Input.Keyboard.KeyCodes.LEFT,
+	  	Phaser.Input.Keyboard.KeyCodes.RIGHT,
+	  	Phaser.Input.Keyboard.KeyCodes.UP,
+	  	Phaser.Input.Keyboard.KeyCodes.DOWN,
+	  	Phaser.Input.Keyboard.KeyCodes.SPACE,
+	  	Phaser.Input.Keyboard.KeyCodes.W,
+	  	Phaser.Input.Keyboard.KeyCodes.A,
+	  	Phaser.Input.Keyboard.KeyCodes.S,
+	  	Phaser.Input.Keyboard.KeyCodes.D
+	  ]);
+
+	  let canvas = this.game.canvas;
+	  let dragging = false;
+	  let drag_start = {x: 0, y: 0, scrollX: 0, scrollY: 0};
+	  function canvas_point(event) {
+	  	let bounds = canvas.getBoundingClientRect();
+	  	return {
+	  		x: (event.clientX - bounds.left) * (main_camera.width / bounds.width),
+	  		y: (event.clientY - bounds.top) * (main_camera.height / bounds.height)
+	  	};
+	  }
+	  canvas.addEventListener("mousedown", function(event) {
+	  	if (event.button !== 0) return;
+	  	blur_text_input_if_focused();
+	  	let point = canvas_point(event);
+	  	dragging = true;
+	  	use_manual_camera();
+	  	drag_start = {
+	  		x: point.x,
+	  		y: point.y,
+	  		scrollX: main_camera.scrollX,
+	  		scrollY: main_camera.scrollY
+	  	};
+	  	event.preventDefault();
+	  });
+	  window.addEventListener("mousemove", function(event) {
+	  	if (!dragging) return;
+	  	let point = canvas_point(event);
+	  	main_camera.scrollX = drag_start.scrollX -
+	  		(point.x - drag_start.x) / main_camera.zoom;
+	  	main_camera.scrollY = drag_start.scrollY -
+	  		(point.y - drag_start.y) / main_camera.zoom;
+	  	clamp_camera_to_world();
+	  });
+	  window.addEventListener("mouseup", function() {
+	  	dragging = false;
+	  });
+	  canvas.addEventListener("wheel", function(event) {
+	  	event.preventDefault();
+	  	use_manual_camera();
+	  	let point = canvas_point(event);
+	  	let world_before = main_camera.getWorldPoint(point.x, point.y);
+	  	let zoom_delta = event.deltaY < 0 ? 0.1 : -0.1;
+	  	let next_zoom = Phaser.Math.Clamp(
+	  		main_camera.zoom + zoom_delta,
+	  		min_camera_zoom,
+	  		max_camera_zoom
+	  	);
+	  	main_camera.setZoom(next_zoom);
+	  	let world_after = main_camera.getWorldPoint(point.x, point.y);
+	  	main_camera.scrollX += world_before.x - world_after.x;
+	  	main_camera.scrollY += world_before.y - world_after.y;
+	  	clamp_camera_to_world();
+	  	update_camera_status();
+	  }, {passive: false});
+
+	  // *** SET UP PERSONAS *** 
+	  // We start by creating the game sprite objects. 
+	  for (let i=0; i<Object.keys(spawn_tile_loc).length; i++) { 
+	    let persona_name = Object.keys(spawn_tile_loc)[i];
+	    let start_pos = [spawn_tile_loc[persona_name][0] * tile_width + tile_width / 2, 
+	                     spawn_tile_loc[persona_name][1] * tile_width + tile_width];
+	    let new_sprite = this.physics.add
+	                         .sprite(start_pos[0], start_pos[1], persona_name, "down")
+	                         .setSize(30, 40)
+	                         .setOffset(0, 0);
+	    // Scale up the sprite
+      new_sprite.displayWidth = 40;
+      new_sprite.scaleY = new_sprite.scaleX;
+
+	    // Here, we are creating the persona and its pronunciatio sprites.
+	    personas[persona_name] = new_sprite;
+	    movement_target[persona_name] = [spawn_tile_loc[persona_name][0] * tile_width,
+	                                     spawn_tile_loc[persona_name][1] * tile_width];
+	    pre_anims_direction_dict[persona_name] = "d";
+	    speech_bubbles[persona_name] = this.add.image(new_sprite.body.x - 0, 
+	    																						  new_sprite.body.y - 30,
+	    																						  'speech_bubble').setDepth(3);
+      speech_bubbles[persona_name].displayWidth = 130;
+      speech_bubbles[persona_name].displayHeight = 58;
+
+	    pronunciatios[persona_name] = this.add.text(
+	                                   new_sprite.body.x - 6, 
+	                                   new_sprite.body.y - 42, 
+	                                   "🦁", {
+	                                   font: "24px monospace", 
+	                                   fill: "#000000", 
+	                                   padding: { x: 8, y: 8}, 
+	                                   border:"solid",
+	                                   borderRadius:"10px"}).setDepth(3);
+	    conversation_bubbles[persona_name] = this.add.text(
+	                                   new_sprite.body.x - 8,
+	                                   new_sprite.body.y - 96,
+	                                   "", {
+	                                   font: "13px Arial",
+	                                   fill: "#111111",
+	                                   backgroundColor: "rgba(255,255,255,0.95)",
+	                                   padding: { x: 8, y: 6 },
+	                                   wordWrap: { width: 260, useAdvancedWrap: true }
+	                                   }).setDepth(6).setVisible(false);
+	  }
+
+	  controllable_player_sprite = this.physics.add
+	                         .sprite(player_initial_spawn_position.x, player_initial_spawn_position.y, "PlayerControl", "down")
+	                         .setSize(30, 40)
+	                         .setOffset(0, 0)
+	                         .setDepth(5)
+	                         .setVisible(false);
+	  controllable_player_sprite.displayWidth = 42;
+	  controllable_player_sprite.scaleY = controllable_player_sprite.scaleX;
+	  controllable_player_label = this.add.text(
+	                                   player_initial_spawn_position.x - 8,
+	                                   player_initial_spawn_position.y - 34,
+	                                   "You", {
+	                                   font: "14px Arial",
+	                                   fill: "#ffffff",
+	                                   backgroundColor: "rgba(0,72,190,0.85)",
+	                                   padding: { x: 6, y: 3 }
+	                                   }).setDepth(6).setVisible(false);
+	  key_w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W, false);
+	  key_a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A, false);
+	  key_s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S, false);
+	  key_d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D, false);
+
+	  // Create the player's walking animations from the texture atlas. These are
+	  // stored in the global animation manager so any sprite can access them.
+	  const anims = this.anims;
+		for (let i=0; i<Object.keys(persona_names).length; i++) { 
+			let persona_name = Object.keys(persona_names)[i];
+			let left_walk_name = persona_name + "-left-walk";
+			let right_walk_name = persona_name + "-right-walk";
+			let down_walk_name = persona_name + "-down-walk";
+			let up_walk_name = persona_name + "-up-walk";
+
+			console.log(persona_name, left_walk_name, "DEUBG")
+		  anims.create({
+		    key: left_walk_name,
+		    frames: anims.generateFrameNames(persona_name, { prefix: "left-walk.", start: 0, end: 3, zeroPad: 3 }),
+		    frameRate: 4,
+		    repeat: -1 });
+
+		  anims.create({
+		    key: right_walk_name,
+		    frames: anims.generateFrameNames(persona_name, { prefix: "right-walk.", start: 0, end: 3, zeroPad: 3 }),
+		    frameRate: 4,
+		    repeat: -1 });
+
+		  anims.create({
+		    key: down_walk_name,
+		    frames: anims.generateFrameNames(persona_name, { prefix: "down-walk.", start: 0, end: 3, zeroPad: 3 }),
+		    frameRate: 4,
+		    repeat: -1 });
+
+		  anims.create({
+		    key: up_walk_name,
+		    frames: anims.generateFrameNames(persona_name, { prefix: "up-walk.", start: 0, end: 3, zeroPad: 3 }),
+		    frameRate: 4,
+		    repeat: -1 });
+	  }
+	  anims.create({
+	    key: "PlayerControl-left-walk",
+	    frames: anims.generateFrameNames("PlayerControl", { prefix: "left-walk.", start: 0, end: 3, zeroPad: 3 }),
+	    frameRate: 5,
+	    repeat: -1 });
+	  anims.create({
+	    key: "PlayerControl-right-walk",
+	    frames: anims.generateFrameNames("PlayerControl", { prefix: "right-walk.", start: 0, end: 3, zeroPad: 3 }),
+	    frameRate: 5,
+	    repeat: -1 });
+	  anims.create({
+	    key: "PlayerControl-down-walk",
+	    frames: anims.generateFrameNames("PlayerControl", { prefix: "down-walk.", start: 0, end: 3, zeroPad: 3 }),
+	    frameRate: 5,
+	    repeat: -1 });
+	  anims.create({
+	    key: "PlayerControl-up-walk",
+	    frames: anims.generateFrameNames("PlayerControl", { prefix: "up-walk.", start: 0, end: 3, zeroPad: 3 }),
+	    frameRate: 5,
+	    repeat: -1 });
+
+	  play_button.onclick = function() {
+	  	legacy_replay_playing = true;
+	  	this.scene.resume();
+	  }.bind(this);
+	  pause_button.onclick = function() {
+	  	legacy_replay_playing = false;
+	  }.bind(this);
+	  if (step_mode_button) {
+	  	step_mode_button.onclick = function() {
+	  		set_playback_mode("step");
+	  	};
+	  }
+	  if (smooth_mode_button) {
+	  	smooth_mode_button.onclick = function() {
+	  		set_playback_mode("smooth");
+	  	};
+	  }
+	  if (playback_speed_slider) {
+	  	playback_speed_slider.oninput = function() {
+	  		set_playback_speed(this.value);
+	  	};
+	  }
+	  if (enable_player_control_button) {
+	  	enable_player_control_button.onclick = function() {
+	  		set_controllable_player_enabled(!controllable_player_enabled);
+	  	};
+	  }
+	  if (enable_player_control_checkbox) {
+	  	enable_player_control_checkbox.onchange = function() {
+	  		set_controllable_player_enabled(this.checked);
+	  	};
+	  }
+	  if (reset_player_control_button) {
+	  	reset_player_control_button.onclick = function() {
+	  		reset_controllable_player_position();
+	  		update_nearby_npc_status();
+	  	};
+	  }
+	  if (follow_player_camera_checkbox) {
+	  	follow_player_camera_checkbox.onchange = function() {
+	  		if (this.checked) {
+	  			follow_controllable_player_camera();
+	  		}
+	  	};
+	  }
+	  if (live_target_npc_select) {
+	  	live_target_npc_select.onchange = function() {
+	  		if (controllable_player_enabled && proximity_target_locked && proximity_locked_target) {
+	  			this.value = proximity_locked_target;
+	  		}
+	  	};
+	  }
+	  if (live_location_select) {
+	  	live_location_select.onchange = function() {
+	  		if (controllable_player_enabled && interaction_location_locked && interaction_locked_location) {
+	  			this.value = interaction_locked_location;
+	  		}
+	  	};
+	  }
+	  if (player_move_up_button) {
+	  	player_move_up_button.onclick = function() {
+	  		move_controllable_player_by(0, -controllable_player_button_step);
+	  	};
+	  }
+	  if (player_move_down_button) {
+	  	player_move_down_button.onclick = function() {
+	  		move_controllable_player_by(0, controllable_player_button_step);
+	  	};
+	  }
+	  if (player_move_left_button) {
+	  	player_move_left_button.onclick = function() {
+	  		move_controllable_player_by(-controllable_player_button_step, 0);
+	  	};
+	  }
+	  if (player_move_right_button) {
+	  	player_move_right_button.onclick = function() {
+	  		move_controllable_player_by(controllable_player_button_step, 0);
+	  	};
+	  }
+	  if (player_debug_teleport_button) {
+	  	player_debug_teleport_button.onclick = function() {
+	  		teleport_controllable_player(player_debug_teleport_location ? player_debug_teleport_location.value : "Town Center");
+	  		update_nearby_npc_status();
+	  	};
+	  }
+	  if (interact_nearby_npc_button) {
+	  	interact_nearby_npc_button.onclick = function() {
+	  		if (nearby_npcs_cache.length === 0) return;
+	  		let target_name = readable_persona_name(nearby_npcs_cache[0].name);
+	  		set_live_target_from_proximity(target_name, true);
+	  		if (live_player_action) {
+	  			live_player_action.focus();
+	  			live_player_action.scrollIntoView({behavior: "smooth", block: "center"});
+	  		}
+	  	};
+	  }
+	  if (clear_proximity_target_button) {
+	  	clear_proximity_target_button.onclick = function() {
+	  		clear_proximity_target_lock();
+	  	};
+	  }
+	  if (send_live_dialogue_button) {
+	  	send_live_dialogue_button.onclick = function() {
+	  		send_live_dialogue();
+	  	};
+	  }
+	  if (apply_live_dialogue_button) {
+	  	apply_live_dialogue_button.onclick = function() {
+	  		generate_simulation_event_draft_from_dialogue();
+	  	};
+	  }
+	  if (copy_simulation_event_draft) {
+	  	copy_simulation_event_draft.onclick = function() {
+	  		copy_simulation_event_draft_to_inject_form();
+	  	};
+	  }
+	  if (confirm_simulation_event_draft) {
+	  	confirm_simulation_event_draft.onclick = function() {
+	  		confirm_simulation_event_draft_and_generate_branch();
+	  	};
+	  }
+	  if (cancel_simulation_event_draft) {
+	  	cancel_simulation_event_draft.onclick = function() {
+	  		current_simulation_event_draft = null;
+	  		if (simulation_event_draft_panel) simulation_event_draft_panel.style.display = "none";
+	  		if (simulation_event_draft_status) simulation_event_draft_status.textContent = "Draft cancelled.";
+	  	};
+	  }
+	  if (advance_world_hour_button) {
+	  	advance_world_hour_button.onclick = function() {
+	  		advance_world_clock_one_hour();
+	  	};
+	  }
+	  if (advance_world_10_button) {
+	  	advance_world_10_button.onclick = function() {
+	  		advance_world_clock_ten_minutes();
+	  	};
+	  }
+	  if (reset_world_time_button) {
+	  	reset_world_time_button.onclick = function() {
+	  		reset_world_time();
+	  	};
+	  }
+	  if (clean_simulation_button) {
+	  	clean_simulation_button.onclick = function() {
+	  		clean_simulation();
+	  	};
+	  }
+	  if (apply_agent_config_button) {
+	  	apply_agent_config_button.onclick = function() {
+	  		set_active_agent_config(agent_config_select ? agent_config_select.value : "full_agent", true);
+	  		clear_live_interaction_frontend_state();
+	  		if (world_clock_status) world_clock_status.textContent = "Agent configuration set to " + active_agent_config + ". Use Clean Simulation before a fresh screenshot run.";
+	  	};
+	  }
+	  if (agent_config_select) {
+	  	agent_config_select.onchange = function() {
+	  		set_active_agent_config(this.value, true);
+	  		if (world_clock_status) world_clock_status.textContent = "Agent configuration set to " + active_agent_config + ". Use Clean Simulation before a fresh screenshot run.";
+	  	};
+	  }
+	  if (jump_world_time_button) {
+	  	jump_world_time_button.onclick = function() {
+	  		jump_world_time();
+	  	};
+	  }
+	  if (set_world_planner_mode_button) {
+	  	set_world_planner_mode_button.onclick = function() {
+	  		set_world_planner_mode();
+	  	};
+	  }
+	  if (regenerate_daily_plan_button) {
+	  	regenerate_daily_plan_button.onclick = function() {
+	  		regenerate_daily_plan();
+	  	};
+	  }
+	  document.querySelectorAll(".npc-state-details-link").forEach(function(link) {
+	  	link.onclick = function(event) {
+	  		event.preventDefault();
+	  		open_npc_details_panel(this.href, this.getAttribute("data-persona-name") || "NPC");
+	  	};
+	  });
+	  if (npc_details_close_button) {
+	  	npc_details_close_button.onclick = function() {
+	  		if (npc_details_panel) npc_details_panel.style.display = "none";
+	  	};
+	  }
+	  if (live_interaction_form) {
+	  	live_interaction_form.onsubmit = function(event) {
+	  		if (controllable_player_enabled && !proximity_target_locked) {
+	  			event.preventDefault();
+	  			update_proximity_interaction_gate();
+	  			return false;
+	  		}
+	  		if (proximity_target_locked && proximity_locked_target && live_target_npc_select) {
+	  			live_target_npc_select.value = proximity_locked_target;
+	  		}
+	  		if (interaction_location_locked && interaction_locked_location && live_location_select) {
+	  			live_location_select.value = interaction_locked_location;
+	  		}
+	  		if (!live_interaction_form.querySelector('input[name="agent_config"]')) {
+	  			let hidden_agent_config = document.createElement("input");
+	  			hidden_agent_config.type = "hidden";
+	  			hidden_agent_config.name = "agent_config";
+	  			live_interaction_form.appendChild(hidden_agent_config);
+	  		}
+	  		live_interaction_form.querySelector('input[name="agent_config"]').value = active_agent_config;
+	  		update_live_interaction_fields(step);
+	  		if (live_inject_button) {
+	  			live_inject_button.disabled = true;
+	  			live_inject_button.textContent = "Generating NPC response...";
+	  		}
+	  		if (live_inject_help) {
+	  			live_inject_help.textContent = "Generating a new replay. This may take 30-90 seconds...";
+	  		}
+	  	};
+	  }
+	  full_map_button.onclick = show_full_map;
+	  reset_view_button.onclick = reset_camera_view;
+	  window.focusDemoPersona = function(persona_name) {
+	  	if (!personas[persona_name]) return;
+	  	player.setPosition(
+	  		personas[persona_name].body.x,
+	  		personas[persona_name].body.y
+	  	);
+	  	main_camera.setZoom(default_camera_zoom);
+	  	main_camera.startFollow(player, true);
+	  	update_camera_status();
+	  };
+	  window.getDemoCameraState = function() {
+	  	return {
+	  		zoom: main_camera.zoom,
+	  		scrollX: main_camera.scrollX,
+	  		scrollY: main_camera.scrollY,
+	  		viewportWidth: main_camera.width,
+	  		viewportHeight: main_camera.height,
+	  		worldWidth: world_width_pixels,
+	  		worldHeight: world_height_pixels
+	  	};
+	  };
+	  update_camera_status();
+	  load_playback_speed();
+	  update_playback_mode_buttons();
+	  restore_live_context_from_session();
+	  update_player_control_status();
+	  update_proximity_interaction_gate();
+	  render_current_npc_movement();
+	  render_current_day_plan();
+	  set_controllable_player_visible(true);
+	  display_time_for_step(step, 0);
+	  update_conversation_overlay(step);
+	  legacy_replay_playing = false;
+	}
+
+
+	function update(time, delta) {
+		if (!Object.prototype.hasOwnProperty.call(all_movement, step)) {
+			legacy_replay_playing = false;
+			updatePersistentNPCSprites(delta);
+			return;
+		}
+
+	  // *** MOVE CAMERA *** 
+	  // This is where we finish up the camera setting we started in the create() 
+	  // function. We set the movement speed of the camera and wire up the keys to
+	  // map to the actual movement.
+	  const camera_speed = 400;
+	  // Stop any previous movement from the last frame
+	  player.body.setVelocity(0);
+	  if (!input_has_text_focus()) {
+		  if (cursors.left.isDown) {
+		    player.body.setVelocityX(-camera_speed);
+		  } 
+		  if (cursors.right.isDown) {
+		    player.body.setVelocityX(camera_speed);
+		  } 
+		  if (cursors.up.isDown) {
+		    player.body.setVelocityY(-camera_speed);
+		  } 
+		  if (cursors.down.isDown) {
+		    player.body.setVelocityY(camera_speed);
+		  }
+	  }
+
+	  
+	  let curr_focused_persona = document.getElementById("temp_focus").textContent;
+	  if (curr_focused_persona != "") {
+	  	player.body.x = personas[curr_focused_persona].body.x;
+	  	player.body.y = personas[curr_focused_persona].body.y;
+	  	main_camera.setZoom(default_camera_zoom);
+	  	main_camera.startFollow(player, true);
+	  	update_camera_status();
+	  	document.getElementById("temp_focus").innerHTML = "";
+	  }
+
+	  if (!legacy_replay_playing) {
+	  	updatePersistentNPCSprites(delta);
+	  	return;
+	  }
+
+	  if (playback_mode === "smooth") {
+	  	if (step >= final_step) {
+	  		display_time_for_step(step, 0);
+	  		document.getElementById("current-step-content").innerHTML = step;
+	  		legacy_replay_playing = false;
+	  		updatePersistentNPCSprites(delta);
+	  		return;
+	  	}
+	  	let alpha = smooth_frame_index / SMOOTH_FRAMES_PER_STEP;
+	  	update_smooth_personas(alpha);
+	  	apply_persistent_npc_movement_overlay();
+	  	update_speech_bubbles(step);
+	  	if (loaded_step !== step) {
+	  		loaded_step = step;
+	  		update_conversation_overlay(step);
+	  	}
+	  	display_time_for_step(step, alpha);
+
+	  	smooth_frame_elapsed_ms += delta;
+	  	let frame_interval = effective_smooth_frame_interval_ms();
+	  	if (smooth_frame_elapsed_ms >= frame_interval) {
+	  		smooth_frame_elapsed_ms = Math.max(0, smooth_frame_elapsed_ms - frame_interval);
+	  		smooth_frame_index += 1;
+	  		if (smooth_frame_index >= SMOOTH_FRAMES_PER_STEP) {
+	  			smooth_frame_index = 0;
+	  			step = step + 1;
+	  		}
+	  	}
+	  	return;
+	  }
+
+
+	  // *** MOVING PERSONAS ***
+	  let is_new_step = loaded_step !== step;
+	 	for (let i=0; i<Object.keys(personas).length; i++) {
+	 		let curr_persona_name = Object.keys(personas)[i];
+    	let curr_persona = personas[curr_persona_name];
+    	let curr_pronunciatio = pronunciatios[Object.keys(personas)[i]];
+    	let curr_speech_bubble = speech_bubbles[Object.keys(personas)[i]];
+
+    	if (curr_persona_name.replace("_", " ") in all_movement[step]) {
+    		let movement_record = all_movement[step][curr_persona_name.replace("_", " ")] || {};
+    		let movement_value = Array.isArray(movement_record["movement"])
+    			? movement_record["movement"]
+    			: spawn_tile_loc[curr_persona_name];
+    		let curr_x = movement_value[0];
+	      let curr_y = movement_value[1];
+    		movement_target[curr_persona_name] = [curr_x * tile_width,
+	                                            curr_y * tile_width];
+    		let is_visible = movement_record["visible"] !== false;
+    		curr_persona.setVisible(is_visible);
+    		curr_pronunciatio.setVisible(is_visible);
+    		curr_speech_bubble.setVisible(is_visible);
+    		if (!is_visible) {
+    			curr_persona.anims.stop();
+    			continue;
+    		}
+    		if (is_new_step) { 
+	        let pronunciatio_content = movement_record["pronunciatio"] || "";
+	        let description_content = movement_record["description"] || "No current action @ Unknown";
+	        let chat_content_raw = movement_record["chat"] || null;
+
+	        let chat_content = "";
+	        if (chat_content_raw != null ){
+		        for (let j=0; j<chat_content_raw.length; j++) { 
+		        	chat_content += chat_content_raw[j][0] + ": " + chat_content_raw[j][1] + "<br>"
+		        }
+		      } else {
+		      	chat_content = "<em>None at the moment</em>"
+		      }
+
+	       	// This is what gives the pronunciatio balloon the name initials. We 
+	        // use regex to extract the initials of the personas. 
+	        // E.g., "Dolores Murphy" -> "DM"
+	        let rgx = new RegExp(/(\p{L}{1})\p{L}+/, 'gu');
+	        let initials = [...curr_persona_name.matchAll(rgx)] || [];
+	        initials = (
+	          (initials.shift()?.[1] || '') + (initials.pop()?.[1] || '')
+	        ).toUpperCase();
+	        pronunciatios[curr_persona_name].setText(initials + ": " + pronunciatio_content);
+
+	        // Updating the status of each personas 
+	        document.getElementById("quick_emoji-"+curr_persona_name).innerHTML = pronunciatio_content;
+	        document.getElementById("current_action__"+curr_persona_name).innerHTML = description_content.split("@")[0];
+	        document.getElementById("target_address__"+curr_persona_name).innerHTML = description_content.split("@")[1];
+	        document.getElementById("chat__"+curr_persona_name).innerHTML = chat_content;
+    		}
+
+    		if (playback_interval_ms > 0 || execute_count > 0) {
+    			if (curr_persona.body.x < movement_target[curr_persona_name][0]) {
+	          curr_persona.body.x += movement_speed; 
+	          anims_direction = "r";
+	          pre_anims_direction = "r"
+	          pre_anims_direction_dict[curr_persona_name] = "r"
+	        } else if (curr_persona.body.x > movement_target[curr_persona_name][0]) {
+	          curr_persona.body.x -= movement_speed; 
+	          anims_direction = "l";
+	          pre_anims_direction = "l"
+	          pre_anims_direction_dict[curr_persona_name] = "l"
+	        } else if (curr_persona.body.y < movement_target[curr_persona_name][1]) {
+	          curr_persona.body.y += movement_speed;
+	          anims_direction = "d";
+	          pre_anims_direction = "d"
+	          pre_anims_direction_dict[curr_persona_name] = "d"
+	        } else if (curr_persona.body.y > movement_target[curr_persona_name][1]) {
+	          curr_persona.body.y -= movement_speed;
+	          anims_direction = "u";
+	          pre_anims_direction = "u"
+	          pre_anims_direction_dict[curr_persona_name] = "u"
+	        } else {
+	        	anims_direction = "";
+	        }
+
+	        curr_pronunciatio.x = curr_persona.body.x + 18; 
+          curr_pronunciatio.y = curr_persona.body.y - 42 - 25; // DEBUG 1 --- I added 32 offset on Dec 29. 
+          curr_speech_bubble.x = curr_persona.body.x + 80; 
+          curr_speech_bubble.y = curr_persona.body.y - 39;
+
+          let left_walk_name = curr_persona_name + "-left-walk";
+					let right_walk_name = curr_persona_name + "-right-walk";
+					let down_walk_name = curr_persona_name + "-down-walk";
+					let up_walk_name = curr_persona_name + "-up-walk";
+          if (anims_direction == "l") {
+			      curr_persona.anims.play(left_walk_name, true);
+			    } else if (anims_direction == "r") {
+			      curr_persona.anims.play(right_walk_name, true);
+			    } else if (anims_direction == "u") {
+			      curr_persona.anims.play(up_walk_name, true);
+			    } else if (anims_direction == "d") {
+			      curr_persona.anims.play(down_walk_name, true);
+			    };
+    		}
+    	} else { 
+    		curr_persona.anims.stop();
+	      // If we were moving, pick an idle frame to use
+	      if (pre_anims_direction_dict[curr_persona_name] == "l") curr_persona.setTexture(curr_persona_name, "left"); else
+	      if (pre_anims_direction_dict[curr_persona_name] == "r") curr_persona.setTexture(curr_persona_name, "right"); else
+	      if (pre_anims_direction_dict[curr_persona_name] == "u") curr_persona.setTexture(curr_persona_name, "up"); else
+	      if (pre_anims_direction_dict[curr_persona_name] == "d") curr_persona.setTexture(curr_persona_name, "down");
+    	}
+	 	}
+	 	apply_persistent_npc_movement_overlay();
+	 	update_speech_bubbles(step);
+	 	if (is_new_step) {
+	 		loaded_step = step;
+	 		update_conversation_overlay(step);
+	 	}
+
+	  playback_elapsed_ms += delta;
+	  let key_step_interval = effective_key_step_interval_ms();
+	  let should_advance = playback_elapsed_ms >= key_step_interval;
+
+	  if (should_advance) {
+		  for (let i=0; i<Object.keys(personas).length; i++) {
+	      let curr_persona_name = Object.keys(personas)[i]
+	      let curr_persona = personas[curr_persona_name];
+	      if (!movement_target[curr_persona_name]) {
+	      	movement_target[curr_persona_name] = [
+	      		spawn_tile_loc[curr_persona_name][0] * tile_width,
+	      		spawn_tile_loc[curr_persona_name][1] * tile_width
+	      	];
+	      }
+	      curr_persona.body.x = movement_target[curr_persona_name][0];
+	      curr_persona.body.y = movement_target[curr_persona_name][1];
+	    }
+	    if (step >= final_step) {
+	    	document.getElementById("current-step-content").innerHTML = step;
+	    	legacy_replay_playing = false;
+	    	updatePersistentNPCSprites(delta);
+	    	return;
+	    }
+	    playback_elapsed_ms = Math.max(0, playback_elapsed_ms - key_step_interval);
+	    step = step + 1;
+
+	    start_datetime = new Date(start_datetime.getTime() + step_size);
+ 			display_time_for_step(step, 0);
+    }
+    updatePersistentNPCSprites(delta);
+	}
+</script>
